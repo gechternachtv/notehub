@@ -3,10 +3,10 @@
 
 	import Card from '../Card/card.svelte';
 	import Editor from './editor.svelte';
-    import PocketBase from 'pocketbase';
+    
     import createNewCard from '../createNewCard'
     import Boardcard from '../Allboards/boardcard.svelte';
-    import { slide } from 'svelte/transition';
+    import {pb} from '../pb.js';
 
 //flip
 
@@ -25,7 +25,7 @@
     export let params = {id:board.id}
 
 
-    const pb = new PocketBase('http://127.0.0.1:8090');
+    
 
     //flip
 

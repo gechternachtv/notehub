@@ -1,6 +1,6 @@
 <script>
 import {querystring, push} from 'svelte-spa-router'
-import PocketBase from 'pocketbase';
+import {pb} from '../pb.js';
 import Editor from '../Viewboard/editor.svelte';
 import Card from '../Card/card.svelte';
 import createNewCard from '../createNewCard';
@@ -10,7 +10,7 @@ export let params = {}
 export let id = params.id;
 
 console.log(id)
-const pb = new PocketBase('http://127.0.0.1:8090');
+
 
 
 let showcard = {};
@@ -48,16 +48,7 @@ const handleNewCard = async (e)=>{
     
 
     const card = await createNewCard(e.detail.content,pb)
-    const data = {
-    "raw": card.raw,
-    "title": card.title,
-    "link": card.link,
-    "color": card.color,
-    "img": card.img,
-    "text": card.text,
-    "tooltip": card.tooltip,
-    "tags":card.tags.map(e => e.id)
-    };
+    const data = {...card,tags:card.tags.map(e => e.id)};
 
     // console.log(data)
     const record = await pb.collection('cards').update(cardid, data);
@@ -83,15 +74,25 @@ const handleDelete = async (e)=>{
 </script>
 
 <main>
-    {#if showcard.id}
-        <Card isNew={true} card={showcard}/>
-    {/if}
+
     
     {#await promise}
     fetching data...
     {:then defaultValue}
-        <button class="button-d" on:click={handleDelete}>delete</button>
-        <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}/>
+
+        {#if showcard.id}
+        <div class="grid">
+            <div class="grid-ch"><Card isNew={true} card={showcard}/></div>
+            <div class="grid-ch">        
+                <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}/>
+                <div class="editor-panel">
+                    <button class="button-d" on:click={handleDelete}>delete</button>
+                </div>
+            </div>
+        </div>
+        
+
+        {/if}
 
     {:catch error}
 	<p style="color: red">{error.message}</p>
@@ -112,5 +113,13 @@ const handleDelete = async (e)=>{
                 border:0px;
                 margin:20px 0;
                 cursor:pointer;
+            }
+            .grid{
+                display:grid;
+                grid-template-columns: 1fr 1fr;
+                gap:20px;
+            }
+            .grid-ch{
+                max-width:100%;
             }
 </style>

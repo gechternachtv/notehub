@@ -1,8 +1,20 @@
 <script>
-        export let card;
+        import {pb} from '../pb.js';
+        
+        export let card = {
+            id:"",
+            check:""
+        }
         export let isNew = false;
         // console.log(`%c card:`,"color:turquoise")
         // console.log(card)
+        
+        let checked = card.check === "done"
+        const handleCheckbox = async ()=>{
+            console.log("handle!")
+            const record = await pb.collection('cards').update(card.id,{...card,check:(checked ? "done":"islist")} );
+            console.log(record)
+        }
 </script>
 
 
@@ -24,11 +36,23 @@
         </div>
         <!-- <div class="title">{channel.name}</div> -->
         <!-- <div class="hostName">{channel.host}</div> -->
-         <div class="title"><img style="max-width:16px" loading=lazy src="{card.favico}" alt=""> {card.title}</div> 
+         <div class="title">
+
+            <img style="max-width:16px" loading=lazy src="{card.favico}" alt=""> {card.title}</div> 
          <div class="link">{card.link ? card.link : card.img}</div>
         
+         
+            {#if card.check}
+            {#if card.check === "done" || card.check === "islist"}
+            <div class:checked={checked} class="inputholder">
+                <label><input type="checkbox" name="" bind:checked={checked} on:change={handleCheckbox}> done</label>
+            </div>
+            {/if}
+            {/if}
+         
         <div class="updates">{card.text}</div>
 
+        
         {#if card.expand?.tags}
         {#if card.expand.tags.length > 0 } 
         <div class="tags">
@@ -69,7 +93,6 @@
         margin-top:10px;
     }
     .card{
-        cursor: grab;
         height: 100%;
         width: 100%;
     }
@@ -202,6 +225,7 @@
 
             .newpost.card{
                 max-width:100% ;
+                width:100%;
             }
             .newpost .thumb img{
                 max-width:60%;
@@ -210,5 +234,50 @@
             .newpost .thumb:hover .tooltip{
                 opacity:0;
             }
+            .bulletlistitem{
+                margin-bottom:7px
+            }
+            input{
+                cursor:pointer;
+            }
+            .inputholder label{
+                cursor:pointer;
+                font-size:12px;
+                opacity:0.6;
+            }
+            .inputholder{
+            background-color: transparent;
+            transition:background-color .3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            max-width: 59px;
+            border-radius: 7px;
+            margin-bottom: 7px;
+            }
+
+            .inputholder label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            padding: 2px;
+            gap:4px;
+            line-height: 0;
+ 
+            }
+            .checked{
+                background-color: #5bfa5b54;
+            }
+
+/* Inline #0 | http://localhost:5173/#/tags */
+
+.inputholder input {
+  /* margin: 0 0 0.5em 0; */
+  margin: 0px;
+}
+
+
 
 </style>

@@ -1,12 +1,10 @@
 <script>
     import Tags from './Tageidt/tagedit.svelte';
     import Viewboard from './Viewboard/viewboard.svelte';
-    import PocketBase from 'pocketbase';
+    import {pb} from './pb.js';
     
     import {dndzone} from "svelte-dnd-action";
 
-
-    const pb = new PocketBase('http://127.0.0.1:8090');
 
 
 

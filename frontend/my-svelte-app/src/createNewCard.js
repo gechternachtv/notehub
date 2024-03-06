@@ -1,3 +1,5 @@
+import { bulletList } from "@milkdown/prose/schema-list"
+
 export default async (content,pb) =>{
     const validateUrl = (url,mainpath = "") => {
         try {
@@ -34,8 +36,9 @@ const card = {
     tags:[],
     link:"",
     text:"",
-    tooltip: "meta stuff?",
     favico: "",
+    metadata:{},
+    bulletlist:[],
     raw:content
 }
 
@@ -119,7 +122,7 @@ if(paragraph){
 
 
     if(texts.length){
-        if(texts[0].content[0].text != card.link && !texts[0].content[0].text.startsWith('#')){
+        if(texts[0].content[0].text != card.link && !texts[0].content[0].text.startsWith('#') && !texts[0].content[0].text.startsWith('[')){
             card.text = texts[0].content[0].text
         }else if(texts[1] && !texts[1].content[0].text.startsWith('#')){
             card.text = texts[1].content[0].text
@@ -159,6 +162,16 @@ if(paragraph){
                     tags.push(record)
                 }
             }
+
+            else if(e.content[0].text.includes('[]')){
+                card.check = "islist";
+                
+            }else if(e.content[0].text.includes('[x]')){
+                card.check = "done"
+                
+            }else{
+                card.check = "";
+            }
         }
 
         
@@ -191,8 +204,7 @@ if(paragraph){
 
 
 
-
-    // console.log(content)
+    console.log(card)
 
     return card
 }
