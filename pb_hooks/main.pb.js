@@ -12,6 +12,7 @@ routerAdd("POST", "/meta", (c) => {
         timeout: 120, // in seconds
     })
     
+        // console.log(res.raw)
         const headRegex = /<head>([\s\S]*?)<\/head>/i;
         const matches = res.raw?.match(headRegex);
         if(matches){

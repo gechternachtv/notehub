@@ -60,8 +60,13 @@
 		      	const getMarkdown = () => {
 					        return editor.action((ctx) => {
 					            const editorView = ctx.get(editorViewCtx);
-								console.log(editorView.state.doc.toJSON())
-					            return editorView.state.doc.toJSON()
+								const doc = editorView.state.doc
+								console.log(doc.content.size)
+					            return {
+									
+									string:doc.textBetween(0,doc.content.size,"\n"),
+									json:doc.toJSON()
+								}
 					        });
 					    }
 

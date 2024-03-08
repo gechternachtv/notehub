@@ -73,9 +73,9 @@ $:{
 			--header-color: #ffe;
 			--card-bg: #f0e0d6;
 			--container-bg: #fff8f0;
-			--gradient-col-1: #fff3e6;
+			--gradient-col-1: #ffe6cc;
 			--gradient-col-2: #fff3e6;
-			--body-background: linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
+			--body-background: #ffeedb;
 			--board-title-color: var(--header-bg);
 		}
 
@@ -107,9 +107,9 @@ $:{
 				--header-color: white;
 				--card-bg: #f0e0d6;
 				--container-bg: #fff3e6;
-				--gradient-col-1: #fff3e6;
+				--gradient-col-1: #f1e1cf;
 				--gradient-col-2: #fff3e6;
-				--body-background: linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
+				--body-background: #ffead3;
 				--board-title-color: var(--header-bg);
 			}
 
@@ -190,8 +190,8 @@ $:{
 				--button-color: #1c1b22;
 				--card-bg: #000010;
 				--container-bg: #1c1b22;
-				--gradient-col-1: var(--main-font-1);
-				--gradient-col-2: var(--main-font-1);
+				--gradient-col-1: #272535;
+				--gradient-col-2: #3b3858;
 				--body-background: url('https://zonaplankton.net/backgrounds/sidebar-pattern-pxtone.png');
 				--header-bg: #000010;
 				--button-bg: var(--main-font-1);

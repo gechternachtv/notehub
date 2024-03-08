@@ -1,9 +1,11 @@
 <script>
-import {querystring, push} from 'svelte-spa-router'
+// @ts-nocheck
+
+import  {pop} from 'svelte-spa-router'
 import {pb} from '../pb.js';
-import Editor from '../Viewboard/editor.svelte';
+import Editor from '../Boardpage/editor.svelte';
 import Card from '../Card/card.svelte';
-import createNewCard from '../createNewCard';
+import createNewCard from '../createNewCard.js';
 
 export let params = {}
 
@@ -45,9 +47,9 @@ let promise = cardget()
 
 const handleNewCard = async (e)=>{
 
-    
+    console.log(e)
 
-    const card = await createNewCard(e.detail.content,pb)
+    const card = await createNewCard(e.detail,pb)
     const data = {...card,tags:card.tags.map(e => e.id)};
 
     // console.log(data)
@@ -60,7 +62,7 @@ const handleNewCard = async (e)=>{
 
 const handleDelete = async (e)=>{
     await pb.collection('cards').delete(id);
-    push("/")
+    pop()
 }
 
 
@@ -86,6 +88,7 @@ const handleDelete = async (e)=>{
             <div class="grid-ch">        
                 <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}/>
                 <div class="editor-panel">
+                    <button class="" on:click={()=>{pop()}}>board</button>
                     <button class="button-d" on:click={handleDelete}>delete</button>
                 </div>
             </div>
@@ -100,8 +103,12 @@ const handleDelete = async (e)=>{
 </main>
 
 <style>
-    .button-d {
-                background: var(--alert);
+    main{
+        padding:30px;
+        box-sizing: border-box;
+    }
+    button {
+                background: var(--button-bg);
                 color: var(--button-color);
                 padding: 5px;
                 font-weight: bold;
@@ -114,6 +121,9 @@ const handleDelete = async (e)=>{
                 margin:20px 0;
                 cursor:pointer;
             }
+            .button-d {
+                background: var(--alert);
+            }
             .grid{
                 display:grid;
                 grid-template-columns: 1fr 1fr;
@@ -121,5 +131,9 @@ const handleDelete = async (e)=>{
             }
             .grid-ch{
                 max-width:100%;
+            }
+            .editor-panel{
+                display:flex;
+                gap:10px;
             }
 </style>

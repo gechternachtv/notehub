@@ -11,10 +11,17 @@
         
         let checked = card.check === "done"
         const handleCheckbox = async ()=>{
-            console.log("handle!")
             const record = await pb.collection('cards').update(card.id,{...card,check:(checked ? "done":"islist")} );
             console.log(record)
         }
+
+        console.log(card)
+        const created = new Date(card.created)
+        console.log(created)
+        const date = {day:created.getDate() < 9 ?  `0${created.getDate()}` : created.getDate() ,
+            month:(created.getMonth() + 1) < 9 ?  `0${created.getMonth() + 1}` : created.getMonth() + 1,
+            year:created.getFullYear()}
+
 </script>
 
 
@@ -51,6 +58,7 @@
             {/if}
          
         <div class="updates">{card.text}</div>
+        <div class="date">📅 {date.year}/{date.month}/{date.day}</div>
 
         
         {#if card.expand?.tags}
@@ -97,14 +105,14 @@
         width: 100%;
     }
     .thumb{
-        min-height: 100px;
+        /* min-height: 100px; */
         cursor:pointer;
     }
 
     .thumblink{
         display: block;
         width: 100%;
-        min-height: 100px;
+        /* min-height: 100px; */
     }
     .thumblink.noimg{
         background: var(--container-bg);
@@ -125,6 +133,8 @@
                 gap: 20px;
                 box-sizing: border-box;
                 position:relative;
+                /* box-shadow: 2px 3px 4px #00000026; */
+                /* border-radius: 4px; */
                 
             }
             @media only screen and (max-width: 568px){
@@ -190,7 +200,8 @@
             }
 
             .updates{
-                font-size:11px
+                font-size:11px;
+                white-space: pre-wrap;
             }
 
             .tooltip {
@@ -271,7 +282,11 @@
                 background-color: #5bfa5b54;
             }
 
-/* Inline #0 | http://localhost:5173/#/tags */
+.date {
+    font-size: 12px;
+  opacity: 0.7;
+  margin-top: 17px;
+}
 
 .inputholder input {
   /* margin: 0 0 0.5em 0; */

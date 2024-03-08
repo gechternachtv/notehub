@@ -7,6 +7,8 @@
     "name":""
     }
 
+    export let small = false
+
     
 </script>
 
@@ -22,11 +24,14 @@
 
     
 
-        <a style="border-left: 4px solid {board.color}" class="board-header" href="/#/board/{board.id}">
-        <img src="{board.image}" alt="">
+        <a class:small={small} style="border-left: 4px solid {board.color}" class="board-header" href="/#/board/{board.id}">
+        <div class="img" style="background-image:url('{board.image}')"></div>
+          <!-- <img src="{board.image}" alt=""> -->
         <div>        
           <h1 class="board-name">{board.name}</h1>
-          <div class="cards-length">cards: {board.cards.length}</div>
+          {#if !small}
+            <div class="cards-length">cards: {board.cards.length}</div>
+          {/if}
         </div>
         </a>
   
@@ -69,12 +74,38 @@
             a:hover{
               text-decoration: none;
             }
-            .board-header img{
+            .board-header .img{
                 border-radius: 10px;
-                max-height: 80px;
-                transition:all .2s
+                height: 80px;
+                transition:all .2s;
+                width: 80px;
+                background-size: cover;
+                background-position: center;
             }
-            .board-header:hover img{
+            .board-header:hover .img{
               transform: scale(1.09);
             }
+
+
+
+
+
+
+
+
+.small  .img {
+  height: 36px;
+  width: 36px;
+}
+
+.board-header.small {
+  gap: 11px;
+  margin-bottom:0px;
+}
+
+.small h1 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
 </style>

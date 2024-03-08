@@ -2,10 +2,11 @@
  import Themeswitch from './themeswitch.svelte';
  import {location} from 'svelte-spa-router'
   import Router from 'svelte-spa-router';
-    import Viewboard from './Viewboard/viewboard.svelte';
-      import Viewpage from './Viewpage.svelte';
-      import Card from './Edit/cardpage.svelte';
+    import Board from './Boardpage/boardpage.svelte';
+      import Viewpage from './Viewpage/Viewpage.svelte';
+      import Card from './Cardpage/cardpage.svelte';
       import Allboards from './Allboards/allboards.svelte';
+    import Allviews from './Allviews/allviews.svelte';
     
 </script>
         
@@ -23,8 +24,8 @@
   
 
 
-  <a  class:active={$location === "/"} href="/#/">All Boards</a>
-  <a  class:active={$location === "/tags"} href="/#/tags">Views </a>
+  <a  class:active={$location === "/"} href="/#/">Views</a>
+  <a  class:active={$location === "/allboards"} href="/#/allboards">Boards </a>
   <a  class:active={$location === "/options"} href="/#/options">Options </a>
   
   <div class="settings">
@@ -35,10 +36,11 @@
 
 <div class="app">
 <Router routes={{
-  '/board/:id': Viewboard,
-  '/tags': Viewpage,
+  '/board/:id': Board,
   '/card/:id': Card,
-  '/': Allboards
+  '/allboards/': Allboards,
+  '/view/:id': Viewpage,
+  '/': Allviews
 }} />
 
 </div>
@@ -65,7 +67,7 @@
 
 
 .app {
-margin-bottom: 50px;
+
 padding: 30px;
 }
 

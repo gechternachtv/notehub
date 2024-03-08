@@ -1,6 +1,32 @@
 import { bulletList } from "@milkdown/prose/schema-list"
 
-export default async (content,pb) =>{
+export default async (markdownobj,pb) =>{
+
+    const content = markdownobj.json.content
+    const mdtext = markdownobj.string
+
+
+    function stringReplacer(originalString, stringsToRemove = []) {
+        
+        const foo = ["[]","[x]",...stringsToRemove].filter(e => e != "")
+        let resultString = originalString
+        console.log("😴")
+        console.log(foo)
+         
+        foo.forEach(element => {
+            resultString = resultString.replaceAll(element,"")
+        });
+
+        console.log(resultString)
+        console.log("😬")
+        return resultString;
+        
+    }
+
+
+
+    console.log(mdtext,content)
+
     const validateUrl = (url,mainpath = "") => {
         try {
             console.log(mainpath)
@@ -38,31 +64,49 @@ const card = {
     text:"",
     favico: "",
     metadata:{},
-    bulletlist:[],
-    raw:content
+    raw:content,
+    created:new Date()
 }
+
+
 
 const paragraph = content.filter(e => e.type === "paragraph").filter(e => e.content)
 
 //title
 const heading = content.find(e => e.type === "heading")
+
+
+
+
 if(heading?.content){
-        card.title = heading.content[0].text  
+        card.title = stringReplacer(heading.content[0].text)
 }
 
 if(paragraph){
 
-    const texts = paragraph.filter(e => e.content[0].type === "text")
+    const words = mdtext.replaceAll("\n"," ").split(" ")
+    console.log(words);
+
+
+    if(words[0] === "[]"){
+        card.check = "islist";
+        
+    }else if(words[0] === "[x]"){
+        card.check = "done"
+        
+    }else{
+        card.check = "";
+    }
 
     //link-check
     // console.log(texts)
-    const url = texts?.find(e => e.content[0].text.match(/https?:\/\/[^\s]+/))
+    const url = words?.find(e => e.match(/https?:\/\/[^\s]+/))
     // console.log(url)
 
-    if(url){
-        if(validateUrl(url.content[0].text)){
-            card.link = url.content[0].text
 
+    if(url){
+        if(validateUrl(url)){
+            card.link = url
             try { //metadata
     
             const res = await(await fetch("http://127.0.0.1:8090/meta",{
@@ -81,6 +125,9 @@ if(paragraph){
 
             const tempDocument = document.implementation.createHTMLDocument();
             tempDocument.head.outerHTML = res
+
+            console.log(res)
+            
             if(tempDocument.head){
                 console.log(validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link))
                 
@@ -117,29 +164,18 @@ if(paragraph){
     if(card.title === "" && meta.title /*link metadata*/){
         card.title = meta.title
     }
-
-    //text
-
-
-    if(texts.length){
-        if(texts[0].content[0].text != card.link && !texts[0].content[0].text.startsWith('#') && !texts[0].content[0].text.startsWith('[')){
-            card.text = texts[0].content[0].text
-        }else if(texts[1] && !texts[1].content[0].text.startsWith('#')){
-            card.text = texts[1].content[0].text
-        }else if(meta.text /*link metadata*/){
-            card.text = meta.text
-        }
-    }
+    
 
     //tags
     const tags = []
 
-    for (let index = 0; index < texts.length; index++) {
-        const e = texts[index];
-        if(e.content){
-            if(e.content[0].text.startsWith('#')){
+    const tagWords = words.filter(e => e.startsWith("#"))
+    for (let index = 0; index < tagWords.length; index++) {
+        const e = tagWords[index];
+        
+            if(tagWords[index].startsWith('#')){
                 // search tag
-                    const name = e.content[0].text.replace(/^#/, '')
+                    const name = tagWords[index].replace(/^#/, '')
                     const color = name.split("-").length > 1 ? name.split("-")[1] : `var(--card-bg)`
                     const searchTags = await pb.collection('tags').getList(1, 2, {
                         filter: `created >= "2022-01-01 00:00:00" && name = "${name.split("-")[0]}"`,
@@ -162,23 +198,18 @@ if(paragraph){
                     tags.push(record)
                 }
             }
-
-            else if(e.content[0].text.includes('[]')){
-                card.check = "islist";
-                
-            }else if(e.content[0].text.includes('[x]')){
-                card.check = "done"
-                
-            }else{
-                card.check = "";
-            }
-        }
+        
 
         
     }
-    // console.log("redeclaration here:")
     card.tags = tags
-    // console.log(tags)
+
+
+
+
+
+        
+
 
 
     //img
@@ -199,6 +230,42 @@ if(paragraph){
         card.color = `var(--card-bg)`
     }
     
+
+
+
+
+    const dataWords = words.filter(e => e.startsWith("$"))
+    dataWords.forEach(dataWord =>{
+        try {
+            console.log("🫥")
+       
+            const name = dataWord.replace("$", '').split(":")[0]
+            const data = dataWord.replace("$", '').split(":")[1]
+            console.log(name,data,card[name])
+    
+            if(card[name] && data != null){
+                card[name] = data;
+                card.text = card.text.replace(dataWord,"")
+            }
+        } catch (error) {
+            console.warn(error)
+        }
+
+    })
+
+
+            //text
+
+
+            const textWithoutStuff = stringReplacer(mdtext, [...dataWords,card.link,(card.link ? "" : card.title),...card.tags.map(e => `#${e.name}`),...card.tags.map(e => `-${e.color}`)])
+            if(textWithoutStuff.replace(/[^a-zA-Z0-9]/g, '').length > 0){
+                console.log("🫡")
+                card.text = textWithoutStuff
+            }else if(meta.text){
+                card.text = meta.text
+            }
+
+
 }
 
 
