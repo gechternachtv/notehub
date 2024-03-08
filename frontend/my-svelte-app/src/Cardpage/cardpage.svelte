@@ -77,10 +77,9 @@ const handleDelete = async (e)=>{
 
 <main>
 
-    
-    {#await promise}
-    fetching data...
-    {:then defaultValue}
+
+
+    {#await promise then defaultValue}
 
         {#if showcard.id}
         <div class="grid">

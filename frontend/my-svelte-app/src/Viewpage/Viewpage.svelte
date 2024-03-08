@@ -42,11 +42,10 @@
     <!-- <Tags/> -->
      
 
-{#await promise}
-    . . .
-{:then res}
-    {#if res.img}
-        <div class="img" style="background-image:url('{res.img}')"></div>
+{#await promise then view}
+
+    {#if view.img}
+        <div class="img" style="background-image:url('http://127.0.0.1:8090/api/files/{view.collectionId}/{view.id}/{view.img}')"></div>
     {/if}
 
     <!-- <img alt="background" src="{res.img}"> -->

@@ -19,12 +19,10 @@
 </script>
 
 {#await promise then views}
-    <!-- promise was fulfilled -->
     <div class="grid">
     {#each views as view}
-         <!-- content here -->
             <div class="viewcard-container">
-                <a href="/#/view/{view.id}" class="img" style="background-image:url('{view.img}')"></a>
+                <a href="/#/view/{view.id}" class="img" style="background-image:url('http://127.0.0.1:8090/api/files/{view.collectionId}/{view.id}/{view.img}?thumb=400x80b')"> </a>
                 <div class="title"><a href="/#/view/{view.id}">{view.name}</a></div>
                 <div class="boardlist">
                     {#each view.expand.boards as board}

@@ -64,7 +64,6 @@
         if(params.id && !params.id.includes("dnd-shadow-placeholder")){
         try {
             (async ()=>{
-            // fetch a paginated records list
             
             const record = await pb.collection('boards').getOne(params.id, {
             expand: 'cards.tags',
@@ -126,9 +125,7 @@
     
     
         
-        {#await promise}
-             . . .fetching data
-        {:then res}
+        {#await promise then views}
     
         <div class="container">
             <Boardcard board={board}/>
@@ -207,17 +204,7 @@
                         gap: 10px
                     }
                 }
-                .main-container {
-                display: grid;
-                grid-template-columns: 134px 1fr;
-                gap: 20px;
-                }
-                @media only screen and (max-width: 568px){
-                    .main-container {
-                    gap:0px;
-                    grid-template-columns:114px 1fr;
-                    }
-                }
+
     
               
     </style>

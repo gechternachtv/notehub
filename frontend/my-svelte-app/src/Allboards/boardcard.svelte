@@ -25,8 +25,12 @@
     
 
         <a class:small={small} style="border-left: 4px solid {board.color}" class="board-header" href="/#/board/{board.id}">
-        <div class="img" style="background-image:url('{board.image}')"></div>
-          <!-- <img src="{board.image}" alt=""> -->
+        {#if board.img}
+           <!-- content here -->
+           <div class="img" style="background-image:url('http://127.0.0.1:8090/api/files/{board.collectionId}/{board.id}/{board.img}{small ? "?thumb=40x40" : ""}')"></div>
+           <!-- <img src="{board.image}" alt=""> -->
+        {/if}
+
         <div>        
           <h1 class="board-name">{board.name}</h1>
           {#if !small}

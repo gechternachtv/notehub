@@ -4,7 +4,7 @@ import {pb} from '../pb.js';
 
 let tags = [];
 
-(async ()=>{
+const getTags = async ()=>{
     // fetch a paginated records list
     const records = await pb.collection('tags').getFullList({
     sort: 'created'
@@ -12,21 +12,24 @@ let tags = [];
     
     tags = [...records]
     // console.log(records)
-})()
+}
 
-
+const promise = getTags()
 
 
 </script>
 <main>
 <div class="container">
+    {#await promise then value}
     <div class="tags">
-    {#each tags as tag}
+        {#each tags as tag}
+    
+            <span class="tag tag-{tag.id}" style="background:{tag.color};">{tag.name}</span>
+    
+        {/each}
+    </div>
+    {/await}
 
-        <span class="tag tag-{tag.id}" style="background:{tag.color};">{tag.name}</span>
-
-    {/each}
-</div>
 </div>
 
 
