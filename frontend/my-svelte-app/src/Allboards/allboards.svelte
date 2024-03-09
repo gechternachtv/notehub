@@ -2,6 +2,7 @@
 	// @ts-ignore
 	import Board from './boardcard.svelte';
     import {pb} from '../pb.js';
+    import CreateBoard from '../CreateBoard/CreateBoard.svelte';
 
 let boards = [];
 
@@ -21,19 +22,11 @@ let promise = getBoards()
 
 
 const handleNewBoard = async (e)=>{
-
-    const data = {
-    "cards": e.cards,
-    "card_order": e.card_order,
-    "header": e.image,
-    "color": e.color,
-    "name":e.name
-    };
-
+    const data = e.detail
     const record = await pb.collection('boards').create(data);
-    e.id = record.id
-    boards.push(e);
-    boards = boards
+        boards.push({...record});
+        boards = boards;
+        console.log(data)
     
 }
 
@@ -51,7 +44,10 @@ const handleNewBoard = async (e)=>{
         </div>
     {/await}
 
+<CreateBoard on:newcontent={handleNewBoard}/>
+
 </div>
+
 
 
 

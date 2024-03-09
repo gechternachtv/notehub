@@ -1,6 +1,7 @@
 <script>
     // @ts-nocheck
-    
+        import CreateBoard from '../CreateBoard/CreateBoard.svelte';
+
         import Card from '../Card/card.svelte';
         import Editor from './editor.svelte';
         
@@ -21,6 +22,8 @@
             color:"",
             cards:[]
         }
+
+        
     
         export let params = {id:board.id}
     
@@ -32,11 +35,11 @@
         let cards = []
         
         function handleDndConsider(e) {
-            console.log(e.detail.items.map(e => e.id))
+           
             cards = e.detail.items;
         }
         async function handleDndFinalize(e) {
-            console.log(e.detail.items.map(e => e.id))
+            
             cards = e.detail.items;
     
             const record = await pb.collection('boards').update(params.id, {cards:e.detail.items.map(e => e.id)});
@@ -62,25 +65,24 @@
     async function getRecords(){
     
         if(params.id && !params.id.includes("dnd-shadow-placeholder")){
-        try {
-            (async ()=>{
-            
+        try {   
             const record = await pb.collection('boards').getOne(params.id, {
             expand: 'cards.tags',
         });
         // @ts-ignore
             board = record;
-            console.log(record)
+            console.log(board)
             if(record?.expand){
                 cards = cardFilter([...record.expand.cards])
             }
             // console.log(records)
-        })()   
+            return board
+        
         } catch (error) {
             console.warn(error)
         }
     }
-    return cards
+    
     }
     
     let promise = getRecords()
@@ -91,25 +93,21 @@
     
     const handleNewCard = async (e)=>{
     
-        console.log("%c e","color:green")
-        console.log(e.detail)
+
     
         const card = await createNewCard(e.detail,pb)
-        console.log(card)
+
         const data = {...card,tags:card.tags.map(e => e.id)};
     
         const cardrecord = await pb.collection('cards').create(data);
-        console.log(`%c cardrecord`,`color:red`)
-        console.log(cardrecord)
+
         const newcardlist = [cardrecord.id,...cards.map(e => e.id)]
         const boarddata = {
         "cards": newcardlist
         };
-        console.log(`%c boarddata`,`color:turquoise`)
-        console.log(boarddata);
+
     const boardrecord = await pb.collection('boards').update(board.id, boarddata);
-        console.log(cardrecord);
-        console.log(boardrecord);
+
         
     card.id = cardrecord.id
     
@@ -119,7 +117,26 @@
     
     }
     
+
+    const handleUpdate = async (e)=>{
+
+    console.log(e.detail)
+    if (e.detail.img === undefined || e.detail.img === ""){
+        delete e.detail.img
+    }
+    if (e.detail.name === undefined || e.detail.name === ""){
+        delete e.detail.name
+    }
+    if (e.detail.color === undefined || e.detail.color === ""){
+        delete e.detail.color
+    }
+
+    console.log({...board,...e.detail})
+    const record = await pb.collection('boards').update(board.id, {...board,...e.detail,cards:cards.map(e => e.id)});
+    console.log(record)
+    board = record
     
+    }
     </script>
     <main>
     
@@ -128,6 +145,7 @@
         {#await promise then views}
     
         <div class="container">
+            
             <Boardcard board={board}/>
             <div class="grid" use:dndzone={{items:cards,type:"cards",dropTargetStyle:{opacity:"0.6"}}} on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
     
@@ -143,13 +161,18 @@
         </div>
         
         {#if editoropen}
+        <div class="controls">
         <div class="editor">
             <Editor on:newcontent={handleNewCard} />
         </div>
+        
+        <div class="boardedit">
+        <CreateBoard on:newcontent={handleUpdate} board={board}/>
+        </div>
+        </div>
         {/if}
+
     
-        {:catch error}
-            <!-- promise was rejected -->
         {/await}
     
     
@@ -161,7 +184,12 @@
     </main>
     
     <style>
-    
+            .controls{
+                display:grid;
+                grid-template-columns: 1fr 1fr;
+                gap:30px;
+            }
+
                 .card-placeholder{
                     display:block;
                     background:rgba(0, 0, 0, 0.021);

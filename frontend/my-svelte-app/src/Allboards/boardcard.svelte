@@ -1,10 +1,8 @@
 <script>
     export let board = {
-    "cards": "",
-    "card_order": "",
-    "header": "",
     "color": "",
-    "name":""
+    "name":"",
+    "img":""
     }
 
     export let small = false
@@ -31,10 +29,13 @@
            <!-- <img src="{board.image}" alt=""> -->
         {/if}
 
+
         <div>        
           <h1 class="board-name">{board.name}</h1>
           {#if !small}
-            <div class="cards-length">cards: {board.cards.length}</div>
+            {#if board.cards}
+              <div class="cards-length">cards: {board.cards.length}</div>
+            {/if}
           {/if}
         </div>
         </a>
