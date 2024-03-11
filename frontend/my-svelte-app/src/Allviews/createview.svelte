@@ -203,10 +203,10 @@
     
     
     <div class="flex">
-    {#if view.id != "" && name != "" && hasboards}
+    {#if view.id != "" && name != "" }
         <button on:click={handleSend}>Edit view</button>
         <button class="alert" on:click={handleDelete}>Delete</button>
-        {:else if name != "" && hasboards}
+        {:else if name != "" }
         <button  on:click={handleSend}>Create new view</button>
     {/if}
     </div>

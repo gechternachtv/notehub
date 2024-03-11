@@ -35,7 +35,7 @@
 
         console.log(record)
         view = record
-        boards = view.expand.boards
+        boards = view.expand?.boards
 
     }
 
@@ -62,7 +62,7 @@
             expand: 'boards.cards.tags',
         });
         console.log(record)
-        boards = record.expand.boards
+        boards = record.expand?.boards
         view = record
         return record
     }
@@ -91,18 +91,26 @@
         <div class="img">
             <img style="object-position: 0% {view.position}%;"src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
         </div>
+    {:else}
+    <div class="img" style="background-color:var(--gradient-col-1)"></div><!-- else content here -->
     {/if}
 
     <!-- <img alt="background" src="{res.img}"> -->
+    {#if boards}
     <div use:dndzone={{items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize} class="grid">
-    {#each boards as board(board.id)}
-        <div class="board-container" >
-        <Board board={board} editoropen={false}/>
-        </div>
-    {/each}
+    
+        {#each boards as board(board.id)}
+            <div class="board-container" >
+                <Board board={board} editoropen={false}/>
+            </div>
+        {/each}  
+    
+
     </div>
+    {/if}
 {:catch error}
     :c
+    {error}
 {/await}
 
 

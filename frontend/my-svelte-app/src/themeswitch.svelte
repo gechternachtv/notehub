@@ -159,9 +159,9 @@ $:{
 				--header-color: #fff;
 				--card-bg: #383838;
 				--container-bg: #1c1c1c;
-				--gradient-col-1: #1c1c1c;
-				--gradient-col-2: #1c1c1c;
-				--body-background: linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
+				--gradient-col-1: #121212;
+				--gradient-col-2: #343434;
+				--body-background: #343434;
 				--main-font-1: #8080E0;
 				--board-title-color: var(--main-font-1);
 			}
@@ -172,8 +172,8 @@ $:{
 				--main-font-2: black;
 				--button-color: #ffe;
 				--card-bg: #eaeaea;
-				--container-bg: #ffffff08;
-				--gradient-col-1: #fff3e6;
+				--container-bg: #fff;;
+				--gradient-col-1: #faf4f4;
 				--gradient-col-2: #fff3e6;
 				--body-background: url('https://zonaplankton.net/backgrounds/page-pattern-default.png');
 				--header-bg: #0394fc;

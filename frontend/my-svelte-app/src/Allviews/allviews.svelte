@@ -51,9 +51,14 @@ const handleedit = async (view)=>{
     {#each views as view}
             <div class="viewcard-container">
                 <a href="/#/view/{view.id}" class="img" >
-                    <div class="img-c">
-                        <img style="object-position: 0px {view.position}%;" src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
-                    </div>
+                    {#if view.img}
+                        <div class="img-c">
+                            <img style="object-position: 0px {view.position}%;" src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
+                        </div>
+                    {:else}
+                         <div class="img-c" style="background-color:var(--gradient-col-1)"></div>
+                    {/if}
+
                 </a>
                 <div class="title"><a href="/#/view/{view.id}">{view.name}</a></div>
                 <div class="boardlist">

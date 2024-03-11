@@ -83,14 +83,15 @@ const handleDelete = async (e)=>{
 
         {#if showcard.id}
         <div class="grid">
-            <div class="grid-ch"><Card isNew={true} card={showcard}/></div>
             <div class="grid-ch">        
                 <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}/>
-                <div class="editor-panel">
+                <div class="controls editor-panel">
                     <button class="" on:click={()=>{pop()}}>board</button>
                     <button class="alert" on:click={handleDelete}>delete</button>
                 </div>
             </div>
+            <div class="grid-ch"><Card isNew={true} card={showcard}/></div>
+
         </div>
         
 

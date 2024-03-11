@@ -258,18 +258,6 @@
             },
             {
                 "system": false,
-                "id": "tpndl9lc",
-                "name": "bulletlist",
-                "type": "json",
-                "required": false,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "maxSize": 2000000
-                }
-            },
-            {
-                "system": false,
                 "id": "3mcmejg6",
                 "name": "check",
                 "type": "select",

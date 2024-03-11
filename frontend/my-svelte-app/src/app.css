@@ -76,3 +76,12 @@ button,.btn {
 button:disabled {
   opacity:0.5
 }
+
+.milkdown .editor{
+  border: 1px solid var(--button-bg);
+  padding: 13px;
+}
+
+.milkdown  img {
+  max-width: 100%;
+}

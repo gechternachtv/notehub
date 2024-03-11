@@ -6,10 +6,13 @@
 		import {createEventDispatcher} from 'svelte';
 		import { onDestroy } from 'svelte';
 
-		let isAlive = true
-		onDestroy(()=>{
-			isAlive = false
-		})
+
+		let editorel;
+		let sendBtn = (e)=>{
+			const event = new Event("send")
+			console.log(event)
+			editorel.dispatchEvent(event)
+		}
 		// import { listener, listenerCtx } from '@milkdown/plugin-listener';
 		// import { nord } from "@milkdown/theme-nord";
 		// import { emoji } from "@milkdown/plugin-emoji";
@@ -27,7 +30,7 @@
 							"content": [
 								{
 								"type": "text",
-								"text": "hello!!"
+								"text": "Edit me"
 								}
 							]
 							}
@@ -71,8 +74,8 @@
 					    }
 
 				const enterHandler = (event)=> {
-					if(isAlive){
-						if (event.ctrlKey && event.key === 'Enter') {
+					
+						if ((event.ctrlKey && event.key === 'Enter') || event.type === "send") {
 							dispatch('newcontent',getMarkdown());
 							window.scrollTo(0, document.body.scrollHeight);
 							if(clearAllonEnter){
@@ -80,14 +83,11 @@
 							}
 
 						}
-					}else{
-						document.removeEventListener('keydown', enterHandler);
-					}
+					
 				}
-				document.addEventListener('keydown', enterHandler);
+				editorel.addEventListener('keydown', enterHandler);
+				editorel.addEventListener("send",enterHandler);
 
-				
-				
 
 			  })
 
@@ -97,12 +97,24 @@
 		}
 </script>
 
+<main>
+	<div bind:this={editorel} class="editor" use:editor />
+	<button class="sendbtn" on:click={sendBtn}>send</button>
+</main>
 
-<div class="editor" use:editor />
+
 
 <style>
-	.editor{
+	main{
 		padding:20px;
 		background:var(--card-bg);
+		display:grid;
+		gap:10px;
 	}
+
+.sendbtn {
+  max-width: 103px;
+  justify-content: center;
+}
+
 </style>
