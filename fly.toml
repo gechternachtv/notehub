@@ -1,25 +1,27 @@
-# fly.toml file generated for notehub on 2024-02-29T00:44:43-03:00
+# fly.toml app configuration file generated for snowy-tree-8913 on 2023-07-28T20:49:19+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "notehub"
-kill_signal = "SIGINT"
-kill_timeout = 5
-mounts = []
-processes = []
+primary_region = "gig"
 
-[[services]]
-  internal_port = 8080
+[mounts]
+  source = "pb_data" # name of the volume
+  destination = "/pb/pb_data"
+
+# optional if you want to change the PocketBase version
+[build.args]
+  PB_VERSION="0.19.0"
+
+[http_service]
+  internal_port = 8090
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
   processes = ["app"]
-  protocol = "tcp"
-  [services.concurrency]
-    hard_limit = 25
-    soft_limit = 20
-    type = "connections"
-
-  [[services.ports]]
-    force_https = true
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 500
+    hard_limit = 550

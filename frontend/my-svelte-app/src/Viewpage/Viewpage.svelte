@@ -89,7 +89,7 @@
 
     {#if view.img}
         <div class="img">
-            <img style="object-position: 0% {view.position}%;"src="http://127.0.0.1:8090/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
+            <img style="object-position: 0% {view.position}%;"src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
         </div>
     {/if}
 

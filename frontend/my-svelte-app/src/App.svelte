@@ -9,6 +9,8 @@
     import Allviews from './Allviews/allviews.svelte';
     import Modal from './modal/modaltest.svelte';
     
+
+    console.log(import.meta.env.VITE_API_URL)
 </script>
         
 

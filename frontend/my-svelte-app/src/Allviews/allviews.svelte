@@ -52,7 +52,7 @@ const handleedit = async (view)=>{
             <div class="viewcard-container">
                 <a href="/#/view/{view.id}" class="img" >
                     <div class="img-c">
-                        <img style="object-position: 0px {view.position}%;" src="http://127.0.0.1:8090/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
+                        <img style="object-position: 0px {view.position}%;" src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
                     </div>
                 </a>
                 <div class="title"><a href="/#/view/{view.id}">{view.name}</a></div>

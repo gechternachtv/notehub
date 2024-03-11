@@ -106,7 +106,7 @@
 			return;
     }else if(board.img != ""){
         showImage = true;
-        image.setAttribute("src", `http://127.0.0.1:8090/api/files/${board.collectionId}/${board.id}/${board.img}`);
+        image.setAttribute("src", `${import.meta.env.VITE_API_URL}/api/files/${board.collectionId}/${board.id}/${board.img}`);
         return
     }
 		showImage = false; 
@@ -121,7 +121,7 @@
 
     {#if showImage}
     <div class="img-c">
-        <img bind:this={image} src="http://127.0.0.1:8090/api/files/{board.collectionId}/{board.id}/{board.img}" alt="" />
+        <img bind:this={image} src="{import.meta.env.VITE_API_URL}/api/files/{board.collectionId}/{board.id}/{board.img}" alt="" />
     </div>
         
     {/if}

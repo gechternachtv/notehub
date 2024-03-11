@@ -141,7 +141,7 @@
 			return;
     }else if(view.img != ""){
         showImage = true;
-        image.setAttribute("src", `http://127.0.0.1:8090/api/files/${view.collectionId}/${view.id}/${view.img}`);
+        image.setAttribute("src", `${import.meta.env.VITE_API_URL}/api/files/${view.collectionId}/${view.id}/${view.img}`);
         return
     }
 		showImage = false; 
@@ -156,7 +156,7 @@
 
     {#if showImage}
         
-            <img style="object-position: 0px {imageposition}%" bind:this={image} src="http://127.0.0.1:8090/api/files/{view.collectionId}/{view.id}/{view.img}" alt="" />
+            <img style="object-position: 0px {imageposition}%" bind:this={image} src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="" />
 
     {/if}
 		

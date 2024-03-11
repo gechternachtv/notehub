@@ -109,7 +109,7 @@ if(paragraph){
             card.link = url
             try { //metadata
     
-            const res = await(await fetch("http://127.0.0.1:8090/meta",{
+            const res = await(await fetch(`${import.meta.env.VITE_API_URL}/meta`,{
                 method: "POST",
                 mode: "cors", // no-cors, *cors, same-origin
                 cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
