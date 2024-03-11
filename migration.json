@@ -396,12 +396,24 @@
                 "unique": false,
                 "options": {
                     "mimeTypes": [],
-                    "thumbs": [
-                        "400x80b"
-                    ],
+                    "thumbs": [],
                     "maxSelect": 1,
                     "maxSize": 5242880,
                     "protected": false
+                }
+            },
+            {
+                "system": false,
+                "id": "sxiuyz9k",
+                "name": "position",
+                "type": "number",
+                "required": false,
+                "presentable": false,
+                "unique": false,
+                "options": {
+                    "min": 0,
+                    "max": 100,
+                    "noDecimal": true
                 }
             }
         ],

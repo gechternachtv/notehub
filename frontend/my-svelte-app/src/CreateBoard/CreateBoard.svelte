@@ -120,7 +120,10 @@
 <div style="border-left: 4px solid {boardPreview.color}" class="board-header">
 
     {#if showImage}
+    <div class="img-c">
         <img bind:this={image} src="http://127.0.0.1:8090/api/files/{board.collectionId}/{board.id}/{board.img}" alt="" />
+    </div>
+        
     {/if}
 		
 
@@ -137,7 +140,7 @@
 <h1 class="board-name"> Create board </h1>
 {/if}
 
-<div class="controls">
+<div class="grid">
     <input class="name" on:change={handleChange} bind:value={name} />
     <input class="color" on:change={handleChange} type="color" bind:value={color} />
     
@@ -167,7 +170,7 @@ main{
     color:var(--button-bg);
     box-sizing: border-box;
 }
-    .controls{
+    .grid{
         display:grid;
     }
 .flex{
@@ -195,13 +198,22 @@ main{
         button.alert{
         background:var(--alert)
     }
-  img {
-    border-radius: 10px;
+    .img-c{
+        border-radius: 10px;
                 height: 80px;
                 transition:all .2s;
                 width: 80px;
                 border:0px;
-  }
+                overflow:hidden;
+    }
+        img {
+            height: 100%;
+            transition: all .2s;
+            width: 100%;
+            border: 0px;
+            display: block;
+            object-fit: cover;
+        }
 
             .board-header{
                 min-height: 80px;

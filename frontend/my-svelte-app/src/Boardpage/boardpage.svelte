@@ -8,6 +8,9 @@
         import createNewCard from '../createNewCard'
         import Boardcard from '../Allboards/boardcard.svelte';
         import {pb} from '../pb.js';
+        import Modal from '../modal/modal.svelte';
+        let showModal = false;
+
     
     //flip
     
@@ -147,6 +150,11 @@
         <div class="container">
             
             <Boardcard board={board}/>
+            {#if editoropen}
+            <div class="controls">
+                <button on:click={() => (showModal = true)}> Edit board </button>
+                </div>
+            {/if}
             <div class="grid" use:dndzone={{items:cards,type:"cards",dropTargetStyle:{opacity:"0.6"}}} on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
     
                 {#each cards as card (card.id)}
@@ -161,13 +169,17 @@
         </div>
         
         {#if editoropen}
-        <div class="controls">
+        <div class="con">
         <div class="editor">
             <Editor on:newcontent={handleNewCard} />
         </div>
         
         <div class="boardedit">
-        <CreateBoard on:newcontent={handleUpdate} board={board}/>
+
+            <Modal bind:showModal>
+                <CreateBoard on:newcontent={handleUpdate} board={board}/>
+            </Modal>
+        
         </div>
         </div>
         {/if}
@@ -184,9 +196,9 @@
     </main>
     
     <style>
-            .controls{
+            .con{
                 display:grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
                 gap:30px;
             }
 

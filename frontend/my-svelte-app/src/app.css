@@ -22,9 +22,6 @@ a:hover {
   text-decoration: underline;
 }
 
-a:visited {
-  color: rgb(0,80,160);
-}
 
 label {
   display: block;
@@ -45,20 +42,37 @@ input:disabled {
   color: #ccc;
 }
 
-button {
-  color: #333;
-  background-color: #f4f4f4;
-  outline: none;
+button,.btn {
+  margin:0px;
+  border:0px;
+  background: var(--button-bg);
+  cursor: pointer;
+
+  background: var(--button-bg);
+  color: var(--button-color);
+  padding: 5px;
+  font-weight: bold;
+  font-size: 11px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+}
+.btn:hover{
+  text-decoration: none;
+  color:var(--button-color);
+}
+.controls{
+  display: flex;
+  gap: 6px;
+  margin: 20px 0;
+}
+
+.alert{
+  background:var(--alert)
 }
 
 button:disabled {
-  color: #999;
-}
-
-button:not(:disabled):active {
-  background-color: #ddd;
-}
-
-button:focus {
-  border-color: #666;
+  opacity:0.5
 }

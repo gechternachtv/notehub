@@ -2,7 +2,11 @@
 	// @ts-ignore
 	import Board from './boardcard.svelte';
     import {pb} from '../pb.js';
+    // @ts-ignore
     import CreateBoard from '../CreateBoard/CreateBoard.svelte';
+    import Modal from '../modal/modal.svelte';
+    let showModal = false;
+
 
 let boards = [];
 
@@ -43,9 +47,12 @@ const handleNewBoard = async (e)=>{
             {/each}
         </div>
     {/await}
-
-<CreateBoard on:newcontent={handleNewBoard}/>
-
+<div class="controls">
+<button on:click={() => (showModal = true)}> create board </button>
+</div>
+<Modal bind:showModal>
+    <CreateBoard on:newcontent={handleNewBoard}/>
+</Modal>
 </div>
 
 

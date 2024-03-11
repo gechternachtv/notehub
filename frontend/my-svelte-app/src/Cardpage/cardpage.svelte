@@ -88,7 +88,7 @@ const handleDelete = async (e)=>{
                 <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}/>
                 <div class="editor-panel">
                     <button class="" on:click={()=>{pop()}}>board</button>
-                    <button class="button-d" on:click={handleDelete}>delete</button>
+                    <button class="alert" on:click={handleDelete}>delete</button>
                 </div>
             </div>
         </div>
@@ -106,23 +106,7 @@ const handleDelete = async (e)=>{
         padding:30px;
         box-sizing: border-box;
     }
-    button {
-                background: var(--button-bg);
-                color: var(--button-color);
-                padding: 5px;
-                font-weight: bold;
-                font-size: 11px;
-                border-radius: 8px;
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                border:0px;
-                margin:20px 0;
-                cursor:pointer;
-            }
-            .button-d {
-                background: var(--alert);
-            }
+
             .grid{
                 display:grid;
                 grid-template-columns: 1fr 1fr;

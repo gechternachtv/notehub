@@ -25,8 +25,11 @@
         <a class:small={small} style="border-left: 4px solid {board.color}" class="board-header" href="/#/board/{board.id}">
         {#if board.img}
            <!-- content here -->
-           <div class="img" style="background-image:url('http://127.0.0.1:8090/api/files/{board.collectionId}/{board.id}/{board.img}{small ? "?thumb=40x40" : ""}')"></div>
-           <!-- <img src="{board.image}" alt=""> -->
+           <!-- <div class="img" style="background-image:url('http://127.0.0.1:8090/api/files/{board.collectionId}/{board.id}/{board.img}{small ? "?thumb=40x40" : ""}')"></div> -->
+           <div class="img-c">
+            <img src="http://127.0.0.1:8090/api/files/{board.collectionId}/{board.id}/{board.img}{small ? "?thumb=40x40" : ""}" alt=""> 
+
+           </div> 
         {/if}
 
 
@@ -79,15 +82,24 @@
             a:hover{
               text-decoration: none;
             }
-            .board-header .img{
+            .board-header .img-c{
                 border-radius: 10px;
                 height: 80px;
                 transition:all .2s;
                 width: 80px;
                 background-size: cover;
                 background-position: center;
+                overflow: hidden;
             }
-            .board-header:hover .img{
+            img{
+              height: 100%;
+            transition: all .2s;
+            width: 100%;
+            border: 0px;
+            display: block;
+            object-fit: cover;
+            }
+            .board-header:hover .img-c{
               transform: scale(1.09);
             }
 
@@ -98,7 +110,7 @@
 
 
 
-.small  .img {
+.small  .img-c {
   height: 36px;
   width: 36px;
 }
