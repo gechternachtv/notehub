@@ -29,7 +29,6 @@
 
   <a  class:active={$location === "/"} href="/#/">Views</a>
   <a  class:active={$location === "/allboards"} href="/#/allboards">Boards </a>
-  <a  class:active={$location === "/sandbox"} href="/#/sandbox">Sandbox </a>
   
   <div class="settings">
   <Themeswitch/> 
@@ -55,19 +54,6 @@
     
         
         <style>
-          select {
-    font-size: 11px;
-    padding: 2px;
-    border:0px;
-    background:var(--button-bg);
-    color:var(--button-color);
-    border-radius: 4px;
-    margin: 4px;
-    cursor: pointer;
-  }
-
-
-
 
 
 .app {
@@ -79,7 +65,7 @@ padding: 30px;
     background:var(--header-bg);
         display: flex;
     display: grid;
-grid-template-columns: auto auto auto 1fr;
+grid-template-columns: auto auto 1fr;
   }
   nav a {
     color:var(--header-color);
@@ -93,7 +79,7 @@ grid-template-columns: auto auto auto 1fr;
   }
 
   nav a.active{
-    border-bottom: 4px solid var(--card-bg);
+    border-bottom: 4px solid var(--header-color);
     font-weight: bold;
   }
   .settings{
@@ -108,10 +94,6 @@ grid-template-columns: auto auto auto 1fr;
     }
 }
 
-.empty{
-  grid-column:span 3;
-  height:32px;
-}
 
 
             main{
@@ -122,79 +104,5 @@ grid-template-columns: auto auto auto 1fr;
                 width:100%;
                 padding-bottom: 40px;
             }
-            .container-header{
-                background:var(--header-bg);
-                color:var(--header-color);
-                padding:4px;
-                margin-top:17px;
-            }
-            .container-header h1{
-                margin: 0;
-            }
-            .container{
-                display: flex;
-                gap:20px;
-                flex-wrap: wrap;
-                flex-direction: row;
-                max-width: 1370px;
-                margin: auto;
-                width: calc(100% - 20px);
-                padding-bottom: 30px;
-            }
-            @media only screen and (max-width: 991px){
-                .container{
-                    gap: 10px
-                }
-            }
-            .main-container {
-            display: grid;
-            grid-template-columns: 134px 1fr;
-            gap: 20px;
-            }
-            @media only screen and (max-width: 568px){
-                .main-container {
-                gap:0px;
-                grid-template-columns:114px 1fr;
-                }
-            }
 
-            button.updateall {
-            background: var(--button-bg);
-            color: var(--button-color);
-            padding: 5px;
-            font-weight: 700;
-            font-size: 12px;
-            border-radius: 8px;
-            border:0px;
-            min-width: 100px;
-            margin: 0;
-            cursor: pointer;
-            }
-
-            .updateall.loading{
-                opacity:0.8;
-                pointer-events: none;
-            }
-            .result{
-                font-size:10px;
-                opacity: 0.7;
-                display: flex;
-                margin-left: 20px;
-                align-items: center;
-            }
-
-        
-            .container-header-buttons{
-
-                display: flex;
-                align-content: center;
-                gap: 11px;
-                margin: 17px 10px;
-
-            }
-            @media only screen and (max-width: 568px){
-                .container-header-buttons button {
-                    min-height: 43px
-                }
-            }
         </style>

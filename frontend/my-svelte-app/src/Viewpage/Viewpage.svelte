@@ -15,6 +15,21 @@
     
     let view;
 
+    const gridDefaults = (len) => {
+        
+        const defaults = [
+        "1fr",
+        "2fr 1fr",
+        "repeat( auto-fit, minmax(393px, 1fr) )"
+    ]
+    console.log("😇🥰😍🤩😘",len,defaults[len])
+        if (!!defaults[len]){
+            return defaults[len]
+        }else{
+            return defaults[2]
+        }
+}
+    let grid;
 
     const handleEditView = async (e)=>{
         
@@ -64,13 +79,14 @@
         console.log(record)
         boards = record.expand?.boards
         view = record
+        grid = view.grid ? view.grid : gridDefaults(view.boards.length - 1)
         return record
     }
     const promise = getView()
 
 
 </script>
-<main>
+<main style="--grid:{grid}">
     <!-- <Tags/> -->
      
 
@@ -97,6 +113,7 @@
 
     <!-- <img alt="background" src="{res.img}"> -->
     {#if boards}
+    {grid}
     <div use:dndzone={{items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize} class="grid">
     
         {#each boards as board(board.id)}
@@ -147,8 +164,8 @@ gap: 17px;
     }
     .grid{
         display:grid;
-        grid-template-columns: 1fr 1fr 1fr;
         gap:30px;
+        grid-template-columns: var(--grid)
     }
 
     .board-container {

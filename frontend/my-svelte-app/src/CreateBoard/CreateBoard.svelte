@@ -117,7 +117,7 @@
 <main>
 
 {#if name != "" || input?.files?.length || board.img != ""}
-<div style="border-left: 4px solid {boardPreview.color}" class="board-header">
+<div style="border-left: 4px solid {color}" class="board-header">
 
     {#if showImage}
     <div class="img-c">

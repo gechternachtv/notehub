@@ -1,9 +1,9 @@
 <script lang="ts">
     	import { Body, classList, style } from 'svelte-body';
 
-let classes = 'yotsuba-nograd';
+let classes = 'luckygreen';
 let styles = '';
-const themes = ["yotsuba-nograd","yotsuba","yotsuba-b","nograd","bluesky","luckygreen","uboa","plankton","pxtone"]
+const themes = ["luckygreen","bluesky","plankton","yotsuba-nograd","yotsuba","yotsuba-b","nograd","blood","uboa","pxtone"]
 
 const storedTheme = localStorage.getItem("storedTheme");
 classes = storedTheme ? storedTheme : classes
@@ -131,23 +131,21 @@ $:{
 			}
 
 			:global(.luckygreen) {
-				--alert: #d3152e;
+				--alert: #df223b;
 				--news: #cb4e16;
-				--header-bg: #36a672;
+				--header-bg: #36a68c;
 				--main-font-2: #000;
-				--button-bg: #297d56;
+				--button-bg: #235e56;
 				--button-color: #fff;
 				--header-color: #fff;
-				--card-bg: #fff;
-				--container-bg: #f9fbf0;
-				--gradient-col-1: #f3f5e0;
-				--gradient-col-2: #f3f5e0;
-				--body-background: linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
+				--card-bg: #efefef;
+				--container-bg: #fff;
+				--gradient-col-1: #f0f0f0;
+				--gradient-col-2: #f0f0f0;
+				--body-background: #f7f7f7;
 				--main-font-1: #214049;
-				--board-title-color: var(--header-bg);
-
-				
-			}
+				--board-title-color: #47bcad;
+				}
 
 			:global(.uboa) {
 				--alert: #D33;
@@ -201,6 +199,25 @@ $:{
 			:global(.uboa .new-section, .uboa .container-header-buttons) {
 				color: var(--button-color);
 			}
+
+
+			:global(.blood) {
+				--alert: #c50000;
+				--news: #f10000;
+				--header-bg: #3a0707;
+				--main-font-1: #0a0a0a;
+				--main-font-2: #0a0a0a;
+				--button-bg: #5e0c0c;
+				--button-color: #fff;
+				--header-color: #bdacac;
+				--card-bg: #5c6060;
+				--container-bg: #7e7e7e;
+				--gradient-col-1: #a8a8a8;
+				--gradient-col-2: #b7b7b7;
+				--body-background: #606464;
+				--board-title-color: var(--header-bg);
+			}
+
 	:global(body) {
 			--container: 1300px;
 			background: var(--gradient-col-1);

@@ -30,7 +30,7 @@
 							"content": [
 								{
 								"type": "text",
-								"text": "Edit me"
+								"text": " "
 								}
 							]
 							}

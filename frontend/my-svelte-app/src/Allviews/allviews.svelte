@@ -115,7 +115,7 @@ const handleedit = async (view)=>{
             }
     .grid{
         display:grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: repeat( auto-fit, minmax(306px, 0.5fr) );
         gap:20px;
     }
     .viewcard-container{

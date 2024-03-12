@@ -36,13 +36,17 @@
         //flip
     
         let cards = []
-        
+
+
         function handleDndConsider(e) {
            
             cards = e.detail.items;
         }
         async function handleDndFinalize(e) {
-            
+            console.log("%c drop details: -----","color:red")
+            console.log(e);
+            console.log("%c  -----","color:red")
+            console.log(cards)
             cards = e.detail.items;
     
             const record = await pb.collection('boards').update(params.id, {cards:e.detail.items.map(e => e.id)});
@@ -74,7 +78,7 @@
         });
         // @ts-ignore
             board = record;
-            console.log(board)
+            // console.log(board)
             if(record?.expand){
                 cards = cardFilter([...record.expand.cards])
             }
@@ -140,6 +144,9 @@
     board = record
     
     }
+
+
+
     </script>
     <main>
     
@@ -155,11 +162,11 @@
                 <button on:click={() => (showModal = true)}> Edit board </button>
                 </div>
             {/if}
-            <div class="grid" use:dndzone={{items:cards,type:"cards",dropTargetStyle:{opacity:"0.6"}}} on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
+            <div class="grid" use:dndzone={{items:cards,type:"cards",dropTargetStyle:{opacity:"0.6"},dropTargetClasses:["floating"],centreDraggedOnCursor:true}} on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
     
                 {#each cards as card (card.id)}
                     <div class="card-container">
-                        <Card card={card} />
+                        <Card card={card}/>
                     </div>
                     {/each}
                 {#if cards.length < 1}
@@ -168,7 +175,7 @@
             </div>
         </div>
         
-        {#if editoropen}
+        {#if true}
         <div class="con">
         <div class="editor">
             <Editor on:newcontent={handleNewCard} />
@@ -230,12 +237,16 @@
                      overflow:auto; 
                      max-height: calc(100vh - 450px); 
                     overflow: auto;
+
+                    display:grid;
+        grid-template-columns: repeat( auto-fit, minmax(353px, 0.3fr) );
+        gap:20px;
                     
                 }
                 .container{
                     max-width: 1370px;
                     margin: auto;
-                    width: calc(100% - 20px);
+                    width: calc(100% - 36px);
                     padding-bottom: 30px;
                     max-height:100%;
                 }
