@@ -1,6 +1,11 @@
 import { bulletList } from "@milkdown/prose/schema-list"
+import dateFormat from "./dateFormat"
+import getFile from "./getFile"
 
-export default async (markdownobj,pb) =>{
+export default async (markdownobj,pb,file=null) =>{
+    
+
+    const filecontent = file.files[0]
 
     const content = markdownobj.json.content
     const mdtext = markdownobj.string
@@ -57,7 +62,7 @@ export default async (markdownobj,pb) =>{
 const meta = {}
 const card = {
     color:"var(--card-bg)",
-    img:"",
+    imglink:"",
     title: "",
     tags:[],
     link:"",
@@ -65,7 +70,9 @@ const card = {
     favico: "",
     metadata:{},
     raw:content,
-    created:new Date()
+    created:new Date(),
+    file: filecontent ? filecontent : null,
+    logs:[]
 }
 
 
@@ -215,9 +222,9 @@ if(paragraph){
     //img
     const imgEl = paragraph.find(e => e.content?.find(e => e.type).type === "image")
     if(imgEl){
-        card.img = imgEl.content[0].attrs.src
+        card.imglink = imgEl.content[0].attrs.src
     }else if(meta.img){
-        card.img = meta.img
+        card.imglink = meta.img
     }
     //favico
     if(meta.favico){
@@ -269,6 +276,25 @@ if(paragraph){
 }
 
 
+
+//imgtest
+
+if(card.imglink.includes("data")){
+
+    const imgTitle = 'image';
+    const imgExtension = card.imglink.substring(card.imglink.lastIndexOf('.') + 1);
+
+    const blob = await (await fetch(card.imglink)).blob()
+
+            const newfile = new File([blob], imgTitle + '.' + imgExtension, { type: blob.type });
+            console.log("🤯")
+            console.log(newfile)
+            card.file = newfile
+            card.imglink = ""
+
+    //imgtest
+
+}
 
 
     console.log(card)

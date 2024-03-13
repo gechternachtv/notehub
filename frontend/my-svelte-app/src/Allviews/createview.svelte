@@ -215,6 +215,9 @@
 </main>
 
 <style>
+    .file{
+        margin-top:20px;
+    }
     label{
         cursor: pointer;
     }

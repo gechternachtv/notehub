@@ -1,6 +1,6 @@
 <script>
 // @ts-nocheck
-
+import dateFormat from '../dateFormat.js';
 import  {pop} from 'svelte-spa-router'
 import {pb} from '../pb.js';
 import Editor from '../Boardpage/editor.svelte';
@@ -11,7 +11,7 @@ export let params = {}
 
 export let id = params.id;
 
-console.log(id)
+console.log(params.id)
 
 
 
@@ -47,25 +47,23 @@ let promise = cardget()
 
 const handleNewCard = async (e)=>{
 
-    console.log(e)
+    console.log(showcard)
 
-    const card = await createNewCard(e.detail,pb)
-    const data = {...card,tags:card.tags.map(e => e.id)};
+    const card = await createNewCard(e.detail,pb,file)
+    const data = {...card,
+        tags:card.tags.map(e => e.id),
+        logs:[...showcard.logs,`card content updated ${dateFormat(new Date())}`]
+    };
 
     // console.log(data)
     const record = await pb.collection('cards').update(cardid, data);
     console.log("%c record:","color:turquoise")
     console.log(record)
     showcard = {...record,tags:card.tags}
-
-}
-
-const handleDelete = async (e)=>{
-    await pb.collection('cards').delete(id);
-    pop()
 }
 
 
+let file;
 
 
 
@@ -84,22 +82,27 @@ const handleDelete = async (e)=>{
         {#if showcard.id}
         <div class="grid">
             <div class="grid-ch">        
-                <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}/>
-                <div class="controls editor-panel">
-                    <button class="" on:click={()=>{pop()}}>board</button>
-                    <button class="alert" on:click={handleDelete}>delete</button>
-                </div>
+                <Editor defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}>
+                    <input bind:this={file} type="file"/>
+                </Editor>
+                
+
+
             </div>
-            <div class="grid-ch"><Card isNew={true} card={showcard}/></div>
+            <div class="grid-ch">
+                <Card isNew={true} card={showcard}/>
+            </div>
 
         </div>
-        
 
         {/if}
 
     {:catch error}
 	<p style="color: red">{error.message}</p>
 {/await}
+
+
+
 </main>
 
 <style>

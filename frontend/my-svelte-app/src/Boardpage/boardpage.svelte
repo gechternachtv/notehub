@@ -1,7 +1,7 @@
 <script>
     // @ts-nocheck
         import CreateBoard from '../CreateBoard/CreateBoard.svelte';
-
+        import dateFormat from '../dateFormat';
         import Card from '../Card/card.svelte';
         import Editor from './editor.svelte';
         
@@ -31,27 +31,48 @@
         export let params = {id:board.id}
     
     
-        
+        let file;
     
         //flip
     
-        let cards = []
+        let cards = board.cards
 
+
+        let counter = cards.length
 
         function handleDndConsider(e) {
-           
+            
             cards = e.detail.items;
         }
         async function handleDndFinalize(e) {
-            console.log("%c drop details: -----","color:red")
-            console.log(e);
+            console.log("%c drop details: -----","color:teal")
+            console.log(counter,cards.length)
+            console.log(board.name)
+            console.log(e.detail.info)
             console.log("%c  -----","color:red")
-            console.log(cards)
+            // console.log(cards)
+            //log
+
+            //
+            
             cards = e.detail.items;
-    
+            
+            
+            if(counter<cards.length){
+                const card = cards.find(o => o.id === e.detail.info.id)
+                if(board.name === "done"){
+                    card.check = "done"
+                }
+                const carddata = {card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`]}
+                await pb.collection('cards').update(e.detail.info.id,carddata);
+                
+            }
             const record = await pb.collection('boards').update(params.id, {cards:e.detail.items.map(e => e.id)});
             board = record
             // console.log(record)
+
+
+            counter = cards.length
         }
     
         //
@@ -81,6 +102,7 @@
             // console.log(board)
             if(record?.expand){
                 cards = cardFilter([...record.expand.cards])
+                counter = cards.length
             }
             // console.log(records)
             return board
@@ -101,10 +123,12 @@
     const handleNewCard = async (e)=>{
     
 
-    
-        const card = await createNewCard(e.detail,pb)
+        const card = await createNewCard(e.detail,pb,file)
 
-        const data = {...card,tags:card.tags.map(e => e.id)};
+        const data = {...card,
+            tags:card.tags.map(e => e.id),
+            logs:[`card created on ${board.name} at ${dateFormat(new Date())}`]
+        };
     
         const cardrecord = await pb.collection('cards').create(data);
 
@@ -113,14 +137,16 @@
         "cards": newcardlist
         };
 
-    const boardrecord = await pb.collection('boards').update(board.id, boarddata);
+        const boardrecord = await pb.collection('boards').update(board.id, boarddata);
 
         
-    card.id = cardrecord.id
+        card.id = cardrecord.id
     
-        cards = cardFilter([card,...cards])
+        cards = cardFilter([cardrecord,...cards])
     
         board = boardrecord
+
+        file.value = ""
     
     }
     
@@ -145,6 +171,15 @@
     
     }
 
+    const cardUpdateFront = (e)=>{
+        console.log(e)
+        const cardNewInfo = e.detail
+        const oldinfoCard = cards[cards.findIndex(e => e.id === cardNewInfo.id)]
+        cards[cards.findIndex(e => e.id === cardNewInfo.id)] = {...cardNewInfo,expand:oldinfoCard.expand}
+        board.cards = cards
+        board = board
+        console.log(board.cards)
+    }
 
 
     </script>
@@ -162,11 +197,16 @@
                 <button on:click={() => (showModal = true)}> Edit board </button>
                 </div>
             {/if}
-            <div class="grid" use:dndzone={{items:cards,type:"cards",dropTargetStyle:{opacity:"0.6"},dropTargetClasses:["floating"],centreDraggedOnCursor:true}} on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
+            <div class="grid" use:dndzone={{items:cards,
+                type:"cards",
+                dropTargetStyle:{opacity:"0.6"}
+                ,dropTargetClasses:["floating"]
+                ,centreDraggedOnCursor:true}
+                } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
     
                 {#each cards as card (card.id)}
                     <div class="card-container">
-                        <Card card={card}/>
+                        <Card card={card} on:updatefront={cardUpdateFront}/>
                     </div>
                     {/each}
                 {#if cards.length < 1}
@@ -177,8 +217,13 @@
         
         {#if true}
         <div class="con">
+            
+            <!-- <button on:click={()=>{document.querySelector(`input[type="file"]`).click()}}>upload file...</button> -->
         <div class="editor">
-            <Editor on:newcontent={handleNewCard} />
+            <Editor on:newcontent={handleNewCard} >
+                <input bind:this={file} type="file"/>
+                <!-- <button type="button" on:click={()=>{file.click()}}>file...</button> -->
+            </Editor>
         </div>
         
         <div class="boardedit">
@@ -231,7 +276,7 @@
                     flex-wrap: wrap;
                     flex-direction: row;
                     opacity:1;
-                    transition: all .3s;
+                    /* transition: all .3s; */
                     min-height:150px;
                     max-height: auto;
                      overflow:auto; 

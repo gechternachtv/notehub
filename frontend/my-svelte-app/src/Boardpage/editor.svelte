@@ -99,12 +99,22 @@
 
 <main>
 	<div bind:this={editorel} class="editor" use:editor />
-	<button class="sendbtn" on:click={sendBtn}>send</button>
+	<div class="editor-controls">
+		<div class="controls">
+			<button class="sendbtn" on:click={sendBtn}>send</button>
+			<slot></slot>
+		</div>
+		
+	</div>
+
 </main>
 
 
 
 <style>
+	.controls{
+		gap:20px;
+	}
 	main{
 		padding:20px;
 		background:var(--card-bg);
@@ -115,6 +125,10 @@
 .sendbtn {
   max-width: 103px;
   justify-content: center;
+  min-width:100px;
+}
+.editor-controls{
+	display:flex;
 }
 
 </style>

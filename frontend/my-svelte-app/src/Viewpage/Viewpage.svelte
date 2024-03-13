@@ -22,7 +22,7 @@
         "2fr 1fr",
         "repeat( auto-fit, minmax(393px, 1fr) )"
     ]
-    console.log("😇🥰😍🤩😘",len,defaults[len])
+    //console.log(len,defaults[len])
         if (!!defaults[len]){
             return defaults[len]
         }else{

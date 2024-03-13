@@ -14,9 +14,15 @@ body {
 }
 
 a {
-  color: rgb(0,100,200);
   text-decoration: none;
 }
+
+a {
+  /* color: rgb(0,100,200); */
+  color: var(--button-bg);
+  cursor: pointer;
+}
+
 
 a:hover {
   text-decoration: underline;
@@ -85,3 +91,30 @@ button:disabled {
 .milkdown  img {
   max-width: 100%;
 }
+
+.hidden{
+  display:none;
+}
+
+input[type="file"]{
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+input::file-selector-button {
+  margin: 0px;
+    border: 0px;
+    background: var(--button-bg);
+    cursor: pointer;
+    background: var(--button-bg);
+    color: var(--button-color);
+    padding: 5px;
+    font-weight: bold;
+    font-size: 11px;
+    border-radius: 8px;
+    align-items: center;
+    gap: 5px;
+    margin-right:10px;
+  }
+  
