@@ -46,7 +46,7 @@
         }
         async function handleDndFinalize(e) {
             console.log("%c drop details: -----","color:teal")
-            console.log(counter,cards.length)
+            console.log(counter,cards)
             console.log(board.name)
             console.log(e.detail.info)
             console.log("%c  -----","color:red")
@@ -142,7 +142,7 @@
         
         card.id = cardrecord.id
     
-        cards = cardFilter([cardrecord,...cards])
+        cards = cardFilter([{...cardrecord,tags:card.tags},...cards])
     
         board = boardrecord
 

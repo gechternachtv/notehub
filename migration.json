@@ -201,7 +201,7 @@
             {
                 "system": false,
                 "id": "vlssk9qm",
-                "name": "img",
+                "name": "imglink",
                 "type": "text",
                 "required": false,
                 "presentable": false,
@@ -270,6 +270,36 @@
                         "islist",
                         "done"
                     ]
+                }
+            },
+            {
+                "system": false,
+                "id": "rcimqucy",
+                "name": "logs",
+                "type": "json",
+                "required": true,
+                "presentable": false,
+                "unique": false,
+                "options": {
+                    "maxSize": 2000000
+                }
+            },
+            {
+                "system": false,
+                "id": "okkxg306",
+                "name": "file",
+                "type": "file",
+                "required": false,
+                "presentable": false,
+                "unique": false,
+                "options": {
+                    "mimeTypes": [],
+                    "thumbs": [
+                        "180x180"
+                    ],
+                    "maxSelect": 1,
+                    "maxSize": 5242880,
+                    "protected": false
                 }
             }
         ],
