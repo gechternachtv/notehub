@@ -1,7 +1,8 @@
 <script>
     import Boardcard from '../Allboards/boardcard.svelte';
     // @ts-ignore
-    import Createview from './createview.svelte';
+    import Createview from './createworkspace.svelte';
+    import { push } from 'svelte-spa-router';
     import {pb} from '../pb.js';
     import {dndzone} from "svelte-dnd-action";
     import Modal from '../modal/modal.svelte';
@@ -23,24 +24,14 @@
     const handleNewView = async (e)=>{
     const data = e.detail
     const record = await pb.collection('views').create(data);
-    const viewfull = await pb.collection('views').getOne(record.id, {
-        expand: 'boards',
-    });
-        views.unshift({...viewfull});
-        views = views;
-        console.log(data)
+    // const viewfull = await pb.collection('views').getOne(record.id, {
+    //     expand: 'boards',
+    // });
+    //     views.unshift({...viewfull});
+    //     views = views;
+    //     console.log(data)
+        push(`/workspace/${record.id}`)
     
-}
-
-const handledelete = async (id)=>{
-    
-    console.log("deleting:",id)
-    await pb.collection('views').delete(id);
-    views = views.filter(e => e.id != id);
-}
-
-const handleedit = async (view)=>{
-    console.log(view)
 }
 
 
@@ -50,7 +41,7 @@ const handleedit = async (view)=>{
     <div class="grid">
     {#each views as view}
             <div class="viewcard-container">
-                <a href="/#/view/{view.id}" class="img" >
+                <a href="/#/workspace/{view.id}" class="img" >
                     {#if view.img}
                         <div class="img-c">
                             <img style="object-position: 0px {view.position}%;" src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
@@ -60,7 +51,7 @@ const handleedit = async (view)=>{
                     {/if}
 
                 </a>
-                <div class="title"><a href="/#/view/{view.id}">{view.name}</a></div>
+                <div class="title"><a href="/#/workspace/{view.id}">{view.name}</a></div>
                 <div class="boardlist">
                     {#if view.expand?.boards}
                     {#each view.expand.boards as board}
@@ -78,7 +69,7 @@ const handleedit = async (view)=>{
     {/each}
     </div>
 {/await}
-<div class="controls"><button on:click={() => (showModal = true)}> create view </button>
+<div class="controls"><button on:click={() => (showModal = true)}> create workspace </button>
 </div>
 
 <Modal bind:showModal>

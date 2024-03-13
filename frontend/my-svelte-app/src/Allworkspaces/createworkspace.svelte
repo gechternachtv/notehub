@@ -3,9 +3,9 @@
     
     import {createEventDispatcher} from 'svelte';
     import { pb } from '../pb';
-    import  {pop} from 'svelte-spa-router'
+    import  {push} from 'svelte-spa-router'
     import Boardcard from '../Allboards/boardcard.svelte';
-
+    import Confirmaction from '../confirmaction.svelte';
     const dispatch = createEventDispatcher();
     
     export let view = {
@@ -17,6 +17,7 @@
         position:0
     }
 
+    let showconfirmbox = false;
     let imageposition = view.position
     let hasboards = view.boards.length > 0
     let boardlist = view.boards
@@ -92,7 +93,7 @@
         
         console.log("delete",view.id)
         await pb.collection('views').delete(view.id)
-        pop();
+        push("/");
         
     }
 
@@ -173,7 +174,7 @@
 
 
 {:else}
-<h1 class="board-name"> Create view </h1>
+<h1 class="board-name"> Create workspace </h1>
 {/if}
 
 <div class="grid">
@@ -204,11 +205,17 @@
     
     <div class="flex">
     {#if view.id != "" && name != "" }
-        <button on:click={handleSend}>Edit view</button>
-        <button class="alert" on:click={handleDelete}>Delete</button>
+        <button on:click={handleSend}>Edit workspace</button>
+        <button class="alert" on:click={()=>{showconfirmbox = true}}>Delete</button>
         {:else if name != "" }
-        <button  on:click={handleSend}>Create new view</button>
+        <button  on:click={handleSend}>Create new workspace</button>
     {/if}
+
+    </div>
+    <div>
+        <Confirmaction show={showconfirmbox} on:close={()=>{showconfirmbox=false}} on:confirm={()=>{handleDelete()}}>
+            Are you sure you want to delete this workspace? (This action does not affect the boards)
+        </Confirmaction>
     </div>
 
 

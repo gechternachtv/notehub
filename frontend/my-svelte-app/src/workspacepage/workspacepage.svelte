@@ -4,7 +4,7 @@
     
     import {dndzone} from "svelte-dnd-action";
     // @ts-ignore
-    import Createview from '../Allviews/createview.svelte';
+    import Createworkspace from '../Allworkspaces/createworkspace.svelte';
     import Modal from '../modal/modal.svelte';
     let showModal = false;
 
@@ -51,7 +51,8 @@
         console.log(record)
         view = record
         boards = view.expand?.boards
-
+        showModal = false
+        
     }
 
 
@@ -85,21 +86,23 @@
     const promise = getView()
 
 
+
+
 </script>
 <main style="--grid:{grid}">
     <!-- <Tags/> -->
-     
+    
 
 {#await promise then res}
 
 
 <div class="controls absolute">
     {view.name}
-    <button on:click={() => (showModal = true)}> edit view </button>
+    <button on:click={()=>{showModal = true}}> edit workspace </button>
 </div>
 
 <Modal bind:showModal>
-    <Createview view={view} on:newcontent={handleEditView}/>
+    <Createworkspace view={view} on:newcontent={handleEditView}/>
 </Modal>
 
 
@@ -113,12 +116,12 @@
 
     <!-- <img alt="background" src="{res.img}"> -->
     {#if boards}
-    {grid}
+
     <div use:dndzone={{items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize} class="grid">
     
         {#each boards as board(board.id)}
             <div class="board-container" >
-                <Board board={board} editoropen={false}/>
+                <Board listView={false} board={board} editoropen={false}/>
             </div>
         {/each}  
     

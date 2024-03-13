@@ -25,7 +25,7 @@
             color:"",
             cards:[]
         }
-
+        export let listView;
         
     
         export let params = {id:board.id}
@@ -62,8 +62,10 @@
                 const card = cards.find(o => o.id === e.detail.info.id)
                 if(board.name === "done"){
                     card.check = "done"
+                    card.logs = [...card.logs,`card marked as "completed" at ${dateFormat(new Date())}`]
                 }
-                const carddata = {card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`]}
+                const carddata = {...card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`]}
+                console.log(carddata);
                 await pb.collection('cards').update(e.detail.info.id,carddata);
                 
             }
@@ -167,8 +169,8 @@
     console.log({...board,...e.detail})
     const record = await pb.collection('boards').update(board.id, {...board,...e.detail,cards:cards.map(e => e.id)});
     console.log(record)
-    board = record
-    
+    board = record;
+    showModal = false;
     }
 
     const cardUpdateFront = (e)=>{
@@ -181,8 +183,22 @@
         console.log(board.cards)
     }
 
+    if(listView === undefined){
+        listView = !!window.localStorage.getItem("listView")
+    }
+    const handleListViewChange = ()=>{
+        if(!window.localStorage.getItem("listView")){
+            window.localStorage.setItem("listView",true)
+            listView = true
+        }else{
+            window.localStorage.removeItem("listView")
+            listView = false
+        }
+    }
 
     </script>
+
+
     <main>
     
     
@@ -195,19 +211,20 @@
             {#if editoropen}
             <div class="controls">
                 <button on:click={() => (showModal = true)}> Edit board </button>
-                </div>
+                <button on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
+            </div>
             {/if}
-            <div class="grid" use:dndzone={{items:cards,
+            <div class="grid" class:list={listView} use:dndzone={{items:cards,
                 type:"cards",
                 dropTargetStyle:{opacity:"0.6"}
                 ,dropTargetClasses:["floating"]
-                ,centreDraggedOnCursor:true}
+                }
                 } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
     
                 {#each cards as card (card.id)}
-                    <div class="card-container">
-                        <Card card={card} on:updatefront={cardUpdateFront}/>
-                    </div>
+
+                        <Card listView={listView} card={card} on:updatefront={cardUpdateFront}/>
+                    
                     {/each}
                 {#if cards.length < 1}
                      <div class="card-placeholder"></div>
@@ -284,9 +301,14 @@
                     overflow: auto;
 
                     display:grid;
-        grid-template-columns: repeat( auto-fit, minmax(353px, 0.3fr) );
-        gap:20px;
+                    grid-template-columns: repeat( auto-fit, minmax(90px, 0.3fr) );
+                    gap:20px;
                     
+                }
+                .grid.list{
+                    grid-template-columns: 190px 1fr auto;
+                    gap:3px;
+
                 }
                 .container{
                     max-width: 1370px;

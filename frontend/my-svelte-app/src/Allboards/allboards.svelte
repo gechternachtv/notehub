@@ -5,6 +5,7 @@
     // @ts-ignore
     import CreateBoard from '../CreateBoard/CreateBoard.svelte';
     import Modal from '../modal/modal.svelte';
+    import { push } from 'svelte-spa-router';
     let showModal = false;
 
 
@@ -26,12 +27,13 @@ let promise = getBoards()
 
 
 const handleNewBoard = async (e)=>{
-    const data = e.detail
-    const record = await pb.collection('boards').create(data);
-        boards.push({...record});
-        boards = boards;
-        console.log(data)
-    
+    try {
+        const data = e.detail
+        const record = await pb.collection('boards').create(data);
+        push(`/board/${record.id}`) 
+    } catch (error) {
+        console.warn(error)
+    }
 }
 
 
@@ -77,7 +79,8 @@ const handleNewBoard = async (e)=>{
             .grid{
                 display:grid;
                 gap:20px;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+                gap:40px;
             }
             .container{
                 max-width: 1370px;

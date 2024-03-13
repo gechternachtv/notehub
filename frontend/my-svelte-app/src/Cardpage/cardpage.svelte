@@ -90,7 +90,7 @@ let file;
 
             </div>
             <div class="grid-ch">
-                <Card isNew={true} card={showcard}/>
+                <Card fullView={true} card={showcard}/>
             </div>
 
         </div>

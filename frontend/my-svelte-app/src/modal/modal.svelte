@@ -3,10 +3,12 @@
     //source = https://svelte.dev/examples/modal
     
 	export let showModal; // boolean
-
 	let dialog; // HTMLDialogElement
-
-	$: if (dialog && showModal) dialog.showModal();
+	
+	$:{
+		if (dialog && !showModal) dialog.close();
+		if (dialog && showModal) dialog.showModal();
+	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->

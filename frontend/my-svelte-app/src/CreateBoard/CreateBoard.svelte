@@ -2,6 +2,8 @@
     import {createEventDispatcher} from 'svelte';
     import { pb } from '../pb';
     import  {pop} from 'svelte-spa-router'
+    import Confirmaction from '../confirmaction.svelte';
+    let showconfirmbox = false;
     const dispatch = createEventDispatcher();
     
     export let board = {
@@ -153,10 +155,15 @@
     <div class="flex">
     {#if board.id != "" && name != "" }
         <button on:click={handleSend}>Edit board</button>
-        <button class="alert" on:click={handleDelete}>Delete</button>
+        <button class="alert" on:click={()=>{showconfirmbox=true}}>Delete</button>
         {:else if name != ""}
         <button  on:click={handleSend}>Create new board</button>
     {/if}
+    </div>
+    <div>
+        <Confirmaction show={showconfirmbox} on:close={()=>{showconfirmbox=false}} on:confirm={()=>{handleDelete()}}>
+            Are you sure you want to delete this board and all the cards within?
+        </Confirmaction>
     </div>
 
 

@@ -3,14 +3,14 @@
  import {location} from 'svelte-spa-router'
   import Router from 'svelte-spa-router';
     import Board from './Boardpage/boardpage.svelte';
-      import Viewpage from './Viewpage/Viewpage.svelte';
+      import Workspaceview from './workspacepage/workspacepage.svelte';
       import Card from './Cardpage/cardpage.svelte';
       import Allboards from './Allboards/allboards.svelte';
-    import Allviews from './Allviews/allviews.svelte';
-    import Modal from './modal/modaltest.svelte';
-    
+    import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
 
-    console.log(import.meta.env.VITE_API_URL)
+
+    console.log(import.meta.env)
+    
 </script>
         
 
@@ -22,13 +22,12 @@
 <main>
 
 
-
-<nav >
+<nav>
   
 
 
-  <a  class:active={$location === "/"} href="/#/">Views</a>
-  <a  class:active={$location === "/allboards"} href="/#/allboards">Boards </a>
+  <a  class:active={$location === "/"} href="/#/">Workspaces</a>
+  <a  class:active={$location === "/allboards"} href="/#/allboards">All Boards </a>
   
   <div class="settings">
   <Themeswitch/> 
@@ -38,13 +37,14 @@
 
 <div class="app">
 <Router routes={{
-  '/sandbox':Modal,
   '/board/:id': Board,
   '/card/:id': Card,
   '/allboards/': Allboards,
-  '/view/:id': Viewpage,
-  '/': Allviews
+  '/workspace/:id': Workspaceview,
+  '/': Allworkspaces
 }} />
+
+
 
 </div>
 
