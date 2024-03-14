@@ -259,7 +259,7 @@ main{
                 color: var(--button-color);
                 padding: 5px;
                 font-weight: bold;
-                font-size: 11px;
+                font-size: 1.1rem;
                 border-radius: 8px;
                 display: flex;
                 align-items: center;
@@ -312,7 +312,7 @@ main{
             }
 
             .cards-length{
-    font-size:12px;
+    font-size:1.2rem;
     opacity: 0.6;
   }
 

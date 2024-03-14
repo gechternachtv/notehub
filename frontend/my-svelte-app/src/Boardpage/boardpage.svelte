@@ -30,7 +30,7 @@
     
         export let params = {id:board.id}
     
-    
+        let dragDisabled = true;
         let file;
     
         //flip
@@ -75,6 +75,7 @@
 
 
             counter = cards.length
+            // dragDisabled = true
         }
     
         //
@@ -214,7 +215,10 @@
                 <button on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
             </div>
             {/if}
-            <div class="grid" class:list={listView} use:dndzone={{items:cards,
+            <div class="grid"
+            class:list={listView} use:dndzone={{items:cards,
+                morphDisabled:true,
+                dragDisabled:dragDisabled,
                 type:"cards",
                 dropTargetStyle:{opacity:"0.6"}
                 ,dropTargetClasses:["floating"]
@@ -223,7 +227,14 @@
     
                 {#each cards as card (card.id)}
 
-                        <Card listView={listView} card={card} on:updatefront={cardUpdateFront}/>
+                        <Card listView={listView} card={card} on:updatefront={cardUpdateFront}>
+                            <div class="grabber" slot="grabber" 
+                            on:focus={()=>dragDisabled = false}
+                            on:mouseover={()=>dragDisabled = false} on:mouseleave={() => {dragDisabled = true}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
+                            </div>
+                        </Card>
+                            
                     
                     {/each}
                 {#if cards.length < 1}
@@ -265,6 +276,20 @@
     </main>
     
     <style>
+
+        .grabber{
+            position: absolute;
+            right: 15px;
+            z-index: 2;
+            right: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            left: -5px;
+            padding: 5px 0px;
+            top: 0;
+            padding-right: 5px;
+        }
             .con{
                 display:grid;
                 grid-template-columns: 1fr;
@@ -277,6 +302,7 @@
                     min-height:110px;
                     width:100%;
                     pointer-events: none;
+                    grid-column: span 3;
                 }
                 main{
                     background:var(--container-bg);
@@ -285,6 +311,7 @@
                     max-width: var(--container);
                     width:100%;
                     padding-bottom: 20px;
+                    
                 }
     
                 .grid{
@@ -301,27 +328,49 @@
                     overflow: auto;
 
                     display:grid;
-                    grid-template-columns: repeat( auto-fit, minmax(90px, 0.3fr) );
-                    gap:20px;
-                    
+                    margin-bottom: 19px;
+                    gap:15px;
+                    grid-template-columns: repeat(12, minmax(70px, 1fr));
+                    /* background:rgba(0, 0, 0, 0.116); */;
+                    container-type: inline-size;
+                    container-name: card-container;
+
                 }
+
+                @container card-container (max-width: 1100px) {
+                    .grid {
+                        grid-template-columns: repeat(9, minmax(70px, 1fr));
+                        
+                    }
+                }      
+
+                @container card-container (max-width: 768px) {
+                    .grid {
+                        grid-template-columns: repeat(6, minmax(70px, 1fr));
+                        
+                    }
+                }
+
+                @container card-container (max-width: 600px) {
+                    .grid {
+                        grid-template-columns: repeat(3, minmax(70px, 1fr));
+                        
+                    }
+                }
+
+
                 .grid.list{
                     grid-template-columns: 190px 1fr auto;
                     gap:3px;
 
                 }
                 .container{
-                    max-width: 1370px;
-                    margin: auto;
-                    width: calc(100% - 36px);
-                    padding-bottom: 30px;
-                    max-height:100%;
+                    padding:0px;
+                    container-type: inline-size;
+                    container-name: card-container;
                 }
-                @media only screen and (max-width: 991px){
-                    .container{
-                        gap: 10px
-                    }
-                }
+
+
 
     
               

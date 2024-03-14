@@ -28,7 +28,7 @@ $:{
 
 <style>
 	select {
-		font-size: 11px;
+		font-size: 1.1rem;
 		padding: 2px;
 		border:0px;
 		background:var(--button-bg);
@@ -219,7 +219,6 @@ $:{
 			}
 
 	:global(body) {
-			--container: 1300px;
 			background: var(--gradient-col-1);
 			background: var(--body-background);
 			background-attachment: fixed;

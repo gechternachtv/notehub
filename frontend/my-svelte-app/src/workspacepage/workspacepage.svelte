@@ -14,13 +14,13 @@
     
     
     let view;
-
+    let dragDisabled = true;
     const gridDefaults = (len) => {
         
         const defaults = [
         "1fr",
         "2fr 1fr",
-        "repeat( auto-fit, minmax(393px, 1fr) )"
+        `repeat(${len + 1}, minmax(322px, 1fr))`
     ]
     //console.log(len,defaults[len])
         if (!!defaults[len]){
@@ -52,6 +52,7 @@
         view = record
         boards = view.expand?.boards
         showModal = false
+        grid = gridDefaults(view.boards.length - 1)
         
     }
 
@@ -71,6 +72,7 @@
         const record = await pb.collection('views').update(id, {boards:e.detail.items.map(e => e.id)});
         
          console.log(record)
+        //  dragDisabled = true
     }
     
     const getView = async ()=>{
@@ -117,10 +119,13 @@
     <!-- <img alt="background" src="{res.img}"> -->
     {#if boards}
 
-    <div use:dndzone={{items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize} class="grid">
+    <div dragDisabled={true} use:dndzone={{dragDisabled:dragDisabled,items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize} class="grid">
     
         {#each boards as board(board.id)}
             <div class="board-container" >
+                <div class="grabber" on:focus={()=>dragDisabled = false} on:mouseover={()=>dragDisabled = false} on:mouseleave={() => {dragDisabled = true}}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
+                </div>
                 <Board listView={false} board={board} editoropen={false}/>
             </div>
         {/each}  
@@ -137,6 +142,19 @@
 </main>
 
 <style>
+    .grabber{
+        position:absolute;
+        right:15px;
+        z-index:2;
+        right: 0;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        left: -5px;
+        padding: 5px 0px;
+        top: 0;
+        padding-right: 5px;
+    }
     .absolute {
         position: absolute;
         
@@ -153,7 +171,7 @@
         top: -20px;
 border-radius: 0 0px 10px 0px;
 padding-left: 16px;
-font-size: 21px;
+font-size: 2.1rem;
 gap: 17px;
     }
     main{
@@ -168,17 +186,20 @@ gap: 17px;
     .grid{
         display:grid;
         gap:30px;
-        grid-template-columns: var(--grid)
+        grid-template-columns: var(--grid);
+        overflow: auto;
+        scroll-snap-type: x mandatory;
     }
 
     .board-container {
+        scroll-snap-align: start;
         padding: 11px;
         box-sizing: border-box;
-        padding: 23px 1px;
         background: var(--container-bg);
         border-radius: 10px;
         /* box-shadow: 2px 3px 4px #00000026; */
         border-radius: 4px;
+        position:relative;
     }
     .grid{
         transition:all .3s;
@@ -200,5 +221,28 @@ gap: 17px;
         height:250px;
     }
     
+
+
+
+
+    @media (max-width:1325px){
+
+        /* Inline #10 | http://localhost:5173/#/workspace/bi030ifwz0fhktp */
+
+        main{
+        width: calc(100% + 18px);
+        margin-left: -9px;
+        margin-top: -9px;
+        padding: 9px;
+        }
+
+        .img {
+
+        width: calc(100% + 18px);
+        margin-left: -9px;
+        margin-top: -9px;
+        }
+
+    }
     
 </style>

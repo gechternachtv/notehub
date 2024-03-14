@@ -114,6 +114,7 @@
 <style>
 	.controls{
 		gap:20px;
+		flex-wrap: wrap;
 	}
 	main{
 		padding:20px;

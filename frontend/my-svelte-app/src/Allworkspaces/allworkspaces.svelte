@@ -106,8 +106,18 @@
             }
     .grid{
         display:grid;
-        grid-template-columns: repeat( auto-fit, minmax(306px, 0.5fr) );
+        grid-template-columns: 1fr 1fr 1fr;
         gap:20px;
+    }
+    @media (max-width:1075px){
+        .grid{
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    @media (max-width:806px){
+        .grid{
+            grid-template-columns:1fr;
+        }
     }
     .viewcard-container{
         background: var(--card-bg);
@@ -119,7 +129,7 @@
     }
     .title a{
         font-weight: bold;
-        font-size: 23px;
+        font-size: 2.3rem;
         color: var(--board-title-color);
         display:block;
         transition:all .3s;
@@ -128,5 +138,9 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
-
+    @media (max-width:806px){
+    .boardlist{
+        grid-template-columns: 1fr;
+    }
+    }
 </style>

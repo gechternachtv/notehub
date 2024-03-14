@@ -15,7 +15,7 @@
 </main>
 <style>
     main{
-        font-size:13px;
+        font-size:1.3rem;
         margin-top:12px;
     }
 </style>

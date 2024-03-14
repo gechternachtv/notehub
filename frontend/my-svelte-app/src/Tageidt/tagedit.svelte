@@ -41,7 +41,7 @@ const promise = getTags()
 
 <style>
             .tags {
-            font-size: 11px;
+            font-size: 1.1rem;
             opacity:0.8;
             margin-bottom:20px;
             }

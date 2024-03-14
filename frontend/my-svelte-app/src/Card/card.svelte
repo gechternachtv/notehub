@@ -15,7 +15,7 @@
         }
         export let fullView = false;
         export let listView = false;
-        //  console.log(card)
+        console.log(card)
 
         let date;
         let showconfirmbox = false
@@ -62,22 +62,20 @@
 
         setInfo(card)
 
+
         // console.log(getFile(card))
 
 </script>
 
 
 
-    <div class="card" class:newpost={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
+    <div class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
+
         <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
         
         <div class="card-container card-container---image">
+            <slot name="grabber" />
             <div class="thumb">
-                <div class="tooltip">
-                    <!-- {#each channel.laspost.split("\n") as content} -->
-                    <div><!-- {content} --> {card.id} </div>
-                    <!-- {/each} -->
-                </div>
 
                     <!-- {#if channel.thumb} -->
                     <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
@@ -155,7 +153,7 @@
             {/if}
             {#if fullView}
             <div class="controls editor-panel">
-                <button class="" on:click={()=>{pop()}}>board</button>
+                <!-- <button class="" on:click={handlemovetoBoard}>move to</button> -->
                 <button class="alert" on:click={()=>showconfirmbox=true}>delete</button>
             </div>
 
@@ -168,7 +166,11 @@
             Are you sure you want to delete this card?
         </Confirmaction>
         {#if fullView}
-
+        <div class="tooltip">
+            <!-- {#each channel.laspost.split("\n") as content} -->
+            <div><!-- {content} -->id: {card.id} </div>
+            <!-- {/each} -->
+        </div>
             {#if card.logs}
             <div class="log-container">
                 {#if card.logs.length > 1}
@@ -214,13 +216,14 @@
                 grid-template-columns: subgrid;
                 gap:14px;
                 min-height: 83px;
+                max-width:100%;
             }
 
 
 
-    .card-container{
-        /* border:1px solid red; */
-    }
+            @container card-container (max-width: 768px) {
+
+                }
 
     .card-container---controls{
                 display: flex;
@@ -249,7 +252,7 @@
         margin-top:20px;
     }
 .log {
-    font-size:12px;
+    font-size:1.2rem;
     opacity:0.6;
     margin: 3px;
     padding: 3px;
@@ -290,7 +293,7 @@ color: var(--button-color);
                 color: var(--button-color);
                 padding: 5px;
                 font-weight: bold;
-                font-size: 11px;
+                font-size: 1.1rem;
                 border-radius: 8px;
                 display: flex;
                 align-items: center;
@@ -311,7 +314,7 @@ color: var(--button-color);
                 color:var(--main-font-2);
             }
             .tags {
-            font-size: 11px;
+            font-size: 1.1rem;
             opacity:0.8
             }
 
@@ -328,7 +331,7 @@ color: var(--button-color);
             }
 
             .link {
-                font-size:10px;
+                font-size:1.0rem;
                 opacity:0.6;
                 margin-bottom:1em;
                 max-height: 36px;
@@ -336,29 +339,29 @@ color: var(--button-color);
             }
 
             .updates{
-                font-size:11px;
+                font-size:1.1rem;
                 white-space: pre-wrap;
+                overflow: hidden;
+                max-height:8ch;
+            }
+
+            .fullview .updates , .listview .updates{
+                max-height: unset;
             }
 
             .tooltip {
-            font-size: 10px;
-            background: var(--button-color);
+            font-size: 1.0rem;
             color: var(--button-bg);
             padding: 14px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            border: 1px solid;
-            opacity:0;
             max-width: 100%;
             word-break: break-word;
             pointer-events: none;
             max-height: 180px;
-            overflow: hidden;
             z-index: 2;
+            opacity:1
             }
 
-            .thumb:hover .tooltip{
+            .thumb .tooltip{
                 opacity:1;
             }
 
@@ -369,29 +372,27 @@ color: var(--button-color);
                 }
             }
 
-            .newpost.card{
+            .fullview.card{
                 max-width:100% ;
                 width:100%;
             }
-            .newpost .img-c object,.newpost .img-c img{
+            .fullview .img-c object,.fullview .img-c img{
                 max-width:100%;
             }
 
-            .newpost .img-c object{
+            .fullview .img-c object{
                 width:100%;
             }
             
 
-            .newpost .thumb:hover .tooltip{
-                opacity:0;
-            }
+
 
             input{
                 cursor:pointer;
             }
             .inputholder label{
                 cursor:pointer;
-                font-size:12px;
+                font-size:1.2rem;
                 opacity:0.6;
             }
             .inputholder{
@@ -421,7 +422,7 @@ color: var(--button-color);
             }
 
 .date {
-    font-size: 12px;
+    font-size: 1.2rem;
   opacity: 0.7;
   margin-top: 17px;
 }

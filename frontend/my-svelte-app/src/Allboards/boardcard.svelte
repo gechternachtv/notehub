@@ -59,7 +59,7 @@
 
 
   .cards-length{
-    font-size:12px;
+    font-size:1.2rem;
     opacity: 0.6;
   }
             .board-header{
@@ -121,7 +121,7 @@
 }
 
 .small h1 {
-  font-size: 16px;
+  font-size: 1.4rem;
   font-weight: normal;
 }
 

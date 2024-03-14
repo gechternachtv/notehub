@@ -61,11 +61,17 @@
 padding: 30px;
 }
 
+@media (max-width:1325px){
+  .app{
+    padding: 9px;}
+}
+
   nav{
     background:var(--header-bg);
         display: flex;
     display: grid;
 grid-template-columns: auto auto 1fr;
+font-size: 1.1rem;
   }
   nav a {
     color:var(--header-color);
@@ -100,8 +106,8 @@ grid-template-columns: auto auto 1fr;
                 background:var(--container-bg);
                 color:var(--main-font-1);
                 margin:auto;
-                max-width: var(--container);
-                width:100%;
+                max-width: 1440px;
+                width:95vw;
                 padding-bottom: 40px;
             }
 
