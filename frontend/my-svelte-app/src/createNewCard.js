@@ -2,10 +2,10 @@ import { bulletList } from "@milkdown/prose/schema-list"
 import dateFormat from "./dateFormat"
 import getFile from "./getFile"
 
-export default async (markdownobj,pb,file=null) =>{
+export default async (markdownobj,pb,file=null,currentfile=null) =>{
     
 
-    const filecontent = file.files[0]
+    const filecontent = file?.files[0]
 
     const content = markdownobj.json.content
     const mdtext = markdownobj.string
@@ -68,10 +68,10 @@ const card = {
     link:"",
     text:"",
     favico: "",
-    metadata:{},
+    data:{},
     raw:content,
     created:new Date(),
-    file: filecontent ? filecontent : null,
+    file: filecontent ? filecontent : currentfile ? currentfile : null,
     logs:[]
 }
 
@@ -248,11 +248,14 @@ if(paragraph){
        
             const name = dataWord.replace("$", '').split(":")[0]
             const data = dataWord.replace("$", '').split(":")[1]
-            console.log(name,data,card[name])
-    
-            if(card[name] && data != null){
+            console.log(name,data,card[name],name in card)
+
+            if(name in card && data != null){
+                
                 card[name] = data;
                 card.text = card.text.replace(dataWord,"")
+            }else{
+                card.data[name] = data
             }
         } catch (error) {
             console.warn(error)
@@ -296,7 +299,7 @@ if(card.imglink.includes("data")){
 
 }
 
-
+    console.log("here:")
     console.log(card)
 
     return card

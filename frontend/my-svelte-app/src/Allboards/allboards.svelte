@@ -6,7 +6,12 @@
     import CreateBoard from '../CreateBoard/CreateBoard.svelte';
     import Modal from '../modal/modal.svelte';
     import { push } from 'svelte-spa-router';
+    import { onDestroy } from 'svelte';
     let showModal = false;
+
+
+
+
 
 
 let boards = [];
@@ -19,6 +24,8 @@ const getBoards = async ()=>{
     });
     
     boards = [...records]
+
+
     console.log(records)
 }
 
@@ -36,6 +43,26 @@ const handleNewBoard = async (e)=>{
     }
 }
 
+
+pb.collection('boards').subscribe('*', (e)=> {
+    console.log("%c subscribe!","color:teal")
+    console.log(e.action);
+    console.log(e.record);
+
+    if(e.action === "create"){
+        boards = [...boards,e.record]
+    }else if(e.action === "update"){
+        boards = boards.map(a => a.id === e.record.id ? e.record : a);
+    }else if(e.action === "delete"){
+        boards = boards.filter(a => a.id != e.record.id)
+    }
+    console.log("%c ------","color:teal")
+    // views = e.record
+}, { expand: 'tags' });
+
+onDestroy(() => {
+    pb.collection('boards').unsubscribe("*")
+        });
 
 </script>
 <main>

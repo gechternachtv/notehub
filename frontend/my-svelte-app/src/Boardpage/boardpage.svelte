@@ -9,11 +9,18 @@
         import Boardcard from '../Allboards/boardcard.svelte';
         import {pb} from '../pb.js';
         import Modal from '../modal/modal.svelte';
-        let showModal = false;
+        import { push } from 'svelte-spa-router';
+        import { onDestroy } from 'svelte';
+        import {createEventDispatcher} from 'svelte';
 
+        const dispatch = createEventDispatcher();
+
+
+        let showModal = false;
+        let boardisactive = true;
     
     //flip
-    
+
         import {dndzone} from "svelte-dnd-action";
     
     
@@ -35,8 +42,10 @@
     
         //flip
     
-        let cards = board.cards
+        let cards = board.expand?.cards ? board.expand.cards : board.cards
 
+        console.log("%c =-=====","font-size:30px;color:teal")
+        console.log(board)
 
         let counter = cards.length
 
@@ -64,13 +73,19 @@
                     card.check = "done"
                     card.logs = [...card.logs,`card marked as "completed" at ${dateFormat(new Date())}`]
                 }
-                const carddata = {...card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`]}
+                const carddata = {...card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`],board:board.id}
+
                 console.log(carddata);
                 await pb.collection('cards').update(e.detail.info.id,carddata);
                 
             }
+            
+            
             const record = await pb.collection('boards').update(params.id, {cards:e.detail.items.map(e => e.id)});
-            board = record
+            board = {...record,cards:cards}
+            dispatch('boardupdate',{...board,cards:cards})
+            
+            
             // console.log(record)
 
 
@@ -80,16 +95,8 @@
     
         //
     
-    
-        
-    
-        
-        
-    
-        
-    
-    
     const cardFilter = (cards)=>{
+        
         return cards
     }
     
@@ -97,17 +104,69 @@
     
         if(params.id && !params.id.includes("dnd-shadow-placeholder")){
         try {   
-            const record = await pb.collection('boards').getOne(params.id, {
-            expand: 'cards.tags',
-        });
+            if(board.id === ""){
+                const record = await pb.collection('boards').getOne(params.id, {
+                expand: 'cards.tags',
+            });
         // @ts-ignore
             board = record;
+            dispatch('boardupdate',board)
             // console.log(board)
             if(record?.expand){
                 cards = cardFilter([...record.expand.cards])
                 counter = cards.length
             }
             // console.log(records)
+
+
+
+            }
+
+            pb.collection('boards').subscribe(params.id, (e)=> {
+                console.log(`%c ${e.action} event on ${board.id}`,"background:turquoise;color:red;font-size:20px")
+                console.log(e.record);
+
+                if(e.action === "update"){
+                    board = e.record
+                    
+                        if(e.record?.expand){
+                            console.log(cardFilter([...e.record.expand.cards]))
+                            cards = cardFilter([...e.record.expand.cards])
+                            counter = cards.length
+                            dispatch('boardupdate',{...board,cards:cards})
+                        }else{
+                            cards = []
+                            dispatch('boardupdate',{...board,cards:[]})
+                        }
+                }else if(e.action === "delete"){
+                    boardisactive = false
+                    pb.collection('boards').unsubscribe(params.id);
+                    console.log("deleted!");
+                }
+                console.log("%c ------","color:teal")
+                // views = e.record
+        }, { expand: 'cards.tags' });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             return board
         
         } catch (error) {
@@ -117,6 +176,11 @@
     
     }
     
+
+    onDestroy(() => {
+                    pb.collection('boards').unsubscribe(params.id);
+                });
+
     let promise = getRecords()
     
     
@@ -143,11 +207,11 @@
         const boardrecord = await pb.collection('boards').update(board.id, boarddata);
 
         
-        card.id = cardrecord.id
+        // card.id = cardrecord.id
     
-        cards = cardFilter([{...cardrecord,tags:card.tags},...cards])
+        // cards = cardFilter([{...cardrecord,tags:card.tags},...cards])
     
-        board = boardrecord
+        // board = boardrecord
 
         file.value = ""
     
@@ -171,6 +235,7 @@
     const record = await pb.collection('boards').update(board.id, {...board,...e.detail,cards:cards.map(e => e.id)});
     console.log(record)
     board = record;
+    dispatch('boardupdate',board)
     showModal = false;
     }
 
@@ -181,6 +246,7 @@
         cards[cards.findIndex(e => e.id === cardNewInfo.id)] = {...cardNewInfo,expand:oldinfoCard.expand}
         board.cards = cards
         board = board
+        dispatch('boardupdate',board)
         console.log(board.cards)
     }
 
@@ -202,12 +268,14 @@
 
     <main>
     
-    
+    {#if boardisactive}
+         <!-- content here -->
+
         
         {#await promise then views}
     
         <div class="container">
-            
+            <!-- {board.id} -->
             <Boardcard board={board}/>
             {#if editoropen}
             <div class="controls">
@@ -215,18 +283,21 @@
                 <button on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
             </div>
             {/if}
-            <div class="grid"
-            class:list={listView} use:dndzone={{items:cards,
-                morphDisabled:true,
-                dragDisabled:dragDisabled,
-                type:"cards",
-                dropTargetStyle:{opacity:"0.6"}
-                ,dropTargetClasses:["floating"]
-                }
-                } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
-    
-                {#each cards as card (card.id)}
 
+                <div class="grid"
+                class:list={listView} use:dndzone={{items:cards,
+                    morphDisabled:true,
+                    dragDisabled:dragDisabled,
+                    type:"cards",
+                    dropTargetStyle:{opacity:"0.6"}
+                    ,dropTargetClasses:["floating"]
+                    }
+                    } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
+
+                    
+                        
+                        {#each cards as card (card.id)}
+                            
                         <Card listView={listView} card={card} on:updatefront={cardUpdateFront}>
                             <div class="grabber" slot="grabber" 
                             on:focus={()=>dragDisabled = false}
@@ -236,12 +307,18 @@
                         </Card>
                             
                     
-                    {/each}
-                {#if cards.length < 1}
-                     <div class="card-placeholder"></div>
-                {/if}
+                        {/each}
+                    
+
+                        {#if cards?.length < 1}
+                            <div class="card-placeholder"></div>
+                        {/if}
+                </div>
+
+
+
+
             </div>
-        </div>
         
         {#if true}
         <div class="con">
@@ -268,7 +345,9 @@
         {/await}
     
     
-    
+        {:else}
+        this board was deleted
+        {/if}
     
     
     
@@ -320,7 +399,7 @@
                     flex-wrap: wrap;
                     flex-direction: row;
                     opacity:1;
-                    /* transition: all .3s; */
+                   
                     min-height:150px;
                     max-height: auto;
                      overflow:auto; 

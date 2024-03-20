@@ -57,7 +57,24 @@
             
         }
 
+        // const handlemovetoBoard = async ()=>{
+        //     movetoBoard("tw5augb2ospnnzx")
+        // }
 
+        // const movetoBoard = async (boardtoinsert)=>{
+            
+        //     const currentboard = await pb.collection('boards').getOne(card.board);
+        //     await pb.collection('boards').update(card.board, {...currentboard,cards:currentboard.cards.filter(e => e != card.id)});
+            
+        //     const newboard = await pb.collection('boards').getOne(boardtoinsert);
+        //     await pb.collection('boards').update(boardtoinsert, {...newboard,cards:[card.id,...newboard.cards]});
+
+
+        //     const record = await pb.collection('cards').update(card.id, {...card,board:boardtoinsert});
+
+        //     card = record
+
+        // }
 
 
         setInfo(card)
@@ -70,7 +87,7 @@
 
 
     <div class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
-
+        <!-- {card.board} -->
         <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
         
         <div class="card-container card-container---image">
@@ -153,6 +170,7 @@
             {/if}
             {#if fullView}
             <div class="controls editor-panel">
+                <a href="/#/board/{card.board}">board</a>
                 <!-- <button class="" on:click={handlemovetoBoard}>move to</button> -->
                 <button class="alert" on:click={()=>showconfirmbox=true}>delete</button>
             </div>
@@ -288,7 +306,7 @@ color: var(--button-color);
         /* min-height: 100px; */
     }
 
-            .feed-btn a{
+            .feed-btn a, .editor-panel a{
                 background: var(--button-bg);
                 color: var(--button-color);
                 padding: 5px;
@@ -298,6 +316,7 @@ color: var(--button-color);
                 display: flex;
                 align-items: center;
                 gap: 5px;
+                text-decoration: none;
             }
 
             .feed-btn a:hover {

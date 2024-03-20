@@ -1,11 +1,12 @@
 <script>
 // @ts-nocheck
     
-    import {createEventDispatcher} from 'svelte';
+    
     import { pb } from '../pb';
     import  {push} from 'svelte-spa-router'
     import Boardcard from '../Allboards/boardcard.svelte';
     import Confirmaction from '../confirmaction.svelte';
+    import {createEventDispatcher} from 'svelte';
     const dispatch = createEventDispatcher();
     
     export let view = {

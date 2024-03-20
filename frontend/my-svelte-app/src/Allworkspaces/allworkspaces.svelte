@@ -6,6 +6,7 @@
     import {pb} from '../pb.js';
     import {dndzone} from "svelte-dnd-action";
     import Modal from '../modal/modal.svelte';
+    import { onDestroy } from 'svelte';
     let showModal = false;
 
 
@@ -34,6 +35,26 @@
     
 }
 
+
+pb.collection('views').subscribe('*', (e)=> {
+    console.log("%c subscribe!","color:teal")
+    console.log(e.action);
+    console.log(e.record);
+
+    if(e.action === "create"){
+        views = [...views,e.record]
+    }else if(e.action === "update"){
+        views = views.map(a => a.id === e.record.id ? e.record : a);
+    }else if(e.action === "delete"){
+        views = views.filter(a => a.id != e.record.id)
+    }
+    console.log("%c ------","color:teal")
+    // views = e.record
+}, { expand: 'boards' });
+
+onDestroy(()=>{
+    pb.collection('views').unsubscribe("*");
+})
 
 </script>
 

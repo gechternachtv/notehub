@@ -6,8 +6,10 @@
     // @ts-ignore
     import Createworkspace from '../Allworkspaces/createworkspace.svelte';
     import Modal from '../modal/modal.svelte';
+    import { onDestroy } from 'svelte';
+    
     let showModal = false;
-
+    let boardisactive = true
 
     export let params = {}
     export let id = params.id;
@@ -83,9 +85,56 @@
         boards = record.expand?.boards
         view = record
         grid = view.grid ? view.grid : gridDefaults(view.boards.length - 1)
+
+
+
+        pb.collection('views').subscribe(params.id, (e)=> {
+                console.log("%c subscribe!","color:teal")
+                console.log(e.action);
+                console.log(e.record);
+
+                if(e.action === "update"){
+                    view = e.record
+                    grid = view.grid ? view.grid : gridDefaults(view.boards.length - 1)
+                    boards = e.record.expand?.boards
+                }else if(e.action === "delete"){
+                    boardisactive = false
+                    pb.collection('views').unsubscribe(params.id);
+                    console.log("deleted!");
+                }
+                console.log("%c ------","color:teal")
+                // views = e.record
+        }, { expand: 'boards.cards.tags' });
+
+
+
+
+
         return record
     }
     const promise = getView()
+
+
+const boardUpdate = data => {
+    console.log(`%c ${data.detail.id}!!!!`,"color:skyblue;font-size:20px")
+    boards = boards.map(e => e.id === data.detail.id ? data.detail : e)
+    console.log(data.detail)
+    console.log(boards)
+    boards = boards
+    console.log("%c -=-","color:red;font-size:20px")
+}
+
+
+
+
+
+
+
+
+        onDestroy(() => {
+                    pb.collection('views').unsubscribe(params.id);
+                });
+
 
 
 
@@ -94,7 +143,7 @@
 <main style="--grid:{grid}">
     <!-- <Tags/> -->
     
-
+{#if boardisactive}
 {#await promise then res}
 
 
@@ -126,17 +175,23 @@
                 <div class="grabber" on:focus={()=>dragDisabled = false} on:mouseover={()=>dragDisabled = false} on:mouseleave={() => {dragDisabled = true}}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
                 </div>
-                <Board listView={false} board={board} editoropen={false}/>
+
+                    <Board listView={false} board={board} editoropen={false} on:boardupdate={boardUpdate} />
+                
             </div>
         {/each}  
     
 
     </div>
     {/if}
-{:catch error}
-    :c
+    {:catch error}
+    error fetching data, <br/><br/>
     {error}
 {/await}
+{:else}
+     this workspace was deleted
+{/if}
+
 
 
 </main>
@@ -202,7 +257,6 @@ gap: 17px;
         position:relative;
     }
     .grid{
-        transition:all .3s;
         opacity:1;
         margin-top: -72px;
     }

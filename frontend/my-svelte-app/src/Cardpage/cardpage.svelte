@@ -17,6 +17,8 @@ console.log(params.id)
 
 let showcard = {};
 let cardid = ""
+let file;
+let currentfile;
 
 const cardget = async()=>{
     if(id){
@@ -27,6 +29,8 @@ const cardget = async()=>{
                 // console.log(res);
                 showcard = res
                 cardid = res.id
+                console.log(res)
+                currentfile = res.file;
                 return {
 				type: 'json',
 				value: {
@@ -34,6 +38,7 @@ const cardget = async()=>{
 						"content": res.raw
 						}
 			};
+            
                 
                 }catch(err){
                     console.warn(err)
@@ -49,7 +54,7 @@ const handleNewCard = async (e)=>{
 
     console.log(showcard)
 
-    const card = await createNewCard(e.detail,pb,file)
+    const card = await createNewCard(e.detail,pb,file,currentfile)
     const data = {...card,
         tags:card.tags.map(e => e.id),
         logs:[...showcard.logs,`card content updated ${dateFormat(new Date())}`]
@@ -63,7 +68,7 @@ const handleNewCard = async (e)=>{
 }
 
 
-let file;
+
 
 
 
