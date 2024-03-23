@@ -9,6 +9,8 @@
         import dateFormat from '../dateFormat.js';
         import getFile from '../getFile.js';
         import Confirmaction from '../confirmaction.svelte';
+        import Modal from '../modal/modal.svelte';
+        import Moveoptions from './moveoptions.svelte';
         export let card = {
             id:"",
             check:""
@@ -19,6 +21,7 @@
 
         let date;
         let showconfirmbox = false
+        let showModal = false
         const dispatch = createEventDispatcher()
         const setInfo = (card)=>{
         checked = card.check === "done"
@@ -56,25 +59,27 @@
             dispatch("updatefront",card)
             
         }
+        // const handlemovetoBoard = async ()=>{ console.log("hey")}
+        const handlemovetoBoard = async ()=>{
+            showModal=true
+            // movetoBoard("tw5augb2ospnnzx")
+        }
 
-        // const handlemovetoBoard = async ()=>{
-        //     movetoBoard("tw5augb2ospnnzx")
-        // }
-
-        // const movetoBoard = async (boardtoinsert)=>{
+        const movetoBoard = async (boardtoinsert)=>{
+            showModal=false
+            const currentboard = await pb.collection('boards').getOne(card.board);
+            await pb.collection('boards').update(card.board, {...currentboard,cards:currentboard.cards.filter(e => e != card.id)});
             
-        //     const currentboard = await pb.collection('boards').getOne(card.board);
-        //     await pb.collection('boards').update(card.board, {...currentboard,cards:currentboard.cards.filter(e => e != card.id)});
+            const newboard = await pb.collection('boards').getOne(boardtoinsert);
+            await pb.collection('boards').update(boardtoinsert, {...newboard,cards:[card.id,...newboard.cards]});
+
+
+            const record = await pb.collection('cards').update(card.id, {...card,board:boardtoinsert});
+
+            card = record
+
             
-        //     const newboard = await pb.collection('boards').getOne(boardtoinsert);
-        //     await pb.collection('boards').update(boardtoinsert, {...newboard,cards:[card.id,...newboard.cards]});
-
-
-        //     const record = await pb.collection('cards').update(card.id, {...card,board:boardtoinsert});
-
-        //     card = record
-
-        // }
+        }
 
 
         setInfo(card)
@@ -87,6 +92,9 @@
 
 
     <div class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
+        <Modal bind:showModal>
+            <Moveoptions currentboard={card.board} on:submit={(e)=>{movetoBoard(e.detail)}}></Moveoptions>
+        </Modal>
         <!-- {card.board} -->
         <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
         
@@ -118,11 +126,12 @@
         <div class="card-container card-container---info">
             <!-- <div class="title">{channel.name}</div> -->
             <!-- <div class="hostName">{channel.host}</div> -->
+            <a class="nodeco" href="/#/card/{card.id}">
             <div class="title">
                 <img style="max-width:16px" loading=lazy src="{card.favico}" alt=""> {card.title}
             </div> 
             <div class="link">{linkPreview(card)}</div> 
-
+            </a>
             {#if card.check}
                 {#if card.check === "done" || card.check === "islist"}
                 <div class:checked={checked} class="inputholder">
@@ -131,7 +140,9 @@
                 {/if}
             {/if}
 
-            <div class="updates">{card.text}</div>
+            <a class="nodeco" href="/#/card/{card.id}">
+                <div class="updates">{card.text}</div>
+            </a>
             <div class="date">📅 {date}</div>
 
             {#if card.expand?.tags}
@@ -163,21 +174,30 @@
         </div>
 
         <div class="card-container card-container---controls">
-            {#if card.link != "" || card.imglink != "" || card.file != ""}
-            <div class="feed-btn"><a target="_blank" href="{card.link ? card.link : card.imglink ? card.imglink : getFile(card).link}">open 
-                <svg fill="var(--button-color)" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="15px" height="15px"><path d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"/></svg>
-            </a></div>
-            {/if}
-            {#if fullView}
-            <div class="controls editor-panel">
-                <a href="/#/board/{card.board}">board</a>
-                <!-- <button class="" on:click={handlemovetoBoard}>move to</button> -->
-                <button class="alert" on:click={()=>showconfirmbox=true}>delete</button>
-            </div>
 
+
+            <div class="controls editor-panel">
+
+                {#if card.link != "" || card.imglink != "" || card.file != ""}
+                <div class="feed-btn"><a target="_blank" href="{card.link ? card.link : card.imglink ? card.imglink : getFile(card).link}"> 
+                    <svg fill="var(--button-color)" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="15px" height="15px"><path d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"/></svg>
+                </a></div>
+                {/if}
+            {#if fullView}
+            
+                <button class="" on:click={handlemovetoBoard}>move ➜</button>
+                <a href="/#/board/{card.board}">current board</a>
+                <button class="alert" on:click={()=>showconfirmbox=true}>delete</button>
+                
+            
             {:else}
-                <div class="feed-btn"><a href="/#/card/{card.id}">more</a></div>
+            
+            <a href="/#/card/{card.id}">more</a>  
+                  
+
             {/if}
+            </div>   
+            
 
         </div>
         <Confirmaction show={showconfirmbox} on:close={()=>{showconfirmbox=false}} on:confirm={()=>{handleDelete()}}>
@@ -209,6 +229,14 @@
 
 
 <style>
+
+.nodeco{
+    text-decoration: none;
+}
+button, .btn {
+  min-height: 26px;
+}
+
 
 .card{
                 background-color:var(--card-bg);
@@ -331,6 +359,7 @@ color: var(--button-color);
 
 
 
+
             .title{
                 font-weight: bold;
                 color:var(--main-font-2);
@@ -349,7 +378,7 @@ color: var(--button-color);
             font-weight: bold;
             background:var(--header-bg);
             margin-bottom: 4px;
-            padding: 1px 7px !important;
+            padding: 3px 7px !important;
             color:white !important;
             
             }
@@ -476,5 +505,12 @@ right: 26px;
 .listview .updates {
   max-width:87%;
 }
+
+@media(max-width:991px){
+    .feed-btn a, .editor-panel a{
+        padding: 10px;
+    }
+}
+
 
 </style>

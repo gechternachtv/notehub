@@ -65,7 +65,8 @@ const handleNewCard = async (e)=>{
     const card = await createNewCard(e.detail,pb,fileelement,currentfile)
     const data = {...card,
         tags:card.tags.map(e => e.id),
-        logs:[...showcard.logs,`card content updated ${dateFormat(new Date())}`]
+        logs:[...showcard.logs,`card content updated ${dateFormat(new Date())}`],
+        board:showcard.board
     };
 
     // console.log(data)

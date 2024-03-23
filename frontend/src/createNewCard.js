@@ -72,7 +72,8 @@ const card = {
     raw:content,
     created:new Date(),
     file: filecontent ? filecontent : currentfile ? currentfile : null,
-    logs:[]
+    logs:[],
+    board:""
 }
 
 

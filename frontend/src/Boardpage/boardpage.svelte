@@ -41,6 +41,7 @@
         let fileelement;
         let files;
         let editorBlocked = false;
+        let editorOpen = false;
         //flip
     
         let cards = board.expand?.cards ? board.expand.cards : board.cards
@@ -195,7 +196,8 @@
 
         const data = {...card,
             tags:card.tags.map(e => e.id),
-            logs:[`card created on ${board.name} at ${dateFormat(new Date())}`]
+            logs:[`card created on ${board.name} at ${dateFormat(new Date())}`],
+            board:board.id
         };
     
         const cardrecord = await pb.collection('cards').create(data);
@@ -285,8 +287,12 @@
                 <button on:click={() => (showModal = true)}> Edit board </button>
                 <button on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
             </div>
+            {:else}
+                <button class="editorOpentoggle" on:click={()=>editorOpen=!editorOpen}>{editorOpen ? "-" : "+"}</button>
             {/if}
 
+            <div class="grid-container">
+                
                 <div class="grid"
                 class:list={listView} use:dndzone={{items:cards,
                     morphDisabled:true,
@@ -318,34 +324,44 @@
                         {/if}
                 </div>
 
-
-
+                {#if  editorOpen}
+                <div class="con conworkspace">
+                    <div class:editorBlocked={editorBlocked} class="editor">
+                        <Editor bind:editorBlocked bind:files bind:fileelement on:newcontent={handleNewCard} ></Editor>
+                    </div>
+                </div>
+                {/if}
 
             </div>
+
+
+            {#if boardpage}
+            <div class="con condesktop">
+                <div class:editorBlocked={editorBlocked} class="editor">
+                    <Editor bind:editorBlocked bind:files bind:fileelement on:newcontent={handleNewCard} ></Editor>
+                </div>
+                
+                <div class="boardedit">
+
+                    <Modal bind:showModal>
+                        <CreateBoard on:newcontent={handleUpdate} board={board}/>
+                    </Modal>
+                
+                </div>
+            </div>
+            {/if}
+
+        </div>
+
         
 
-        <div class="con">
+ 
             
 
-        {#if boardpage}
-    
-            <!-- <button on:click={()=>{document.querySelector(`input[type="file"]`).click()}}>upload file...</button> -->
-        <div class:editorBlocked={editorBlocked} class="editor">
-            <Editor bind:editorBlocked bind:files bind:fileelement on:newcontent={handleNewCard} ></Editor>
-        </div>
-        
-        <div class="boardedit">
-
-            <Modal bind:showModal>
-                <CreateBoard on:newcontent={handleUpdate} board={board}/>
-            </Modal>
-        
-        </div>
-
-        {/if}
 
 
-        </div>
+
+  
   
 
     
@@ -363,6 +379,9 @@
     
     <style>
 
+        main{
+            position: relative;
+        }
         
         .grabber{
             position: absolute;
@@ -380,7 +399,6 @@
             .con{
                 display:grid;
                 grid-template-columns: 1fr;
-                gap:30px;
             }
 
                 .card-placeholder{
@@ -395,25 +413,16 @@
                     background:var(--container-bg);
                     color:var(--main-font-1);
                     margin:auto;
-                    max-width: var(--container);
+                    /* max-width: var(--container); */
                     width:100%;
                     /* padding-bottom: 20px; */
                     
                 }
     
                 .grid{
-                    display: flex;
-                    gap:20px;
-                    flex-wrap: wrap;
-                    flex-direction: row;
-                    opacity:1;
-                   
+                    gap:20px;     
+                    opacity:1;     
                     min-height:150px;
-                    max-height: auto;
-                     overflow:auto; 
-                     max-height: var(--board-height); 
-                    overflow: auto;
-
                     display:grid;
                     margin-bottom: 19px;
                     gap:15px;
@@ -421,7 +430,13 @@
                     /* background:rgba(0, 0, 0, 0.116); */;
                     container-type: inline-size;
                     container-name: card-container;
+                    
 
+                }
+
+                .grid-container{
+                    max-height: var(--board-height); 
+                    overflow: auto;
                 }
 
                 @container card-container (max-width: 1100px) {
@@ -459,6 +474,18 @@
 
 
 
-    
+        .con{
+            position:sticky;
+            width: 100%;
+            bottom: 0;
+            border-top:4px solid var(--container-bg)
+        }
+        .editorOpentoggle{
+
+        position: absolute;
+        top:18px;right:20px;
+        padding:6px 8px;
+        border-radius: 6px
+        }
               
     </style>

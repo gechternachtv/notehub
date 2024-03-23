@@ -53,7 +53,7 @@ const promise = getTags()
             font-weight: bold;
             background:var(--header-bg);
             margin-bottom: 4px;
-            padding: 1px 7px !important;
+            padding: 3px 7px !important;
             color:white !important;
             
             }
