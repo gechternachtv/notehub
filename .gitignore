@@ -1,10 +1,10 @@
 
 
 # Logs
-frontend/my-svelte-app/.vscode
-frontend/my-svelte-app/dist
-frontend/my-svelte-app/node_modules
-frontend/my-svelte-app/yarn.lock
+frontend/.vscode
+frontend/dist
+frontend/node_modules
+frontend/yarn.lock
 
 
 
