@@ -72,6 +72,9 @@
     display: grid;
 grid-template-columns: auto auto 1fr;
 font-size: 1.1rem;
+                position: sticky;
+                top: 0;
+z-index: 2;
   }
   nav a {
     color:var(--header-color);
