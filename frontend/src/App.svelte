@@ -63,18 +63,20 @@
   padding: var(--bodypadding);
   padding-bottom: 0px;
   min-height: calc(100vh - var(--bodypadding));
+  position:relative;
 }
 
 
   nav{
     background:var(--header-bg);
-        display: flex;
-    display: grid;
+        /* display: flex; */
+    display: flex;
 grid-template-columns: auto auto 1fr;
 font-size: 1.1rem;
                 position: sticky;
                 top: 0;
 z-index: 2;
+justify-content: flex-end;
   }
   nav a {
     color:var(--header-color);

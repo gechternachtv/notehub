@@ -93,7 +93,7 @@
 
     <div class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
         <Modal bind:showModal>
-            <Moveoptions currentboard={card.board} on:submit={(e)=>{movetoBoard(e.detail)}}></Moveoptions>
+            <Moveoptions isopen={showModal} currentboard={card.board} on:submit={(e)=>{movetoBoard(e.detail)}}></Moveoptions>
         </Modal>
         <!-- {card.board} -->
         <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->

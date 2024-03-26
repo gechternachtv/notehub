@@ -209,3 +209,22 @@ input::file-selector-button {
   height:36px; 
   pointer-events: none;
 }
+button{
+  cursor: pointer;
+}
+
+
+.contextholder{
+  padding-top:30px;
+}
+
+@media (max-width:991px) {
+  .contextholder{
+    padding-top:45px;
+  }
+}
+
+.createbtn{
+  font-size: 2.0rem;
+  padding:3px 8px;;
+}

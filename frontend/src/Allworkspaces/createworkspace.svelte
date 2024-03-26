@@ -7,6 +7,7 @@
     import Boardcard from '../Allboards/boardcard.svelte';
     import Confirmaction from '../confirmaction.svelte';
     import {createEventDispatcher} from 'svelte';
+    export let isopen = false;
     const dispatch = createEventDispatcher();
     
     export let view = {
@@ -31,8 +32,12 @@
             expand: 'boards'
         })
     }
-
-    const promise = getallBoards()
+    let promise;
+    $:{
+        if(isopen){
+            promise = getallBoards()
+        }
+    }
 
     console.log(view)
 
@@ -153,6 +158,9 @@
 
 <main>
 
+
+
+
 {#if input?.files?.length || view.img != ""}
 <div class="board-header">
 
@@ -182,19 +190,23 @@
 
     <input class="name" on:change={handleChange} bind:value={name} />
     <div bind:this={checkboxholder} class="checkbox-holder">
-    {#await promise then boards}
-        {#each boards as board}
-       
-            <div class="checkbox">
-                
-                <input checked={view.boards.includes(board.id)} type="checkbox" id="checkbox-{board.id}" name="{board.id}" on:change={inputchange}>
-                <label for="checkbox-{board.id}">
-                <div class="boardcontainer"> <Boardcard workspacecard={true} board={board}/></div>
-                </label>
-            </div>
-             
-        {/each}
-    {/await}
+
+        {#if isopen}
+            {#await promise then boards}
+            {#each boards as board}
+        
+                    <div class="checkbox">
+                        
+                        <input checked={view.boards.includes(board.id)} type="checkbox" id="checkbox-{board.id}" name="{board.id}" on:change={inputchange}>
+                        <label for="checkbox-{board.id}">
+                        <div class="boardcontainer"> <Boardcard workspacecard={true} board={board}/></div>
+                        </label>
+                    </div>
+                    
+                {/each}
+            {/await}
+        {/if}
+
     </div>
     <input
         class="file"

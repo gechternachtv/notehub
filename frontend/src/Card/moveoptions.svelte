@@ -5,8 +5,11 @@
     import { pb } from "../pb";
     import { createEventDispatcher } from 'svelte';
     export let currentboard;
+    export let isopen = false;
+    import { onMount } from "svelte";
 
     const getAllBoards = async () => { 
+        console.log("got all boards!")
         return await pb.collection('boards').getFullList({
             sort: '-created',
             expand: 'boards'
@@ -15,8 +18,14 @@
 
     const dispatch = createEventDispatcher()
     let checkboxholder;
-    const promise = getAllBoards()
-   
+    let promise;
+
+    $:{
+        if(isopen){
+            promise = getAllBoards()
+        }
+    }
+
     const handleSubmit = (e)=>{
         e.preventDefault()
         const id = document.querySelector(`input[name="boards"]:checked`)?.value
@@ -29,28 +38,38 @@
 
 </script>
 <main>
+    
     <div bind:this={checkboxholder} class="checkbox-holder">
-        {#await promise then boards}
+        {#if isopen}
+        {#await promise}
+            loading boards...
+        {:then boards}
             <h1 class="title">Move card to:</h1>
             <form on:submit={handleSubmit}>
             {#each boards as board}
-           
+        
             <div class="checkbox">
                     <input class="" checked={board.id === currentboard} type="radio" id="checkbox-{board.id}" name="boards" value="{board.id}">
                     <label for="checkbox-{board.id}">
                         
                             <div class="boardcontainer"> <Boardcard workspacecard={true} board={board}/></div>
-                       
+                    
                     </label>
                 </div>
                 
-                 
+                
             {/each}
             <button type="submit">move</button>
             </form>
             
+        {:catch error}
+            error catching boards: <br/>
+            {error}
         {/await}
+
+        {/if}
         </div>
+        
 </main>
 
 <style>

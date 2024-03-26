@@ -7,6 +7,7 @@
     import Createworkspace from '../Allworkspaces/createworkspace.svelte';
     import Modal from '../modal/modal.svelte';
     import { onDestroy } from 'svelte';
+    import Contextmenu from '../contextmenu.svelte';
     
     let showModal = false;
     let boardisactive = true
@@ -152,14 +153,15 @@ const boardUpdate = data => {
 {#if boardisactive}
 {#await promise then res}
 
+<Contextmenu>
 
-<div class="controls absolute">
-    {view.name}
-    <button on:click={()=>{showModal = true}}> edit workspace </button>
-</div>
+        {view.name}
+        <button on:click={()=>{showModal = true}}> edit </button>
+
+</Contextmenu>
 
 <Modal bind:showModal>
-    <Createworkspace view={view} on:newcontent={handleEditView}/>
+    <Createworkspace isopen={showModal} view={view} on:newcontent={handleEditView}/>
 </Modal>
 
 
@@ -216,25 +218,7 @@ const boardUpdate = data => {
         top: 0;
         padding-right: 5px;
     }
-    .absolute {
-        position: absolute;
-        
-        background: var(--header-bg);
-        padding: 5px;
-        left: 0px;
-        align-content: center;
-        justify-content: center;
-        align-items: center;
-        
-        font-weight: bold;
-        
-        color: var(--header-color);
-        top: -20px;
-border-radius: 0 0px 10px 0px;
-padding-left: 16px;
-font-size: 2.1rem;
-gap: 17px;
-    }
+
     main{
         width: calc(100% + 60px);
         margin-left: -30px;

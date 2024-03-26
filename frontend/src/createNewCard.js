@@ -114,58 +114,76 @@ if(paragraph){
 
     if(url){
         if(validateUrl(url)){
+
             card.link = url
-            try { //metadata
-    
-            const res = await(await fetch(`${import.meta.env.VITE_API_URL}/meta`,{
-                method: "POST",
-                mode: "cors", // no-cors, *cors, same-origin
-                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: "same-origin", // include, *same-origin, omit
-                headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                redirect: "follow", // manual, *follow, error
-                referrerPolicy: "no-referrer",
-                body:JSON.stringify({url:card.link})
-            })).json()
-
-            const tempDocument = document.implementation.createHTMLDocument();
-            tempDocument.head.outerHTML = res
-
-            console.log(res)
             
-            if(tempDocument.head){
-                console.log(validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link))
-                
-                meta.color = tempDocument.head.querySelector('meta[name="theme-color"]')?.getAttribute("content")
-                meta.title = tempDocument.head.querySelector('title')?.innerHTML
-                
-                meta.text = tempDocument.head.querySelector('meta[property="og:description"]')?.getAttribute("content")
-                
-                //favico
-                
-                    if(validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)){
-                        meta.favico = validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)
-                    }else if (validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)){
-                        meta.favico = validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)
-                    }
-                //image
-                if(validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)){
-                    meta.img = validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)
-                }else if(validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)){
-                    meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
-                }
-                
+            if(url.endsWith('.png') ||
+            url.endsWith('.jpg') ||
+            url.endsWith('.jpeg') ||
+            url.endsWith('.gif') ||
+            url.endsWith('.bmp') ||
+            url.endsWith('.webp') ||
+            url.endsWith('.svg')){
+                console.log("IS IMAGE LINK!!!")
+                card.imglink = url
             }
-            
-            
+            else{
+                try { //metadata
+    
+                    const res = await(await fetch(`${import.meta.env.VITE_API_URL}/meta`,{
+                        method: "POST",
+                        mode: "cors", // no-cors, *cors, same-origin
+                        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                        credentials: "same-origin", // include, *same-origin, omit
+                        headers: {
+                        "Content-Type": "application/json",
+                        // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        redirect: "follow", // manual, *follow, error
+                        referrerPolicy: "no-referrer",
+                        body:JSON.stringify({url:card.link})
+                    })).json()
+        
+                    const tempDocument = document.implementation.createHTMLDocument();
+                    tempDocument.head.outerHTML = res
+        
+                    console.log(res)
+                    
+                    if(tempDocument.head){
+                        console.log(validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link))
+                        
+                        meta.color = tempDocument.head.querySelector('meta[name="theme-color"]')?.getAttribute("content")
+                        meta.title = tempDocument.head.querySelector('title')?.innerHTML
+                        
+                        meta.text = tempDocument.head.querySelector('meta[property="og:description"]')?.getAttribute("content")
+                        
+                        //favico
+                        
+                            if(validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)){
+                                meta.favico = validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)
+                            }else if (validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)){
+                                meta.favico = validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)
+                            }
+                        //image
+                        if(validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)){
+                            meta.img = validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)
+                        }else if(validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)){
+                            meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
+                        }
+                        
+                    }
+                    
+                    
+        
+        
+                } catch (error) {
+                    console.warn(error)
+                }
+            }
 
 
-        } catch (error) {
-            console.warn(error)
-        }
+            
+
         }
     }
     //title

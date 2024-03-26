@@ -7,6 +7,7 @@
     import Modal from '../modal/modal.svelte';
     import { push } from 'svelte-spa-router';
     import { onDestroy } from 'svelte';
+    import Contextmenu from '../contextmenu.svelte';
     let showModal = false;
 
 
@@ -67,23 +68,35 @@ onDestroy(() => {
 </script>
 <main>
 
-<div class="container">
+<div class="container contextholder">
 
-    {#await promise then value}
+    {#await promise}
+       
+    {:then value}
+    <Contextmenu>
+        <div>Boards</div>
+        <button class="createbtn" on:click={() => (showModal = true)}> + </button>    
+    </Contextmenu>
+
+        <Modal bind:showModal>
+            <CreateBoard on:newcontent={handleNewBoard}/>
+        </Modal>
+
+
         <div class="grid">
             {#each boards as board}
             <Board board={board}/>
             {/each}
         </div>
-    {/await}
-<div class="controls">
-<button on:click={() => (showModal = true)}> create board </button>
-</div>
-<Modal bind:showModal>
-    <CreateBoard on:newcontent={handleNewBoard}/>
-</Modal>
-</div>
 
+
+    {:catch error}
+       {error}
+    {/await}
+
+
+
+</div>
 
 
 
@@ -114,6 +127,7 @@ onDestroy(() => {
                 margin: auto;
                 width: calc(100% - 20px);
                 padding-bottom: 30px;
+                
             }
             @media only screen and (max-width: 991px){
                 .container{

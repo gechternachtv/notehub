@@ -7,6 +7,7 @@
     import {dndzone} from "svelte-dnd-action";
     import Modal from '../modal/modal.svelte';
     import { onDestroy } from 'svelte';
+    import Contextmenu from '../contextmenu.svelte';
     let showModal = false;
 
 
@@ -57,45 +58,60 @@ onDestroy(()=>{
 })
 
 </script>
-<main>
-{#await promise then res}
+<main class="contextholder">
+    {#await promise}
+        
+    {:then value}
+
+    <Contextmenu>
+        <div>Workspaces</div>
+        <button class="createbtn" on:click={() => (showModal = true)}> + </button>    
+    </Contextmenu>
+
+    
+    <Modal bind:showModal>
+        <Createview isopen={showModal} on:newcontent={handleNewView}/>
+    </Modal>
+
+
     <div class="grid">
-    {#each views as view}
-            <div class="viewcard-container">
-                <a href="/#/workspace/{view.id}" class="img" >
-                    {#if view.img}
-                        <div class="img-c">
-                            <img style="object-position: 0px {view.position}%;" src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
-                        </div>
-                    {:else}
-                         <div class="img-c" style="background-color:var(--gradient-col-1)"></div>
-                    {/if}
-
-                </a>
-                <div class="title"><a href="/#/workspace/{view.id}">{view.name}</a></div>
-                <div class="boardlist">
-                    {#if view.expand?.boards}
-                    {#each view.expand.boards as board}
-                        <Boardcard workspacecard={true} board={board}/>
-                    {/each}
-                    {/if}
-
+        {#each views as view}
+                <div class="viewcard-container">
+                    <a href="/#/workspace/{view.id}" class="img" >
+                        {#if view.img}
+                            <div class="img-c">
+                                <img style="object-position: 0px {view.position}%;" src="{import.meta.env.VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}" alt="">
+                            </div>
+                        {:else}
+                             <div class="img-c" style="background-color:var(--gradient-col-1)"></div>
+                        {/if}
+    
+                    </a>
+                    <div class="title"><a href="/#/workspace/{view.id}">{view.name}</a></div>
+                    <div class="boardlist">
+                        {#if view.expand?.boards}
+                        {#each view.expand.boards as board}
+                            <Boardcard workspacecard={true} board={board}/>
+                        {/each}
+                        {/if}
+    
+                    </div>
+                    <div class="controls">
+                        <!-- <a class="btn" href="/#/view/{view.id}">view</a> -->
+                        <!-- <button on:click={()=>{console.log(view)}} class="btn">edit</button> -->
+                        <!-- <button on:click={()=>{handledelete(view.id)}} class="btn alert">delete</button> -->
+                    </div>
                 </div>
-                <div class="controls">
-                    <!-- <a class="btn" href="/#/view/{view.id}">view</a> -->
-                    <!-- <button on:click={()=>{console.log(view)}} class="btn">edit</button> -->
-                    <!-- <button on:click={()=>{handledelete(view.id)}} class="btn alert">delete</button> -->
-                </div>
-            </div>
-    {/each}
-    </div>
-{/await}
-<div class="controls"><button on:click={() => (showModal = true)}> create workspace </button>
-</div>
+        {/each}
+        </div>
 
-<Modal bind:showModal>
-    <Createview on:newcontent={handleNewView}/>
-</Modal>
+
+
+    {:catch error}
+        {error}
+    {/await}
+
+
 
 
 </main>
