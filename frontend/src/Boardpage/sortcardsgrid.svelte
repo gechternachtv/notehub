@@ -16,6 +16,8 @@
     const defaults = {
             scroll: true,
             forceAutoScrollFallback: true,
+            forceFallback: false, 
+
             scrollSensitivity: 70,
             bubbleScroll: true,
             direction: 'vertical',
@@ -33,10 +35,13 @@
             chosenClass: "sortable-chosen",  // Class name for the chosen item
 	        dragClass: "sortable-drag",
             onStart: e =>{
+                console.log(e.item)
+                // e.item.draggable = false
                 document.querySelector("body").classList.add("elementisbeingdragged")
             },
             onEnd: e =>{
                 // console.log("in the end")
+                
                 document.querySelector("body").classList.remove("elementisbeingdragged")
             },
             onUpdate: e => {

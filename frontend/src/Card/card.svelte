@@ -113,12 +113,12 @@
 
                         {#if card.file}
                             {#if getFile(card).type === "image/jpeg"}
-                                <img src="{getFile(card).link}" alt="">   
+                                <img loading="lazy" src="{getFile(card).link}" alt="">   
                             {:else if getFile(card).type && fullView}
-                                    <object title="{card.id}" data="{getFile(card).link}"><a href="{getFile(card).link}" target="_blank">{card.file}</a></object>
+                                    <object loading="lazy" title="{card.id}" data="{getFile(card).link}"><a href="{getFile(card).link}" target="_blank">{card.file}</a></object>
                             {/if}
                         {:else if card.imglink}
-                            <img src="{card.imglink}" alt="">
+                            <img loading="lazy" src="{card.imglink}" alt="">
                         {/if}
 
                         

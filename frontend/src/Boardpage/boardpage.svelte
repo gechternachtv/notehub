@@ -286,7 +286,7 @@
             {#if boardpage}
             <div class="controls">
                 <button on:click={() => (showModal = true)}> Edit board </button>
-                <button on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
+                <button class="listviewtoggle" on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
             </div>
             {:else}
                 <button class="editorOpentoggle" on:click={()=>editorOpen=!editorOpen}>{editorOpen ? "-" : "+"}</button>
@@ -304,7 +304,7 @@
                     }
                     } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
-                    <Sortgrid class="card-grid" on:change={handleDndFinalize}>
+                    <Sortgrid class="card-grid {listView ? "list" : ""}" on:change={handleDndFinalize}>
                         
                         {#each cards as card (card.id)}
                             
@@ -427,6 +427,12 @@
         top:18px;right:20px;
         padding:6px 8px;
         border-radius: 6px
+        }
+
+        @media(max-width:991px){
+            .listviewtoggle{
+                display:none
+            }
         }
               
     </style>
