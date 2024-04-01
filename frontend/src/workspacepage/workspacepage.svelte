@@ -2,12 +2,13 @@
     import Board from '../Boardpage/boardpage.svelte';
     import {pb} from '../pb.js';
     
-    import {dndzone} from "svelte-dnd-action";
+    // import {dndzone} from "svelte-dnd-action";
     // @ts-ignore
     import Createworkspace from '../Allworkspaces/createworkspace.svelte';
     import Modal from '../modal/modal.svelte';
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
+    import Sortgrid from '../Boardpage/sortcardsgrid.svelte';
     
     let showModal = false;
     let boardisactive = true
@@ -68,19 +69,14 @@
 
 
     let boards = []
-    
-    function handleDndConsider(e) {
-        console.log(e.detail.items.map(e => e.id))
-        boards = e.detail.items;
-    }
-
 
     async function handleDndFinalize(e) {
-        console.log(e.detail.items.map(e => e.id))
-        boards = e.detail.items;
-        const record = await pb.collection('views').update(id, {boards:e.detail.items.map(e => e.id)});
+        // console.log(e.detail.items.map(e => e.id))
+        // boards = e.detail.items;
+        console.log(e.detail)
+        const record = await pb.collection('views').update(id, {boards:e.detail.tochildren});
         
-         console.log(record)
+          console.log(record)
         //  dragDisabled = true
     }
     
@@ -176,19 +172,25 @@ const boardUpdate = data => {
     <!-- <img alt="background" src="{res.img}"> -->
     {#if boards}
 
-    <div dragDisabled={true} use:dndzone={{dragDisabled:dragDisabled,items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize} class="grid">
+    <!-- dragDisabled={true} use:dndzone={{dragDisabled:dragDisabled,items:boards,type:"board",dropTargetStyle:{opacity:"0.6"}}} on:consider={handleDndConsider} on:finalize={handleDndFinalize}  -->
+    <div class="grid">
+
+        <Sortgrid on:change={handleDndFinalize} class="board-grid" options={{	group: {
+            name: 'boards'
+        },handle: ".grabber-board",direction: 'horizontal',ghostClass: "sortable-ghost-board",}}>
     
         {#each boards as board(board.id)}
-            <div class="board-container" >
-                <div class="grabber" on:focus={()=>dragDisabled = false} on:mouseover={()=>dragDisabled = false} on:mouseleave={() => {dragDisabled = true}}>
+            <div id="{board.id}" class="board-container" >
+                <div class="grabber-board" on:focus={()=>dragDisabled = false} on:mouseover={()=>dragDisabled = false} on:mouseleave={() => {dragDisabled = true}}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
                 </div>
 
                     <Board listView={false} board={board} boardpage={false} on:boardupdate={boardUpdate} />
                 
             </div>
-        {/each}  
-    
+        {/each}
+
+    </Sortgrid>
 
     </div>
     {/if}
@@ -205,7 +207,7 @@ const boardUpdate = data => {
 </main>
 
 <style>
-    .grabber{
+    .grabber-board{
         position:absolute;
         right:15px;
         z-index:2;
@@ -230,15 +232,15 @@ const boardUpdate = data => {
                 height: calc(100vh - var(--bodypadding));
                 --board-height:calc(100vh - 350px)
     }
-    .grid{
+    :global(.board-grid){
         display:grid;
         gap:30px;
         grid-template-columns: var(--grid);
-        overflow: auto;
-        scroll-snap-type: x mandatory;
+        overflow: scroll;
+        scroll-snap-type: x mandatory; 
     }
     @media (max-width:991px){
-    .grid{
+        :global(.board-grid){
         width: calc(100% + 9px);
         grid-template-columns: var(--grid-default)
     }
@@ -259,7 +261,7 @@ const boardUpdate = data => {
             scroll-snap-stop: always;
         }
     }
-    .grid{
+    :global(.board-grid){
         opacity:1;
         margin-top: -78px;
     }

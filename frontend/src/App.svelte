@@ -7,7 +7,7 @@
       import Card from './Cardpage/cardpage.svelte';
       import Allboards from './Allboards/allboards.svelte';
     import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
-
+// import Sortgrid from './Boardpage/sortcardsgrid.svelte';
 
     console.log(import.meta.env)
     
@@ -25,6 +25,7 @@
 <main>
 
 
+
 <nav>
   
 
@@ -37,7 +38,7 @@
   </div>
 
 </nav>
-
+<!-- <Sortgrid></Sortgrid> -->
 <div class="app">
 <Router routes={{
   '/board/:id': Board,

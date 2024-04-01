@@ -21,8 +21,8 @@
     
     //flip
 
-        import {dndzone} from "svelte-dnd-action";
-    
+        // import {dndzone} from "svelte-dnd-action";
+        import Sortgrid from './sortcardsgrid.svelte';
 
         export let boardpage = true
         export let board = {
@@ -37,7 +37,7 @@
     
         export let params = {id:board.id}
     
-        let dragDisabled = true;
+        let dragDisabled = false;
         let fileelement;
         let files;
         let editorBlocked = false;
@@ -51,47 +51,47 @@
 
         let counter = cards.length
 
-        function handleDndConsider(e) {
-            
-            cards = e.detail.items;
-        }
+
         async function handleDndFinalize(e) {
             console.log("%c drop details: -----","color:teal")
             console.log(counter,cards)
             console.log(board.name)
-            console.log(e.detail.info)
             console.log("%c  -----","color:red")
+            console.log(e.detail.tochildren)
             // console.log(cards)
             //log
 
             //
             
-            cards = e.detail.items;
+            // cards = e.detail.items;
             
             
-            if(counter<cards.length){
-                const card = cards.find(o => o.id === e.detail.info.id)
-                if(board.name === "done"){
-                    card.check = "done"
-                    card.logs = [...card.logs,`card marked as "completed" at ${dateFormat(new Date())}`]
-                }
-                const carddata = {...card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`],board:board.id}
+            // if(counter<cards.length){
+            //     const card = cards.find(o => o.id === e.detail.info.id)
+            //     if(board.name === "done"){
+            //         card.check = "done"
+            //         card.logs = [...card.logs,`card marked as "completed" at ${dateFormat(new Date())}`]
+            //     }
+            //     const carddata = {...card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`],board:board.id}
 
-                console.log(carddata);
-                await pb.collection('cards').update(e.detail.info.id,carddata);
+            //     console.log(carddata);
+            //     await pb.collection('cards').update(e.detail.info.id,carddata);
                 
-            }
+            // }
+            
+            // if(e.detail.fromchildren){
+            //     const record = await pb.collection('boards').update(e.detail.fromtarget, {cards:e.detail.fromchildren});
+            //     console.log(record)
+            // }
+            const record = await pb.collection('boards').update(params.id, {cards:e.detail.tochildren});
+            // board = {...record,cards:cards}
+            // dispatch('boardupdate',{...board,cards:cards})
             
             
-            const record = await pb.collection('boards').update(params.id, {cards:e.detail.items.map(e => e.id)});
-            board = {...record,cards:cards}
-            dispatch('boardupdate',{...board,cards:cards})
-            
-            
-            // console.log(record)
+             console.log(record)
 
 
-            counter = cards.length
+            counter = e.detail.tochildren.length
             // dragDisabled = true
         }
     
@@ -280,6 +280,7 @@
         {#await promise then views}
     
         <div class="container">
+           
             <!-- {board.id} -->
             <Boardcard board={board}/>
             {#if boardpage}
@@ -290,38 +291,30 @@
             {:else}
                 <button class="editorOpentoggle" on:click={()=>editorOpen=!editorOpen}>{editorOpen ? "-" : "+"}</button>
             {/if}
-
+            
             <div class="grid-container">
                 
-                <div class="grid"
-                class:list={listView} use:dndzone={{items:cards,
+                <!-- <div class="grid"
+                    class:list={listView} use:dndzone={{items:cards,
                     morphDisabled:true,
-                    dragDisabled:dragDisabled,
+                    dragDisabled:false,
                     type:"cards",
                     dropTargetStyle:{opacity:"0.6"}
                     ,dropTargetClasses:["floating"]
                     }
-                    } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
+                    } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
-                    
+                    <Sortgrid class="card-grid" on:change={handleDndFinalize}>
                         
                         {#each cards as card (card.id)}
                             
-                        <Card listView={listView} card={card} on:updatefront={cardUpdateFront}>
-                            <div class="grabber" slot="grabber" 
-                            on:mouseover={()=>dragDisabled = false} on:mouseleave={() => {dragDisabled = true}}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
-                            </div>
-                        </Card>
+                        <Card listView={listView} card={card} on:updatefront={cardUpdateFront}></Card>
                             
                     
                         {/each}
                     
 
-                        {#if cards?.length < 1}
-                            <div class="card-placeholder"></div>
-                        {/if}
-                </div>
+                    </Sortgrid>
 
                 {#if  editorOpen}
                 <div class="con conworkspace">
@@ -382,19 +375,7 @@
             position: relative;
         }
         
-        .grabber{
-            position: absolute;
-            right: 15px;
-            z-index: 2;
-            right: 0;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            left: -5px;
-            padding: 5px 0px;
-            top: 0;
-            padding-right: 5px;
-        }
+
             .con{
                 display:grid;
                 grid-template-columns: 1fr;
@@ -418,53 +399,14 @@
                     
                 }
     
-                .grid{
-                    gap:20px;     
-                    opacity:1;     
-                    min-height:150px;
-                    display:grid;
-                    margin-bottom: 19px;
-                    gap:15px;
-                    grid-template-columns: repeat(12, minmax(70px, 1fr));
-                    /* background:rgba(0, 0, 0, 0.116); */;
-                    container-type: inline-size;
-                    container-name: card-container;
-                    
 
-                }
 
                 .grid-container{
                     max-height: var(--board-height); 
-                    overflow: auto;
-                }
-
-                @container card-container (max-width: 1100px) {
-                    .grid {
-                        grid-template-columns: repeat(9, minmax(70px, 1fr));
-                        
-                    }
-                }      
-
-                @container card-container (max-width: 768px) {
-                    .grid {
-                        grid-template-columns: repeat(6, minmax(70px, 1fr));
-                        
-                    }
-                }
-
-                @container card-container (max-width: 600px) {
-                    .grid {
-                        grid-template-columns: repeat(3, minmax(70px, 1fr));
-                        
-                    }
+                    overflow: scroll;
                 }
 
 
-                .grid.list{
-                    grid-template-columns: 190px 1fr auto;
-                    gap:3px;
-
-                }
                 .container{
                     padding:0px;
                     container-type: inline-size;

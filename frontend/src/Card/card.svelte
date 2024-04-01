@@ -91,7 +91,7 @@
 
 
 
-    <div class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
+    <div id={card.id} class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
         <Modal bind:showModal>
             <Moveoptions isopen={showModal} currentboard={card.board} on:submit={(e)=>{movetoBoard(e.detail)}}></Moveoptions>
         </Modal>
@@ -99,7 +99,12 @@
         <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
         
         <div class="card-container card-container---image">
-            <slot name="grabber" />
+            
+            <div class="grabber">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
+            </div>
+
+
             <div class="thumb">
 
                     <!-- {#if channel.thumb} -->
@@ -255,6 +260,7 @@ button, .btn {
                 grid-column: span 3;
                 grid-template-rows: subgrid;
                 overflow:hidden;
+                box-shadow: inset 18px 20px 14px -27px rgba(0,0,0,0.12);
             }
 
             .card.listview{
@@ -294,7 +300,7 @@ button, .btn {
 
     .log-container{
         max-height:100px;
-        overflow: auto;
+        overflow: scroll;
         display: flex;
         flex-direction: column;
         margin-top:20px;
@@ -512,5 +518,62 @@ right: 26px;
     }
 }
 
+.grabber{
+            position: absolute;
+            right: 15px;
+            z-index: 2;
+            right: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            left: -5px;
+            padding: 5px 0px;
+            top: 0;
+            padding-right: 5px;
+        }
 
+
+
+@media(max-width:991px){
+    .card:not(.fullview){
+                grid-template-rows: auto;
+                grid-template-columns: subgrid;
+                gap:14px;
+                min-height: 83px;
+                max-width:100%;
+                grid-template-rows: auto;
+                grid-template-columns: subgrid;
+                gap:14px;
+                min-height: 83px;
+                max-width:100%;
+                gap: 8px;
+                min-height: 54px;
+                padding: 5px;
+                }
+
+                .card:not(.fullview) .card-container---controls {
+        grid-column: span 3;
+        }
+
+
+        .card:not(.fullview) .card-container---info {
+        grid-column: span 2;
+        }
+
+
+
+        .card:not(.fullview) .thumb{
+        max-height: 100px;
+        overflow: hidden;
+        }
+        .card:not(.fullview) .updates{
+        max-height: 20px;
+        }
+
+        .card:not(.fullview) .card-container---controls {
+        position: absolute;
+        bottom: 0;
+        right: 10px;
+        }
+}
 </style>

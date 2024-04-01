@@ -85,7 +85,9 @@ onDestroy(() => {
 
         <div class="grid">
             {#each boards as board}
+            
             <Board board={board}/>
+            
             {/each}
         </div>
 

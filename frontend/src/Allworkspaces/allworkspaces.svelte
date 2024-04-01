@@ -4,7 +4,7 @@
     import Createview from './createworkspace.svelte';
     import { push } from 'svelte-spa-router';
     import {pb} from '../pb.js';
-    import {dndzone} from "svelte-dnd-action";
+    // import {dndzone} from "svelte-dnd-action";
     import Modal from '../modal/modal.svelte';
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
