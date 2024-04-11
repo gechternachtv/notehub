@@ -7,9 +7,23 @@
       import Card from './Cardpage/cardpage.svelte';
       import Allboards from './Allboards/allboards.svelte';
     import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
+    import Login from './login.svelte'
+    import Account from './account.svelte'
+    import {localToken} from './stores.js'
+
 // import Sortgrid from './Boardpage/sortcardsgrid.svelte';
 
-    console.log(import.meta.env)
+import {pb} from './pb.js';
+
+
+
+    console.log(import.meta.env);
+    console.log($localToken);
+
+
+
+
+
     
 </script>
         
@@ -18,43 +32,45 @@
   <title>notehub</title>
 </svelte:head>
 
+<!-- <Login></Login> -->
+  {#if $localToken}
+  <div class="maincontainer">
+    <nav>
+      
 
 
+      <a  class:active={$location === "/"} href="/#/">Workspaces</a>
+      <a  class:active={$location === "/allboards"} href="/#/allboards">All Boards </a>
+      <a class="navatar-container" href="/#/account"> <div class="navavatar"><img src="{import.meta.env.VITE_API_URL}/api/files/_pb_users_auth_/{$localToken.model.id}/{$localToken.model?.avatar}"></div></a>
+      
+      <div class="settings">
+      
+      </div>
 
+    </nav>
+    <!-- <Sortgrid></Sortgrid> -->
+    <div class="app">
+    <Router routes={{
+      '/board/:id': Board,
+      '/card/:id': Card,
+      '/allboards/': Allboards,
+      '/workspace/:id': Workspaceview,
+      '/account/': Account,
+      '/': Allworkspaces
+    }} />
+    </div>
 
-<main>
-
-
-
-<nav>
-  
-
-
-  <a  class:active={$location === "/"} href="/#/">Workspaces</a>
-  <a  class:active={$location === "/allboards"} href="/#/allboards">All Boards </a>
-  
-  <div class="settings">
-  <Themeswitch/> 
   </div>
+  {:else}
 
-</nav>
-<!-- <Sortgrid></Sortgrid> -->
-<div class="app">
-<Router routes={{
-  '/board/:id': Board,
-  '/card/:id': Card,
-  '/allboards/': Allboards,
-  '/workspace/:id': Workspaceview,
-  '/': Allworkspaces
-}} />
+        <Login></Login>
+  {/if}
 
 
 
-</div>
+<footer><Themeswitch/> </footer>
 
 
-
-</main>
     
         
         <style>
@@ -78,6 +94,7 @@ font-size: 1.1rem;
                 top: 0;
 z-index: 2;
 justify-content: flex-end;
+line-height: 21px;
   }
   nav a {
     color:var(--header-color);
@@ -110,7 +127,7 @@ justify-content: flex-end;
     }
 }
 
-            main{
+            .maincontainer{
                 background:var(--container-bg);
                 color:var(--main-font-1);
                 margin:auto;
@@ -128,5 +145,43 @@ justify-content: flex-end;
               }
 
 
+            }
+            footer{
+              max-width: 1440px;
+              width:100vw;
+              margin:auto;
+              display: flex;
+              justify-content:flex-end;
+            }
+
+            .navatar-container{
+              position:relative;
+              height: 40px;
+              width:40px;
+              
+            }
+            .navavatar {
+              overflow: hidden;
+              position: absolute;
+            top: 0;
+            left: 0;
+            height: 40px;
+            width:40px;
+            
+            }
+
+            .navavatar img{
+              object-fit: contain;
+              height:40px;
+            }
+
+            @media(max-width:991px){
+              .navavatar {
+                height: 53px;
+                width:53px;
+              }
+              .navavatar img{ 
+                height:53px;
+              }
             }
         </style>

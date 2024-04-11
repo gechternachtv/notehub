@@ -14,7 +14,7 @@ routerAdd("POST", "/meta", (c) => {
             method:  "GET",
             body:    "",
             headers: {
-                'X-Linkpreview-Api-Key': "apikey",
+                'X-Linkpreview-Api-Key': "",
               },
             timeout: 120, // in seconds
         })

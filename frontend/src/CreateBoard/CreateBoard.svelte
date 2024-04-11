@@ -44,6 +44,7 @@
             name:name,
             img:input.files[0],
             cards:[],
+            instance:"5c0rz3c5ywh4qth"
         }
         if(board.id === ""){
             color = "var(--main-font-1)";

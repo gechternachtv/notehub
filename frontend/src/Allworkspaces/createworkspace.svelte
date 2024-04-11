@@ -7,6 +7,7 @@
     import Boardcard from '../Allboards/boardcard.svelte';
     import Confirmaction from '../confirmaction.svelte';
     import {createEventDispatcher} from 'svelte';
+    // import {localToken} from '../stores.js'
     export let isopen = false;
     const dispatch = createEventDispatcher();
     
@@ -27,10 +28,7 @@
 
     const getallBoards = 
     async () => { 
-        return await pb.collection('boards').getFullList({
-            sort: '-created',
-            expand: 'boards'
-        })
+        return await pb.collection('boards').getFullList()
     }
     let promise;
     $:{
@@ -69,7 +67,8 @@
             name:name,
             img:input.files[0],
             boards:boardlist,
-            position: imageposition
+            position: imageposition,
+            instance:"5c0rz3c5ywh4qth"
         }
 
 

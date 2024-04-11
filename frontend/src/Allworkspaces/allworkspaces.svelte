@@ -13,9 +13,19 @@
 
     let views = []
     const records = async () => {
+        const recordsinstances = await pb.collection('views').getFullList({
+            sort: '-created',
+            expand: 'boards',
+            // filter: 'instance = "pnfkrb2353g8zkp"'
+
+            // filter : 'instance == "pnfkrb2353g8zkp"'
+        });
         const records = await pb.collection('views').getFullList({
             sort: '-created',
-            expand: 'boards'
+            expand: 'boards',
+            // filter: 'instance = "pnfkrb2353g8zkp"'
+
+            // filter : 'instance == "pnfkrb2353g8zkp"'
         });
         console.log(records)
         views = records
@@ -35,6 +45,8 @@
         push(`/workspace/${record.id}`)
     
 }
+
+
 
 
 pb.collection('views').subscribe('*', (e)=> {
