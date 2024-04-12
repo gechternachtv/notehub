@@ -1,19 +1,24 @@
 <script>
  import Themeswitch from './themeswitch.svelte';
- import {location} from 'svelte-spa-router'
+  import {location} from 'svelte-spa-router'
   import Router from 'svelte-spa-router';
     import Board from './Boardpage/boardpage.svelte';
       import Workspaceview from './workspacepage/workspacepage.svelte';
       import Card from './Cardpage/cardpage.svelte';
       import Allboards from './Allboards/allboards.svelte';
     import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
-    import Login from './login.svelte'
-    import Account from './account.svelte'
-    import {localToken} from './stores.js'
-
+    import Login from './login.svelte';
+    import Account from './account.svelte';
+    import Allinstances from './instances/allinstance.svelte';
+    import {localToken} from './stores.js';
+    import Instancepage from './instances/instancepage.svelte';
+    import Allinstance from './instances/allinstance.svelte';
+    import Register from './register.svelte';
 // import Sortgrid from './Boardpage/sortcardsgrid.svelte';
 
 import {pb} from './pb.js';
+
+    
 
 
 
@@ -33,16 +38,15 @@ import {pb} from './pb.js';
 </svelte:head>
 
 <!-- <Login></Login> -->
-  {#if $localToken}
+ 
   <div class="maincontainer">
     <nav>
-      
-
-
-      <a  class:active={$location === "/"} href="/#/">Workspaces</a>
-      <a  class:active={$location === "/allboards"} href="/#/allboards">All Boards </a>
+      <a  class="home" href="/#/">notehub </a>
+      {#if $localToken}
       <a class="navatar-container" href="/#/account"> <div class="navavatar"><img src="{import.meta.env.VITE_API_URL}/api/files/_pb_users_auth_/{$localToken.model.id}/{$localToken.model?.avatar}"></div></a>
-      
+      {:else}
+      <a  class:active={$location === "/account"} href="/#/account">Login </a>
+      {/if}
       <div class="settings">
       
       </div>
@@ -53,18 +57,19 @@ import {pb} from './pb.js';
     <Router routes={{
       '/board/:id': Board,
       '/card/:id': Card,
-      '/allboards/': Allboards,
+      '/allboards/:instance': Allboards,
       '/workspace/:id': Workspaceview,
       '/account/': Account,
-      '/': Allworkspaces
+      '/register/': Register,
+      '/workspaces/:instance': Allworkspaces,
+      '/usergroup/:instance' : Instancepage,
+      '/': Allinstance
     }} />
     </div>
 
   </div>
-  {:else}
 
-        <Login></Login>
-  {/if}
+
 
 
 
@@ -95,6 +100,7 @@ font-size: 1.1rem;
 z-index: 2;
 justify-content: flex-end;
 line-height: 21px;
+min-height:40px;
   }
   nav a {
     color:var(--header-color);
@@ -184,4 +190,14 @@ line-height: 21px;
                 height:53px;
               }
             }
+
+
+.home {
+  font-weight: bold;
+  font-size: 23px;
+  padding: 9px 20px;
+  width: 100%;
+text-align: left;
+}
+
         </style>

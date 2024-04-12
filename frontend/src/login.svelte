@@ -1,7 +1,8 @@
 <script >
 import { pb } from './pb.js';
 // import {push} from 'svelte-spa-router'
-import {localToken} from './stores.js'
+import {localToken} from './stores.js';
+import {push} from 'svelte-spa-router'
 
 const localStorageItem = window.localStorage.getItem('pocketbase_auth')
 
@@ -156,12 +157,17 @@ async function btnlogin(){
         <h1>Notehub login</h1>
         <div class="input">email: <input type="text" bind:value={state.email} name=""></div>
         <div class="input">password: <input type="password" bind:value={state.password} name=""></div>
-<!--         <button
-        on:click={register}
-        >Register</button> -->
-        <button
-        on:click={btnlogin}
-        >login</button>
+        <div class="controls">
+          <button class="btn"
+          on:click={btnlogin}
+          >login</button>
+
+          <button class="btn"
+          on:click={()=>{push("/register")}}
+          >register →</button>
+
+        </div>
+
 
         {#if showWarning}
 
@@ -181,21 +187,7 @@ async function btnlogin(){
 
 
 <style>
-  button{
-    background: var(--button-bg);
-color: var(--button-color);
-padding: 5px;
-font-weight: 700;
-font-size: 12px;
-border-radius: 8px;
-border: 0px;
-min-width: 100px;
-margin: 0;
-cursor: pointer;
-margin-bottom:10px;
-margin-top:10px;
-justify-content: center;
-  }
+
 
   article{
     background:var(--container-bg);
@@ -281,5 +273,8 @@ gap: 20px;
   .profilepic-container{
     align-items:center;
   }
+}
+.success{
+  margin-bottom:10px;
 }
 </style>

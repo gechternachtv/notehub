@@ -8,22 +8,20 @@
     import Modal from '../modal/modal.svelte';
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
+
+    export let params;
+    // console.log(params)
+
     let showModal = false;
 
 
     let views = []
     const records = async () => {
-        const recordsinstances = await pb.collection('views').getFullList({
-            sort: '-created',
-            expand: 'boards',
-            // filter: 'instance = "pnfkrb2353g8zkp"'
 
-            // filter : 'instance == "pnfkrb2353g8zkp"'
-        });
         const records = await pb.collection('views').getFullList({
             sort: '-created',
             expand: 'boards',
-            // filter: 'instance = "pnfkrb2353g8zkp"'
+             filter: `instance = "${params.instance}"`
 
             // filter : 'instance == "pnfkrb2353g8zkp"'
         });
@@ -63,7 +61,7 @@ pb.collection('views').subscribe('*', (e)=> {
     }
     console.log("%c ------","color:teal")
     // views = e.record
-}, { expand: 'boards' });
+}, { expand: 'boards',filter: `instance = "${params.instance}"` });
 
 onDestroy(()=>{
     pb.collection('views').unsubscribe("*");
@@ -71,18 +69,21 @@ onDestroy(()=>{
 
 </script>
 <main class="contextholder">
+    
     {#await promise}
         
     {:then value}
-
-    <Contextmenu>
+    <div class="contexttitle">
+    <h1>Workspaces</h1> <button class="createbtn" on:click={() => (showModal = true)}> + </button>
+    </div>
+    <!-- <Contextmenu>
         <div>Workspaces</div>
         <button class="createbtn" on:click={() => (showModal = true)}> + </button>    
-    </Contextmenu>
+    </Contextmenu> -->
 
     
     <Modal bind:showModal>
-        <Createview isopen={showModal} on:newcontent={handleNewView}/>
+        <Createview isopen={showModal} on:newcontent={handleNewView} instance={params.instance}/>
     </Modal>
 
 

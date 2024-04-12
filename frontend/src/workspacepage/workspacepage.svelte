@@ -5,17 +5,20 @@
     // import {dndzone} from "svelte-dnd-action";
     // @ts-ignore
     import Createworkspace from '../Allworkspaces/createworkspace.svelte';
+    // @ts-ignore
+    import CreateBoard from '../CreateBoard/CreateBoard.svelte';
     import Modal from '../modal/modal.svelte';
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
     import Sortgrid from '../Boardpage/sortcardsgrid.svelte';
+    
     
     let showModal = false;
     let boardisactive = true
 
     export let params = {}
     export let id = params.id;
-    
+    let modalcontent;
     let defaults = [
         "1fr",
         "2fr 1fr",
@@ -40,6 +43,29 @@
         }
 }
     let grid;
+
+    const handleNewBoard = async (e)=>{
+    try {
+        const data = e.detail
+        const boardrecord = await pb.collection('boards').create({...data,instance:view.instance});
+
+        console.log(data)
+        const res = await pb.collection('views').update(view.id, {...view,boards:[...view.boards,boardrecord.id]});
+        // const record = await pb.collection('views').getOne(view.id, {
+        //     expand: 'boards.cards.tags',
+        // });
+
+        // console.log(record)
+        // view = record
+        // boards = view.expand?.boards
+        showModal = false
+
+
+        
+    } catch (error) {
+        console.warn(error)
+    }
+}
 
     const handleEditView = async (e)=>{
         
@@ -151,13 +177,18 @@ const boardUpdate = data => {
 
 <Contextmenu>
 
-        {view.name}
-        <button on:click={()=>{showModal = true}}> edit </button>
-
+        <!-- {view.name} -->
+        <button on:click={()=>{showModal = true; modalcontent="edit"}}> edit </button>
+        <button on:click={()=>{showModal = true; modalcontent="create"}}> create </button>
 </Contextmenu>
 
 <Modal bind:showModal>
-    <Createworkspace isopen={showModal} view={view} on:newcontent={handleEditView}/>
+    {#if modalcontent === "edit"}
+        <Createworkspace isopen={showModal} view={view} on:newcontent={handleEditView} instance={view.instance}/>
+    {/if}
+    {#if modalcontent === "create"}
+        <CreateBoard on:newcontent={handleNewBoard} instance={params.instance}/>
+    {/if}
 </Modal>
 
 
@@ -190,9 +221,13 @@ const boardUpdate = data => {
             </div>
         {/each}
 
-    </Sortgrid>
+        </Sortgrid>
 
     </div>
+    {:else}
+        <div class="textwarning">
+            add existing boards on "edit" or create new boards on "create"
+        </div>
     {/if}
     {:catch error}
     error fetching data, <br/><br/>
@@ -310,6 +345,13 @@ const boardUpdate = data => {
     height: 50px ;
     }
     
-    
+.textwarning {
+  text-align: center;
+  margin-top: 39px;
+  font-size: 20px;
+  background: var(--card-bg);
+  padding: 13px;
+}
+
 
 </style>

@@ -3,7 +3,7 @@
 
 let classes = 'luckygreen';
 let styles = '';
-const themes = ["luckygreen","bluesky","plankton","yotsuba-nograd","yotsuba","yotsuba-b","nograd","blood","uboa","pxtone"]
+const themes = ["luckygreen","bluesky","plankton","yotsuba","yotsuba-b","futaba","blood","uboa","pxtone"]
 
 const storedTheme = localStorage.getItem("storedTheme");
 classes = storedTheme ? storedTheme : classes
@@ -53,7 +53,7 @@ $:{
 
 
 
-:global(.yotsuba) {
+/* :global(.yotsuba) {
 			--alert:#fb0000;
 			--news:#fb0000;
 			--header-bg: #e04001;
@@ -68,9 +68,9 @@ $:{
 			--gradient-col-2:#ffffee;
 			--body-background:linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
 			--board-title-color: var(--header-bg);
-		}
+		} */
 
-		:global(.yotsuba-nograd) {
+		:global(.yotsuba) {
 			--alert: #fb0000;
 			--news: #fb0000;
 			--header-bg: #e04001;
@@ -104,7 +104,7 @@ $:{
 			--board-title-color: var(--header-bg);
 			}
 
-			:global(.nograd) {
+			:global(.futaba) {
 				--alert: #fb0000;
 				--news: #fb0000;
 				--header-bg: #800000;
@@ -113,9 +113,9 @@ $:{
 				--button-bg: #117743;
 				--button-color: #ffe;
 				--header-color: white;
-				--card-bg: #f0e0d6;
+				--card-bg: #f8e3ca;;
 				--container-bg: #fff3e6;
-				--gradient-col-1: #f1e1cf;
+				--gradient-col-1: #fff9f5;
 				--gradient-col-2: #fff3e6;
 				--body-background: #ffead3;
 				--board-title-color: var(--header-bg);
@@ -126,7 +126,7 @@ $:{
 				--news: #cb4e16;
 				--header-bg: #42a0bd;
 				--main-font-2: black;
-				--button-bg: #428194;
+				--button-bg: #356574;
 				--button-color: #fff;
 				--header-color: #fff;
 				--card-bg: #eee;
@@ -199,7 +199,7 @@ $:{
 				--gradient-col-1: #272535;
 				--gradient-col-2: #3b3858;
 				--body-background: url('https://zonaplankton.net/backgrounds/sidebar-pattern-pxtone.png');
-				--header-bg: #000010;
+				--header-bg: #0c0c1f;
 				--button-bg: var(--main-font-1);
 				--header-color: var(--main-font-1);
 				--board-title-color: var(--main-font-1);

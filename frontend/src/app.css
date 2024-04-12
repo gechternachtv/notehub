@@ -394,3 +394,10 @@ button{
   opacity:0 !important;
   
 }
+
+.contexttitle{
+  display: flex;
+  gap:20px;
+  font-size:15px;
+  align-items: center;
+}

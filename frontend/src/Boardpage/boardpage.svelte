@@ -32,7 +32,7 @@
             color:"",
             cards:[]
         }
-        export let listView;
+        export let listView = undefined;
         
     
         export let params = {id:board.id}
@@ -336,7 +336,7 @@
                 <div class="boardedit">
 
                     <Modal bind:showModal>
-                        <CreateBoard on:newcontent={handleUpdate} board={board}/>
+                        <CreateBoard on:newcontent={handleUpdate} board={board} instance={board.instance}/>
                     </Modal>
                 
                 </div>

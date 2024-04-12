@@ -11,7 +11,7 @@
     let showModal = false;
 
 
-
+    export let params;
 
 
 
@@ -22,6 +22,7 @@ const getBoards = async ()=>{
     const records = await pb.collection('boards').getFullList({
     sort: 'created',
     expand: 'tags',
+    filter: `instance = "${params.instance}"`
     });
     
     boards = [...records]
@@ -67,19 +68,21 @@ onDestroy(() => {
 
 </script>
 <main>
+    <div class="contexttitle"> <h1>Boards</h1> <button class="createbtn" on:click={() => (showModal = true)}> + </button> </div>
+   
 
 <div class="container contextholder">
 
     {#await promise}
        
     {:then value}
-    <Contextmenu>
+    <!-- <Contextmenu>
         <div>Boards</div>
-        <button class="createbtn" on:click={() => (showModal = true)}> + </button>    
-    </Contextmenu>
+          
+    </Contextmenu> -->
 
         <Modal bind:showModal>
-            <CreateBoard on:newcontent={handleNewBoard}/>
+            <CreateBoard on:newcontent={handleNewBoard} instance={params.instance}/>
         </Modal>
 
 
