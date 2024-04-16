@@ -3,7 +3,7 @@
 
 let classes = 'luckygreen';
 let styles = '';
-const themes = ["luckygreen","bluesky","plankton","yotsuba","yotsuba-b","futaba","blood","uboa","pxtone"]
+const themes = ["luckygreen","bluesky","plankton","yotsuba","yotsuba-b","futaba","dfwm98","blood","uboa","pxtone"]
 
 const storedTheme = localStorage.getItem("storedTheme");
 classes = storedTheme ? storedTheme : classes
@@ -12,7 +12,7 @@ let themeColor = "#235e56"
 $:{
 	localStorage.setItem("storedTheme",classes);
 	setTimeout(()=>{
-		themeColor = getComputedStyle(document.querySelector("body")).getPropertyValue('--header-bg')
+		themeColor = getComputedStyle(document.querySelector("body")).getPropertyValue('--browser-color')
 	},100)
 	
 }
@@ -85,6 +85,7 @@ $:{
 			--gradient-col-2: #fff3e6;
 			--body-background: #ffeedb;
 			--board-title-color: var(--header-bg);
+			--browser-color : var(--header-bg)
 		}
 
 		:global(.yotsuba-b) {
@@ -102,6 +103,7 @@ $:{
 			--gradient-col-2: #ffe;
 			--body-background: linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
 			--board-title-color: var(--header-bg);
+			--browser-color : var(--header-bg)
 			}
 
 			:global(.futaba) {
@@ -119,6 +121,7 @@ $:{
 				--gradient-col-2: #fff3e6;
 				--body-background: #ffead3;
 				--board-title-color: var(--header-bg);
+				--browser-color : var(--header-bg)
 			}
 
 			:global(.bluesky) {
@@ -136,6 +139,7 @@ $:{
 				--body-background: linear-gradient(0deg, var(--gradient-col-2) 0%, var(--gradient-col-1) 80%);
 				--main-font-1: #214049;
 				--board-title-color: var(--header-bg);
+				--browser-color : var(--header-bg)
 			}
 
 			:global(.luckygreen) {
@@ -153,6 +157,7 @@ $:{
 				--body-background: #f7f7f7;
 				--main-font-1: #214049;
 				--board-title-color: #47bcad;
+				--browser-color : var(--header-bg)
 				}
 
 			:global(.uboa) {
@@ -170,6 +175,10 @@ $:{
 				--body-background: #343434;
 				--main-font-1: #8080E0;
 				--board-title-color: var(--main-font-1);
+				--browser-color : var(--header-bg)
+			}
+			:global(.uboa .new-section, .uboa .container-header-buttons) {
+				color: var(--button-color);
 			}
 			:global(.plankton) {
 				--alert: #FF2164;
@@ -186,6 +195,7 @@ $:{
 				--button-bg: #FF2164;
 				--header-color: white;
 				--board-title-color: var(--header-bg);
+				--browser-color : var(--header-bg)
 							}
 
 				:global(.pxtone) {
@@ -193,20 +203,19 @@ $:{
 				--news: var(--alert);
 				--main-font-1: #D2CA9C;
 				--main-font-2: var(--main-font-1);
-				--button-color: #1c1b22;
+				--button-color: #0E0E2D;
 				--card-bg: #000010;
 				--container-bg: #1c1b22;
 				--gradient-col-1: #272535;
 				--gradient-col-2: #3b3858;
 				--body-background: url('https://zonaplankton.net/backgrounds/sidebar-pattern-pxtone.png');
 				--header-bg: #0c0c1f;
-				--button-bg: var(--main-font-1);
+				--button-bg: #9d9784;
 				--header-color: var(--main-font-1);
 				--board-title-color: var(--main-font-1);
+				--browser-color : #343255
 							}
-			:global(.uboa .new-section, .uboa .container-header-buttons) {
-				color: var(--button-color);
-			}
+
 
 
 			:global(.blood) {
@@ -224,6 +233,7 @@ $:{
 				--gradient-col-2: #b7b7b7;
 				--body-background: #606464;
 				--board-title-color: var(--header-bg);
+				--browser-color : var(--header-bg)
 			}
 
 	:global(body) {
@@ -231,4 +241,25 @@ $:{
 			background-attachment: fixed;
 			background-color: var(--gradient-col-1);
 		}
+
+		:global(.dfwm98) {
+				--alert: #df223b;
+				--news: #cb4e16;
+				--header-color: #fff;
+				--card-bg: #efefef;
+				--gradient-col-2: #f0f0f0;
+				--body-background: #f7f7f7;
+				--main-font-1: #214049;
+				--header-bg: #0b0c76;
+				--button-bg: #0c57af;
+				--button-color: white;
+				--container-bg: #d7d7d7;
+				--gradient-col-1: #007f82;
+				--main-font-2: #8c8c8c;
+				--board-title-color: #212121;
+				--browser-color : #007f82
+			}
+			:global(.dfwm98 nav, .dfwm98 .title-container) {
+				background: linear-gradient(90deg, rgba(11,12,118,1) 22%, rgba(12,121,201,1) 100%) !important;
+			}
 </style>

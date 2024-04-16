@@ -1,11 +1,12 @@
-import { bulletList } from "@milkdown/prose/schema-list"
-import dateFormat from "./dateFormat"
-import getFile from "./getFile"
+// import { bulletList } from "@milkdown/prose/schema-list"
+// import dateFormat from "./dateFormat"
+// import getFile from "./getFile"
+import {pb} from "./pb.js"
 
-export default async (markdownobj,pb,file=null,currentfile=null) =>{
+export default async (markdownobj,fileInputelement=null,currentfile=null) =>{
     
 
-    const filecontent = file?.files[0]
+    const filecontent = fileInputelement?.files ? fileInputelement?.files[0] : null
 
     const content = markdownobj.json.content
     const mdtext = markdownobj.string
@@ -15,7 +16,7 @@ export default async (markdownobj,pb,file=null,currentfile=null) =>{
         
         const foo = ["[]","[x]",...stringsToRemove].filter(e => e != "")
         let resultString = originalString
-        console.log("😴")
+        // console.log("😴")
         console.log(foo)
          
         foo.forEach(element => {

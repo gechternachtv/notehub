@@ -197,7 +197,7 @@
     const handleNewCard = async (e)=>{
     
         editorBlocked = true
-        const card = await createNewCard(e.detail,pb,fileelement)
+        const card = await createNewCard(e.detail,fileelement)
 
         const data = {...card,
             tags:card.tags.map(e => e.id),

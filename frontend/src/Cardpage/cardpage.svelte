@@ -69,7 +69,7 @@ const handleNewCard = async (e)=>{
     editorBlocked = true
     console.log(showcard)
 
-    const card = await createNewCard(e.detail,pb,fileelement,currentfile)
+    const card = await createNewCard(e.detail,fileelement,currentfile)
     const data = {...card,
         tags:card.tags.map(e => e.id),
         logs:[...showcard.logs,`card content updated ${dateFormat(new Date())}`],

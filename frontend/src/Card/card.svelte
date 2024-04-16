@@ -75,7 +75,7 @@
             await pb.collection('boards').update(boardtoinsert, {cards:[card.id,...newboard.cards]});
 
 
-            const record = await pb.collection('cards').update(card.id, {...card,board:boardtoinsert});
+            const record = await pb.collection('cards').update(card.id, {board:boardtoinsert});
 
             card = record
 
@@ -577,6 +577,9 @@ right: 26px;
         position: absolute;
         bottom: 0;
         right: 10px;
+        }
+        .updates {
+        color: var(--main-font-1);
         }
 }
 </style>

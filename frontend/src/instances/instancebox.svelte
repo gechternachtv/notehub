@@ -81,7 +81,7 @@
         .minimizebtn {
             position: absolute;
             right: 20px;
-            background:var(--header-bg);
+            background:transparent;
             color: var(--header-color);
         }
         main{
@@ -172,7 +172,9 @@
         overflow: hidden;
         border-radius: 6px;
         transition:all .2s;
+        color:var(--main-font-1);
     }
+    
     .workspace-card:hover{
         text-decoration: none;
         transform: scale(1.04);
