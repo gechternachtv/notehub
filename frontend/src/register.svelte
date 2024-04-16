@@ -14,7 +14,7 @@
     let showavatarpreview = false;
 
     
-
+console.log($localToken)
 
     const handleAvatarChange = (e) =>{
         if(e.target?.files){
@@ -82,40 +82,60 @@ async function login(){
         showWarning = false;
         pb.authStore.clear()
         localToken.set(false)
+        push("/login")
       }
     
 
     
     
     let state ={
-      email:"",
+      email:$localToken?.model?.email,
+      name:$localToken?.model?.name,
+      username:$localToken?.model?.name,
+      avatar: $localToken?.model?.avatar,
       password:""
     }
     
     async function register(){
-      await logout()
+      
       try {
 
-
-        const user = await pb.collection('users').create({
+        if($localToken){
+          const user = await pb.collection('users').update($localToken.model.id,{
+        email: state.email != "" ? state.email : $localToken.model.email,
+        
+        avatar: avatar != $localToken.model.avatar ? avatar : $localToken.model.avatar,
+        
+        name: state.name != "" ? state.name : $localToken.model.name,
+        username: state.name != "" ? state.name : $localToken.model.name
+        });
+        console.log(user)
+        localToken.set({...$localToken,model:user})
+        }else{
+          // await logout();
+          const user = await pb.collection('users').create({
         email: state.email,
         password: state.password,
         avatar: avatar,
         passwordConfirm: state.passwordconfirm,
         name: state.name,
         username: state.name
-    });
-      console.log(user)
+        });
+
+        console.log(user)
       if(user){
         sendemail();
         await login();
       }
+        }
+
+
       } catch (error) {
         errorhandling(error)
       }
     }
     async function sendemail(){
-      await logout()
+      // await logout()
         const authData = await pb.collection('users').requestVerification(state.email);
         if(authData){
           console.log(authData)
@@ -159,9 +179,9 @@ async function login(){
               </div>
             </div>
             
-          {:else}
-          
-            <h1>Notehub register:</h1>
+            {/if}
+            {#if !$localToken}<h1>Notehub register:</h1>{/if}
+            
             <div class="input">email: <input type="text" bind:value={state.email} name=""></div>
             <div class="input">username: <input type="text" bind:value={state.name} name=""></div>
             <div class="avatarcontainer">
@@ -174,11 +194,13 @@ async function login(){
                 <div class="input">avatar: <input on:change={handleAvatarChange} class="avatar" type="file" name=""></div>
                
             </div>
+            {#if !$localToken}
              <div class="input">password: <input type="password" bind:value={state.password} name=""></div>
             <div class="input">password confirm: <input type="password" bind:value={state.passwordconfirm} name=""></div>
+            {/if}
             <button
             on:click={register}
-            >Register</button>
+            >{$localToken ? "Update" : "Register"}</button>
 
             {#if showWarning}
     
@@ -191,7 +213,7 @@ async function login(){
             {/if}
     
     
-        {/if}
+        
       </article>
       
     </main>

@@ -4,11 +4,26 @@
     export let workspaces;
     export let boards;
 
+    let showfull = true
+
+
+    const getPublictext = {
+        "private": {text:"🔒 private"},
+        "view" : {text:"public: 👁️ view"},
+        "global-view" : {text:"public: 🌐 global view"},
+        "edit" : {text:"public: 🔓 join and edit"}
+    }
+
 </script>
+
+<main>
 <div class="title-container">
     <h1><a href="/#/usergroup/{instance.id}">{instance.name}</a></h1>
-    
+    <button class="minimizebtn" on:click={()=>{showfull = !showfull}}>-</button>
 </div>
+{#if showfull}
+
+
 <div class="instancebox">
     <!-- {console.log(instance)} -->
 
@@ -26,7 +41,8 @@
         {/each}
     </div>
     {/if}
-    <div class="public">{instance.public != "private" ? "permission: " : ""}{instance.public}</div>
+    <div class="public">{getPublictext[instance.public].text}
+    </div>
     <div class="workspacecontainer viewcard-container">
         {#each workspaces.filter(e => e.instance === instance.id) as workspace}
                     <a class="workspace-card" href="/#/workspace/{workspace.id}">
@@ -56,8 +72,21 @@
     
     </div>
 
-
+{/if}
+</main>
     <style>
+        .title-container{
+            position: relative;
+        }
+        .minimizebtn {
+            position: absolute;
+            right: 20px;
+            background:var(--header-bg);
+            color: var(--header-color);
+        }
+        main{
+            margin-bottom:20px;
+        }
           .title-container{
         display: flex;
         flex-wrap: wrap;
@@ -78,7 +107,7 @@
         display:flex;
         align-items: center;
         gap: 10px;
-        background: #ffffff0f;
+        background: var(--container-bg);;
         overflow: hidden;
         border-radius: 9px;
         padding: 0 9px 0 0;
@@ -160,4 +189,8 @@
     .workspacecontainer .text {
         padding:5px;
     }
+
+
+
+
     </style>

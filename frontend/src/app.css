@@ -401,3 +401,14 @@ button{
   font-size:15px;
   align-items: center;
 }
+
+
+
+.locked .grabber-board,
+ .locked .editorOpentoggle,
+ .locked .grabber,
+ .locked .editor,
+ .locked .cardcontrols-move,
+ .locked .cardcontrols-delete{
+  display:none !important;
+}

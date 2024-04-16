@@ -17,6 +17,7 @@
         }
         export let fullView = false;
         export let listView = false;
+        
         console.log(card)
 
         let date;
@@ -67,11 +68,11 @@
 
         const movetoBoard = async (boardtoinsert)=>{
             showModal=false
-            const currentboard = await pb.collection('boards').getOne(card.board);
-            await pb.collection('boards').update(card.board, {...currentboard,cards:currentboard.cards.filter(e => e != card.id)});
+            const currentboard = await pb.collection('boards').getOne(card.board,{fields:"cards"});
+            await pb.collection('boards').update(card.board, {cards:currentboard.cards.filter(e => e != card.id)});
             
-            const newboard = await pb.collection('boards').getOne(boardtoinsert);
-            await pb.collection('boards').update(boardtoinsert, {...newboard,cards:[card.id,...newboard.cards]});
+            const newboard = await pb.collection('boards').getOne(boardtoinsert,{fields:"cards"});
+            await pb.collection('boards').update(boardtoinsert, {cards:[card.id,...newboard.cards]});
 
 
             const record = await pb.collection('cards').update(card.id, {...card,board:boardtoinsert});
@@ -92,8 +93,10 @@
 
 
     <div id={card.id} class="card" class:fullview={fullView} class:listview={listView} style="border-left: 3px solid {card.color}">
+        <!-- {card.board}<br/>
+        {card.expand?.board.name} -->
         <Modal bind:showModal>
-            <Moveoptions isopen={showModal} currentboard={card.board} on:submit={(e)=>{movetoBoard(e.detail)}}></Moveoptions>
+            <Moveoptions instance={card?.expand?.board?.instance} isopen={showModal} currentboard={card.board} on:submit={(e)=>{movetoBoard(e.detail)}}></Moveoptions>
         </Modal>
         <!-- {card.board} -->
         <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
@@ -151,10 +154,10 @@
             <div class="date">📅 {date}</div>
 
             {#if card.expand?.tags}
-                {#if card.expand.tags.length > 0 }
+                {#if card.expand?.tags.length > 0 }
 
                 <div class="tags">
-                    {#each card.expand.tags as tag} 
+                    {#each card.expand?.tags as tag} 
                     {#if tag.name != undefined}
                         <span class="tag" style="background:{tag.color};">{tag.name}</span>
                     {/if}
@@ -190,9 +193,9 @@
                 {/if}
             {#if fullView}
             
-                <button class="" on:click={handlemovetoBoard}>move ➜</button>
+                <button class="cardcontrols-move" on:click={handlemovetoBoard}>move ➜</button>
                 <a href="/#/board/{card.board}">current board</a>
-                <button class="alert" on:click={()=>showconfirmbox=true}>delete</button>
+                <button class="alert cardcontrols-delete" on:click={()=>showconfirmbox=true}>delete</button>
                 
             
             {:else}

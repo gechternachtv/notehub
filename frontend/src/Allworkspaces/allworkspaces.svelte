@@ -9,19 +9,28 @@
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
 
-    export let params;
-    // console.log(params)
+    export let usergroup = null;
+    export let params = {instance:""};
+    import {localToken} from '../stores.js'
+    // console.log(usergroup)
 
     let showModal = false;
 
 
     let views = []
     const records = async () => {
+    if(!usergroup){
+        usergroup = await pb.collection('instance').getOne(params.instance, {
+        fields: 'public,id,users',
+        });
+        console.log(usergroup)
+    }
+
 
         const records = await pb.collection('views').getFullList({
             sort: '-created',
             expand: 'boards',
-             filter: `instance = "${params.instance}"`
+             filter: `instance = "${usergroup.id}"`
 
             // filter : 'instance == "pnfkrb2353g8zkp"'
         });
@@ -74,7 +83,15 @@ onDestroy(()=>{
         
     {:then value}
     <div class="contexttitle">
-    <h1>Workspaces</h1> <button class="createbtn" on:click={() => (showModal = true)}> + </button>
+    <h1>Workspaces</h1> 
+        {#if usergroup.users.includes($localToken ? $localToken?.model.id : "???")}
+            <button class="createbtn" on:click={() => (showModal = true)}> + </button>
+
+            <Modal bind:showModal>
+                <Createview isopen={showModal} on:newcontent={handleNewView} instance={usergroup.id}/>
+            </Modal>
+        {/if}
+
     </div>
     <!-- <Contextmenu>
         <div>Workspaces</div>
@@ -82,9 +99,7 @@ onDestroy(()=>{
     </Contextmenu> -->
 
     
-    <Modal bind:showModal>
-        <Createview isopen={showModal} on:newcontent={handleNewView} instance={params.instance}/>
-    </Modal>
+
 
 
     <div class="grid">

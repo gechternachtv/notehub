@@ -9,7 +9,7 @@ const localStorageItem = window.localStorage.getItem('pocketbase_auth')
 let warning = "success"
 let showWarning = false;
 let warningcontent = []
-
+let newavatar;
 
 
 
@@ -129,9 +129,9 @@ async function btnlogin(){
       <article>
         {#if $localToken}
         
-        <div  class:grid={$localToken.model.avatar}>
+        <div  class:grid={$localToken?.model.avatar}>
         
-          {#if $localToken.model.avatar}
+          {#if $localToken?.model.avatar}
             <div class="profilepic-container">
               <img alt="profile pic" class="profilepic" src="{import.meta.env.VITE_API_URL}/api/files/_pb_users_auth_/{$localToken.model.id}/{$localToken.model.avatar}"/>
             </div>
@@ -146,10 +146,16 @@ async function btnlogin(){
               <div class="pleaseverify"> Welcome to notehub! </div>
               {/if}
             
-            </div>  
-            <button
+            </div> 
+            <div class="controls">
+              <button
               on:click={logout}
               >logout</button>
+              <!-- <button on:click={newavatar.click()}>change avatar</button>
+              <input bind:this={newavatar} type="file" name="" id=""/> -->
+              <button on:click={()=>{push("/account")}}>account</button>
+            </div>
+
           </div>
         </div>
         

@@ -4,30 +4,54 @@
     
     import {localToken} from './stores.js'
     
-    let showconfirmbox = false;
+
+    export let currentUsergroup = {
+        name: "new User Group",
+        public : "private",
+        users : []
+    };
+    console.log(currentUsergroup)
+    // let showconfirmbox = false;
     const dispatch = createEventDispatcher();
     
 
-    let name,publicperm;
-    let users = ""
+    let name= currentUsergroup.name 
+    let publicperm = currentUsergroup.public
+    let users = currentUsergroup.users?.filter(e => e != ($localToken ? $localToken?.model?.id : "???")).join(",")
 
-    const publicopt = [{value:"edit",desc:"edit - everyone can view and edit"},{value:"view",desc:"view - everyone can view, only members can edit"},{value:"private",desc:"private - only members can view and edit"}]
+    const publicopt = [{value:"edit",desc:"edit - everyone with the link can join"},{value:"view",desc:"view - everyone with the link can view, only members can edit"},{value:"private",desc:"private - only members can view and edit"}]
 
 
-  function handleNew() {
-
-   dispatch("new",{
+  function handleSubmit() {
+    if (currentUsergroup.id){
+   dispatch("edit",{
+    id:currentUsergroup.id,
     name:name,
     public:publicperm,
-    users:[...users.split(","),$localToken.model.id]
+    users:[$localToken?.model?.id,...users.split(",")].filter(e => e != "")
    })
+    }else{
+    dispatch("new",{
+        name:name,
+        public:publicperm,
+        users:[$localToken?.model?.id,...users.split(",")].filter(e => e != "")
+   })
+    }
+
   }
+
+  
 </script>
 
 
 <main>
 
-<h1 class="board-name"> Create usergroup </h1>
+<h1 class="board-name"> 
+{#if currentUsergroup.id}
+    Edit
+{:else}
+    Create
+{/if} usergroup </h1>
 
 
 <div class="grid">
@@ -41,8 +65,14 @@
    
 
     </div>
-
-    <button class="btn" on:click={handleNew}>Create</button>
+    
+     <button class="btn" on:click={handleSubmit}>
+        {#if currentUsergroup.id}
+            Edit
+        {:else}
+            Create
+        {/if}
+        </button>
 
 </main>
 

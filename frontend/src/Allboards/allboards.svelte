@@ -8,26 +8,36 @@
     import { push } from 'svelte-spa-router';
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
+    import {localToken} from '../stores.js';
     let showModal = false;
+    
 
 
-    export let params;
+    export let usergroup = null;
+    export let params = {instance:""};
 
-
+    console.log(params,usergroup)
 
 let boards = [];
 
 const getBoards = async ()=>{
+    if(!usergroup){
+        // console.log("...getting")
+        usergroup = await pb.collection('instance').getOne(params.instance, {
+        fields: 'public,id,users',
+        });
+        console.log(usergroup)
+    }
     // fetch a paginated records list
     const records = await pb.collection('boards').getFullList({
     sort: 'created',
     expand: 'tags',
-    filter: `instance = "${params.instance}"`
+    filter: `instance = "${usergroup.id}"`
     });
     
     boards = [...records]
 
-
+    console.log("->>>>>>>")
     console.log(records)
 }
 
@@ -68,22 +78,29 @@ onDestroy(() => {
 
 </script>
 <main>
-    <div class="contexttitle"> <h1>Boards</h1> <button class="createbtn" on:click={() => (showModal = true)}> + </button> </div>
+    {#await promise}
+       
+    {:then value}
+
+    <div class="contexttitle"> <h1>Boards</h1> 
+        {#if usergroup.users?.includes($localToken ? $localToken?.model.id : "???")}
+        <button class="createbtn" on:click={() => (showModal = true)}> + </button> 
+        <Modal bind:showModal>
+            <CreateBoard on:newcontent={handleNewBoard} instance={usergroup.id}/>
+        </Modal>
+        {/if}
+    </div>
    
 
 <div class="container contextholder">
 
-    {#await promise}
-       
-    {:then value}
+
     <!-- <Contextmenu>
         <div>Boards</div>
           
     </Contextmenu> -->
 
-        <Modal bind:showModal>
-            <CreateBoard on:newcontent={handleNewBoard} instance={params.instance}/>
-        </Modal>
+
 
 
         <div class="grid">
@@ -95,15 +112,15 @@ onDestroy(() => {
         </div>
 
 
-    {:catch error}
-       {error}
-    {/await}
+    
 
 
 
 </div>
 
-
+{:catch error}
+       {error}
+    {/await}
 
 
 

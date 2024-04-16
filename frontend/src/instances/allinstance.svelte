@@ -4,24 +4,29 @@
     import CreateUsergroup from "../createUsergroup.svelte";
     import { push } from "svelte-spa-router";
     import Modal from "../modal/modal.svelte";
+    import { localToken } from '../stores.js';
 
     let recordboards = [];
     let recordworkspaces = [];
     let showModal = false;
 
     const recordsinstance = pb.collection('instance').getFullList({
-    sort: '-created',expand:"users"});
+    sort: '-created',expand:"users",
+    filter:`users ~ "${$localToken ? $localToken.model.id : "aaa"}" || public = "global-view"`
+    });
 
     ;(async ()=>{
         recordboards = await pb.collection('boards').getFullList({
         sort: '-created',
-        fields: 'id,collectionId,name,img,instance,color'
+        fields: 'id,collectionId,name,img,instance,color',
+        filter:`instance.users ~ "${$localToken ? $localToken.model.id : "aaa"}" || instance.public = "global-view"`
         })
         console.log(recordboards)
 
         recordworkspaces = await pb.collection('views').getFullList({
         sort: '-created',
-        fields: 'id,name,img,collectionId,position,instance'
+        fields: 'id,name,img,collectionId,position,instance',
+        filter:`instance.users ~ "${$localToken ?  $localToken?.model.id : "aaa"}" || instance.public = "global-view"`
         })
         console.log(recordworkspaces)
     })()
@@ -35,15 +40,20 @@
 
 </script>
 <main>
-    <button class="btn createusergroup" on:click={()=>{showModal = true}}>Create new userGroup</button>
-    <Modal bind:showModal>
-        <CreateUsergroup on:new={handlenewusergroup}></CreateUsergroup>
-    </Modal>
+
 
 
 {#await recordsinstance}
     ...
 {:then instances}
+<h1>User Groups</h1>
+<button class="btn createusergroup" on:click={()=>{showModal = true}}>Create new userGroup</button>
+<Modal bind:showModal>
+    <CreateUsergroup on:new={handlenewusergroup}></CreateUsergroup>
+</Modal>
+{#each instances.filter(e => e.public === "global-view") as instance}
+    <Instancebox instance={instance} boards={recordboards} workspaces={recordworkspaces}></Instancebox>
+{/each}
 {#each instances.filter(e => e.public === "edit") as instance}
     <Instancebox instance={instance} boards={recordboards} workspaces={recordworkspaces}></Instancebox>
 {/each}
@@ -64,5 +74,8 @@
     }
     .createusergroup{
         margin-bottom:20px;
+    }
+    h1 {
+        font-size:32px;
     }
 </style>

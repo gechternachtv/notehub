@@ -11,13 +11,17 @@
     import { onDestroy } from 'svelte';
     import Contextmenu from '../contextmenu.svelte';
     import Sortgrid from '../Boardpage/sortcardsgrid.svelte';
+    import {localToken} from '../stores.js'
     
     
     let showModal = false;
     let boardisactive = true
+    let canedit = false;
 
     export let params = {}
     export let id = params.id;
+
+    let usergroup;
     let modalcontent;
     let defaults = [
         "1fr",
@@ -81,7 +85,7 @@
         console.log(data)
         const res = await pb.collection('views').update(view.id, data);
         const record = await pb.collection('views').getOne(view.id, {
-            expand: 'boards.cards.tags',
+            expand: 'instance,boards.cards.tags',
         });
 
         console.log(record)
@@ -99,7 +103,9 @@
     async function handleDndFinalize(e) {
         // console.log(e.detail.items.map(e => e.id))
         // boards = e.detail.items;
+        console.log("->>>>")
         console.log(e.detail)
+        
         const record = await pb.collection('views').update(id, {boards:e.detail.tochildren});
         
           console.log(record)
@@ -108,9 +114,12 @@
     
     const getView = async ()=>{
             const record = await pb.collection('views').getOne(id, {
-            expand: 'boards.cards.tags',
+            expand: 'instance,boards.cards.tags',
         });
+        console.log("%c ====","color:red;font-size:40px")
         console.log(record)
+        usergroup = record.expand?.instance
+        canedit = !!usergroup.users?.includes($localToken ? $localToken?.model.id : "???")
         boards = record.expand?.boards
         view = record
         grid = view.grid ? view.grid : gridDefaults(view.boards.length - 1)
@@ -133,7 +142,7 @@
                 }
                 console.log("%c ------","color:teal")
                 // views = e.record
-        }, { expand: 'boards.cards.tags' });
+        }, { expand: 'instance,boards.cards.tags' });
 
 
 
@@ -169,28 +178,28 @@ const boardUpdate = data => {
 
 
 </script>
-<main class="workspacepage" style="--grid:{grid};--grid-default:{defaults[2]}">
+<main class:locked={!canedit} class="workspacepage" style="--grid:{grid};--grid-default:{defaults[2]}">
     <!-- <Tags/> -->
     
 {#if boardisactive}
 {#await promise then res}
+    {#if canedit}
+        <Contextmenu>
 
-<Contextmenu>
+                <!-- {view.name} -->
+                <button on:click={()=>{showModal = true; modalcontent="edit"}}> edit </button>
+                <button on:click={()=>{showModal = true; modalcontent="create"}}> create </button>
+        </Contextmenu>
 
-        <!-- {view.name} -->
-        <button on:click={()=>{showModal = true; modalcontent="edit"}}> edit </button>
-        <button on:click={()=>{showModal = true; modalcontent="create"}}> create </button>
-</Contextmenu>
-
-<Modal bind:showModal>
-    {#if modalcontent === "edit"}
-        <Createworkspace isopen={showModal} view={view} on:newcontent={handleEditView} instance={view.instance}/>
+        <Modal bind:showModal>
+            {#if modalcontent === "edit"}
+                <Createworkspace isopen={showModal} view={view} on:newcontent={handleEditView} instance={view.instance}/>
+            {/if}
+            {#if modalcontent === "create"}
+                <CreateBoard on:newcontent={handleNewBoard} instance={params.instance}/>
+            {/if}
+        </Modal>
     {/if}
-    {#if modalcontent === "create"}
-        <CreateBoard on:newcontent={handleNewBoard} instance={params.instance}/>
-    {/if}
-</Modal>
-
 
     {#if view.img}
         <div class="img">
@@ -216,7 +225,7 @@ const boardUpdate = data => {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" transform="matrix(1, 0, 0, 1, 0, 0)"><path d="M10 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm-4 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5-9a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" fill="var(--button-bg)"/></svg>
                 </div>
 
-                    <Board listView={false} board={board} boardpage={false} on:boardupdate={boardUpdate} />
+                    <Board listView={false} board={{...board,expand:{...board.expand,instance:view.expand?.instance}}} boardpage={false} on:boardupdate={boardUpdate} />
                 
             </div>
         {/each}
@@ -265,24 +274,32 @@ const boardUpdate = data => {
                 background:var(--gradient-col-1);
                 position: relative;
                 height: calc(100vh - var(--bodypadding));
-                --board-height:calc(100vh - 350px)
+                --board-height:calc(100vh - 310px)
+    }
+    @media (max-height:499px){
+    main{
+        --board-height: calc(100vh - 124px);
+    }
     }
     :global(.board-grid){
         display:grid;
         gap:30px;
         grid-template-columns: var(--grid);
         overflow: scroll;
-        scroll-snap-type: x mandatory; 
+        scroll-snap-type: x mandatory;
+        padding:0 30px;
+        min-height: calc(100vh - 205px);
+        
     }
     @media (max-width:991px){
         :global(.board-grid){
-        width: calc(100% + 9px);
+        width: 100%;
         grid-template-columns: var(--grid-default)
     }
     }
     .board-container {
         /* scroll-snap-stop: always; */
-        scroll-snap-align: start;
+        scroll-snap-align: center;
         padding: 11px;
         box-sizing: border-box;
         background: var(--container-bg);
@@ -317,7 +334,14 @@ const boardUpdate = data => {
     
 
 
+    @media (max-height:499px){
 
+        :global(.board-grid){
+            margin-top: -195px;
+            min-height:calc(100vh - 67px);
+        }
+
+    }
 
     @media (max-width:1325px){
 
@@ -353,5 +377,11 @@ const boardUpdate = data => {
   padding: 13px;
 }
 
+.grid {
+  /* background:tomato; */
+  position:absolute;
+  left:0;
+  width: 100%;
+}
 
 </style>

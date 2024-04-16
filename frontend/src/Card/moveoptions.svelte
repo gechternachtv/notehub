@@ -6,13 +6,15 @@
     import { createEventDispatcher } from 'svelte';
     export let currentboard;
     export let isopen = false;
+    export let instance;
     import { onMount } from "svelte";
 
     const getAllBoards = async () => { 
         console.log("got all boards!")
         return await pb.collection('boards').getFullList({
             sort: '-created',
-            expand: 'boards'
+            expand: 'boards',
+            filter : `instance = "${instance}"`
         })
     }
 

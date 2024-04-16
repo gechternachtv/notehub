@@ -65,16 +65,17 @@
         if (board.id != ""){
             console.log(board.cards)
 
-            const promiseList = [...board.cards.map(async (e) => {
-                console.log(e)
-                try {
-                await pb.collection('cards').delete(e)
-                console.log(`${e} deleted.`);
-                } catch (error) {
-                console.warn(`Error deleting ${e}:`, error);
-                }
-            }), await pb.collection('boards').delete(board.id)]
-            await Promise.all(promiseList)
+            // const promiseList = [...board.cards.map(async (e) => {
+            //     console.log(e)
+            //     try {
+            //     await pb.collection('cards').delete(e)
+            //     console.log(`${e} deleted.`);
+            //     } catch (error) {
+            //     console.warn(`Error deleting ${e}:`, error);
+            //     }
+            // }), await pb.collection('boards').delete(board.id)]
+            // await Promise.all(promiseList)
+            await pb.collection('boards').delete(board.id)
             console.log("all deleted")
             pop();
         }

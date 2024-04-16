@@ -6,6 +6,7 @@ import {pb} from '../pb.js';
 import Editor from '../Boardpage/editor.svelte';
 import Card from '../Card/card.svelte';
 import createNewCard from '../createNewCard.js';
+import { localToken } from '../stores.js';
 
 export let params = {}
 
@@ -22,11 +23,12 @@ let files;
 let currentfile;
 let editorBlocked = true;
 
+
 const cardget = async()=>{
     if(id){
 				try {
-				const res = await pb.collection('cards').getOne(id,{expand: 'tags'})
-				// console.log(params.get("id"))
+				const res = await pb.collection('cards').getOne(id,{expand: 'tags,board.instance'})
+				console.log(res)
 
                 // console.log(res);
                 showcard = res
@@ -34,6 +36,11 @@ const cardget = async()=>{
                 console.log(res)
                 currentfile = res.file;
                 editorBlocked = false;
+
+
+                // console.log(showcard.expand?.board?.expand?.instance?.users.includes($localToken ? $localToken?.model.id : "???"))
+
+
                 if(res.file){
                     files = [{name:res.file}]
                 }
@@ -70,10 +77,11 @@ const handleNewCard = async (e)=>{
     };
 
     // console.log(data)
+    const oldexpand = showcard.expand
     const record = await pb.collection('cards').update(cardid, data);
     console.log("%c record:","color:turquoise")
     console.log(record)
-    showcard = {...record,tags:card.tags}
+    showcard = {...record,tags:card.tags,expand:oldexpand}
     // files = fileelement.files
     if(record.file){
         files = [{name:record.file}]
@@ -99,8 +107,9 @@ const handleNewCard = async (e)=>{
     {#await promise then defaultValue}
 
         {#if showcard.id}
-        <div class="grid">
-            <div class="grid-ch">        
+       
+        <div class:locked={!showcard.expand?.board?.expand?.instance?.users.includes($localToken ? $localToken?.model.id : "???")} class="grid">
+            <div class="grid-ch grid-editor-container">        
                 <Editor bind:editorBlocked bind:files bind:fileelement defaultValue={defaultValue} on:newcontent={handleNewCard} clearAllonEnter={false}></Editor>
                 
 
@@ -141,4 +150,15 @@ const handleNewCard = async (e)=>{
                 display:flex;
                 gap:10px;
             }
+
+            .locked .grid-editor-container {
+                display:none;
+            }
+
+            .locked .grid-ch{
+                max-width:700px;
+                margin:auto;
+                width:100%;
+            }
+            
 </style>

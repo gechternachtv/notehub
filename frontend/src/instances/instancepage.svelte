@@ -1,28 +1,98 @@
 <script>
+// @ts-nocheck
+
     import Allworkspaces from "../Allworkspaces/allworkspaces.svelte";
     import Allboards from "../Allboards/allboards.svelte";
     import { pb } from "../pb";
+    import Modal from "../modal/modal.svelte";
+    import CreateUsergroup from "../createUsergroup.svelte";
+    import {localToken} from '../stores.js'
+    import { push } from "svelte-spa-router";
 
     export let params;
 
-    const userGroup = pb.collection('instance').getOne(params.instance, {
-            fields: 'name,public,expand',
+    let usergroup;
+    let showModal = false;
+
+    const getPublictext = {
+        "private": {text:"🔒 private"},
+        "view" : {text:"public: 👁️ view"},
+        "global-view" : {text:"public: 🌐 global view"},
+        "edit" : {text:"public: 🔓 join and edit"}
+    }
+
+    const getUserGroup = async ()=>{
+        const record = await pb.collection('instance').getOne(params.instance, {
+            fields: 'id,name,public,users,expand',
             expand: "users"
         });
+        console.log(record)
+            usergroup = record;
+    }
+
+    const joinUserGroup = async ()=>{
+        if(!usergroup.users.includes($localToken ? $localToken?.model.id : "???") && usergroup.public === "edit"){
+            const newrecord = await pb.collection('instance').update(params.instance, {
+                name:usergroup.name,
+                public:usergroup.public,
+                users:[...usergroup.users,$localToken?.model.id]
+            });
+            usergroup = {...newrecord,expand:{
+                users:[...usergroup.expand.users,{id:$localToken?.model.id,name:$localToken?.model.name,avatar:$localToken?.model.avatar}]
+            }};
+        }
+    }
+
+
+    const userGroup = getUserGroup()
+
+    const handleeditusergroup = async e => {
+        console.log("edit!")
+        console.log(e.detail)
+
+         const record = await pb.collection('instance').update(e.detail.id, e.detail);
+         const users = await pb.collection('instance').getOne(e.detail.id, {
+            fields: 'expand',
+            expand: 'users',
+        });
+         console.log(record,users)
+         usergroup = {...record,expand:users.expand}
+    }
 </script>
 
 {#await userGroup}
     <!-- promise is pending -->
 {:then e}
+
+
 <div class="titlecontainer">
-    <h1>{e.name}</h1>
-    <div class="public">{e.public != "private" ? "permission: " : ""}{e.public}</div>
+    <h1>{usergroup.name}</h1>
+    <div class="public">{getPublictext[usergroup.public].text}</div>
     
 </div>
+<div class="btncontainer">
+    {#if $localToken && (usergroup.users.includes($localToken ? $localToken?.model?.id : "???"))}
 
-{#if e.expand?.users}
+    <button class="btn createusergroup" on:click={()=>{showModal = true}}>Edit userGroup</button>
+    <Modal bind:showModal>
+        <CreateUsergroup currentUsergroup={usergroup} on:edit={handleeditusergroup}></CreateUsergroup>
+    </Modal>
+
+{/if}
+{#if !usergroup.users.includes($localToken ? $localToken?.model.id : "???") && usergroup.public === "edit"}
+    {#if $localToken}
+        <button class="btn createusergroup" on:click={joinUserGroup}>Join userGroup</button>
+        {:else}
+        <button class="btn createusergroup" on:click={()=>{push("/login")}}>Join userGroup</button>
+    {/if}
+    
+{/if}
+</div>
+
+
+{#if usergroup.expand?.users}
     <div class="users-container">
-        {#each e.expand.users as user}
+        {#each usergroup.expand.users as user}
         <div class="userbox">
             <div class="navavatar">
             <img loading="lazy" src="{import.meta.env.VITE_API_URL}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"/>
@@ -34,19 +104,25 @@
     </div>
     {/if}
 
+
+    <Allworkspaces usergroup={usergroup}></Allworkspaces>
+
+    <Allboards usergroup={usergroup}></Allboards>
+
+
 {:catch error}
     {error}
 {/await}
 
-<Allworkspaces params={{instance:params.instance}}></Allworkspaces>
 
-<Allboards params={{instance:params.instance}}></Allboards>
 
 <style>
     h1 {
         font-size:32px;
     }
-
+.btncontainer{
+    margin-bottom:28px;
+}
     .public{
         font-weight: bold;
   background: var(--header-bg);

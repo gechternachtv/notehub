@@ -2,19 +2,20 @@
  import Themeswitch from './themeswitch.svelte';
   import {location} from 'svelte-spa-router'
   import Router from 'svelte-spa-router';
-    import Board from './Boardpage/boardpage.svelte';
-      import Workspaceview from './workspacepage/workspacepage.svelte';
-      import Card from './Cardpage/cardpage.svelte';
-      import Allboards from './Allboards/allboards.svelte';
-    import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
-    import Login from './login.svelte';
-    import Account from './account.svelte';
-    import Allinstances from './instances/allinstance.svelte';
+    // import Board from './Boardpage/boardpage.svelte';
+      // import Workspaceview from './workspacepage/workspacepage.svelte';
+      // import Card from './Cardpage/cardpage.svelte';
+      // import Allboards from './Allboards/allboards.svelte';
+    // import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
+    // import Login from './login.svelte';
+    // import Account from './account.svelte';
+    // import Allinstances from './instances/allinstance.svelte';
     import {localToken} from './stores.js';
-    import Instancepage from './instances/instancepage.svelte';
-    import Allinstance from './instances/allinstance.svelte';
-    import Register from './register.svelte';
+    // import Instancepage from './instances/instancepage.svelte';
+    // import Allinstance from './instances/allinstance.svelte';
+    // import Register from './register.svelte';
 // import Sortgrid from './Boardpage/sortcardsgrid.svelte';
+import { wrap } from 'svelte-spa-router/wrap'
 
 import {pb} from './pb.js';
 
@@ -45,7 +46,7 @@ import {pb} from './pb.js';
       {#if $localToken}
       <a class="navatar-container" href="/#/account"> <div class="navavatar"><img src="{import.meta.env.VITE_API_URL}/api/files/_pb_users_auth_/{$localToken.model.id}/{$localToken.model?.avatar}"></div></a>
       {:else}
-      <a  class:active={$location === "/account"} href="/#/account">Login </a>
+      <a  class:active={$location === "/login"} href="/#/login">Login </a>
       {/if}
       <div class="settings">
       
@@ -55,15 +56,16 @@ import {pb} from './pb.js';
     <!-- <Sortgrid></Sortgrid> -->
     <div class="app">
     <Router routes={{
-      '/board/:id': Board,
-      '/card/:id': Card,
-      '/allboards/:instance': Allboards,
-      '/workspace/:id': Workspaceview,
-      '/account/': Account,
-      '/register/': Register,
-      '/workspaces/:instance': Allworkspaces,
-      '/usergroup/:instance' : Instancepage,
-      '/': Allinstance
+      '/board/:id': wrap({asyncComponent: () => import('./Boardpage/boardpage.svelte')}),
+      '/card/:id': wrap({asyncComponent: () => import('./Cardpage/cardpage.svelte')}),
+      '/allboards/:instance': wrap({asyncComponent: () => import('./Allboards/allboards.svelte')}),
+      '/workspace/:id': wrap({asyncComponent: () => import('./workspacepage/workspacepage.svelte')}),
+      '/account/': wrap({asyncComponent: () => import('./register.svelte')}),
+      '/login/': wrap({asyncComponent: () => import('./login.svelte')}),
+      '/register/': wrap({asyncComponent: () => import('./register.svelte')}),
+      '/workspaces/:instance': wrap({asyncComponent: () => import('./Allworkspaces/allworkspaces.svelte')}),
+      '/usergroup/:instance' : wrap({asyncComponent: () => import('./instances/instancepage.svelte')}),
+      '/': wrap({asyncComponent: () => import('./instances/allinstance.svelte')})
     }} />
     </div>
 

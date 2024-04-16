@@ -12,7 +12,9 @@
         import { push } from 'svelte-spa-router';
         import { onDestroy } from 'svelte';
         import {createEventDispatcher} from 'svelte';
+        import {localToken} from '../stores.js'
 
+        
         const dispatch = createEventDispatcher();
 
 
@@ -32,11 +34,17 @@
             color:"",
             cards:[]
         }
+
+        let canedit = !!board.expand?.instance.users?.includes($localToken ? $localToken?.model.id : "???");
+        let usergroup = board.expand?.instance
         export let listView = undefined;
         
     
         export let params = {id:board.id}
     
+        console.log("%c =-=====","font-size:30px;color:teal")
+        console.log(board)
+
         let dragDisabled = false;
         let fileelement;
         let files;
@@ -46,17 +54,17 @@
     
         let cards = board.expand?.cards ? board.expand.cards : board.cards
 
-        console.log("%c =-=====","font-size:30px;color:teal")
+        
         console.log(board)
 
         let counter = cards.length
 
 
         async function handleDndFinalize(e) {
-            console.log("%c drop details: -----","color:teal")
+            console.log("%c drop details: <<<<<<-----","color:teal")
             console.log(counter,cards)
             console.log(board.name)
-            console.log("%c  -----","color:red")
+            console.log("%c  ----->>>>>","color:red")
             console.log(e.detail.tochildren)
             // console.log(cards)
             //log
@@ -83,6 +91,12 @@
             //     const record = await pb.collection('boards').update(e.detail.fromtarget, {cards:e.detail.fromchildren});
             //     console.log(record)
             // }
+            console.log("%c  ----->>>>>","color:teal;font-size:50px")
+            console.log(e.detail)
+            e.detail.tochildren.forEach(async item => {
+                const itemrec = await pb.collection('cards').update(item, {board:params.id});
+            });
+            // const cardrecord = await pb.collection('boards').update(params.id, {cards:e.detail.tochildren});
             const record = await pb.collection('boards').update(params.id, {cards:e.detail.tochildren});
             // board = {...record,cards:cards}
             // dispatch('boardupdate',{...board,cards:cards})
@@ -108,15 +122,18 @@
         try {   
             if(board.id === ""){
                 const record = await pb.collection('boards').getOne(params.id, {
-                expand: 'cards.tags',
+                expand: 'instance.users,cards.tags',
             });
-        // @ts-ignore
+            usergroup = record.expand?.instance
+            canedit = record.expand?.instance.users?.includes($localToken ? $localToken?.model.id : "???")
             board = record;
             dispatch('boardupdate',board)
-            // console.log(board)
+            console.log(board)
             if(record?.expand){
+                if(record?.expand.cards){
                 cards = cardFilter([...record.expand.cards])
                 counter = cards.length
+                }
             }
             // console.log(records)
 
@@ -125,6 +142,7 @@
             }
 
             pb.collection('boards').subscribe(params.id, (e)=> {
+                console.log("here?")
                 console.log(`%c ${e.action} event on ${board.id}`,"background:turquoise;color:red;font-size:20px")
                 console.log(e.record);
 
@@ -132,10 +150,14 @@
                     board = e.record
                     
                         if(e.record?.expand){
-                            console.log(cardFilter([...e.record.expand.cards]))
-                            cards = cardFilter([...e.record.expand.cards])
-                            counter = cards.length
-                            dispatch('boardupdate',{...board,cards:cards})
+                            if(e.record?.expand.cards){
+                                cards = cardFilter([...e.record.expand.cards])
+                                counter = cards.length
+                                dispatch('boardupdate',{...board,cards:cards})
+                            }else{
+                                cards = []
+                                dispatch('boardupdate',{...board,cards:[]})
+                            }
                         }else{
                             cards = []
                             dispatch('boardupdate',{...board,cards:[]})
@@ -148,23 +170,6 @@
                 console.log("%c ------","color:teal")
                 // views = e.record
         }, { expand: 'cards.tags' });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -279,13 +284,16 @@
         
         {#await promise then views}
     
-        <div class="container">
+        <div class:locked={!canedit} class="container">
            
             <!-- {board.id} -->
             <Boardcard board={board}/>
             {#if boardpage}
             <div class="controls">
-                <button on:click={() => (showModal = true)}> Edit board </button>
+                {#if canedit}
+                    <button on:click={() => (showModal = true)}> Edit board </button>
+                {/if}
+
                 <button class="listviewtoggle" on:click={handleListViewChange}> {listView ? "Card mode" : "List mode"} </button>    
             </div>
             {:else}
@@ -316,7 +324,7 @@
 
                     </Sortgrid>
 
-                {#if  editorOpen}
+                {#if  editorOpen && canedit}
                 <div class="con conworkspace">
                     <div class:editorBlocked={editorBlocked} class="editor">
                         <Editor bind:editorBlocked bind:files bind:fileelement on:newcontent={handleNewCard} ></Editor>
@@ -327,7 +335,7 @@
             </div>
 
 
-            {#if boardpage}
+            {#if boardpage && canedit}
             <div class="con condesktop">
                 <div class:editorBlocked={editorBlocked} class="editor">
                     <Editor bind:editorBlocked bind:files bind:fileelement on:newcontent={handleNewCard} ></Editor>
@@ -336,7 +344,7 @@
                 <div class="boardedit">
 
                     <Modal bind:showModal>
-                        <CreateBoard on:newcontent={handleUpdate} board={board} instance={board.instance}/>
+                        <CreateBoard on:newcontent={handleUpdate} board={board} instance={usergroup?.id}/>
                     </Modal>
                 
                 </div>
@@ -353,7 +361,7 @@
 
 
 
-  
+
   
 
     
