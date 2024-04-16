@@ -47,10 +47,12 @@
     ...
 {:then instances}
 <h1>User Groups</h1>
+{#if $localToken}
 <button class="btn createusergroup" on:click={()=>{showModal = true}}>Create new userGroup</button>
 <Modal bind:showModal>
     <CreateUsergroup on:new={handlenewusergroup}></CreateUsergroup>
 </Modal>
+{/if}
 {#each instances.filter(e => e.public === "global-view") as instance}
     <Instancebox instance={instance} boards={recordboards} workspaces={recordworkspaces}></Instancebox>
 {/each}
