@@ -290,9 +290,9 @@ export default async (markdownobj, fileInputelement = null, currentfile = null) 
         const textWithoutStuff = stringReplacer(mdtext, [...dataWords, card.link, (card.link ? "" : card.title), ...card.tags.map(e => `#${e.name}`), ...card.tags.map(e => `-${e.color}`)])
         if (textWithoutStuff.replace(/[^a-zA-Z0-9]/g, '').length > 0) {
             console.log("🫡")
-            card.text = textWithoutStuff
+            card.text = textWithoutStuff.substring(0, 200)
         } else if (meta.text) {
-            card.text = meta.text
+            card.text = meta.text.substring(0, 200)
         }
 
 

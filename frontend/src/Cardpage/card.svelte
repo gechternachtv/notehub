@@ -59,16 +59,14 @@
 
     let checked = card.check === "done";
     const handleCheckbox = async () => {
-        const record = await pb
-            .collection("cards")
-            .update(card.id, {
-                ...card,
-                check: checked ? "done" : "islist",
-                logs: [
-                    ...card.logs,
-                    `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
-                ],
-            });
+        const record = await pb.collection("cards").update(card.id, {
+            ...card,
+            check: checked ? "done" : "islist",
+            logs: [
+                ...card.logs,
+                `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
+            ],
+        });
         card = record;
         setInfo(card);
         dispatch("updatefront", card);
@@ -84,11 +82,9 @@
         const currentboard = await pb
             .collection("boards")
             .getOne(card.board, { fields: "cards" });
-        await pb
-            .collection("boards")
-            .update(card.board, {
-                cards: currentboard.cards.filter((e) => e != card.id),
-            });
+        await pb.collection("boards").update(card.board, {
+            cards: currentboard.cards.filter((e) => e != card.id),
+        });
 
         const newboard = await pb
             .collection("boards")
@@ -301,7 +297,7 @@
     
                 </div>
                 {/if} -->
-
+    {card.text}
     {card.raw}
 </div>
 

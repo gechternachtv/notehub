@@ -11,6 +11,7 @@
 		"yotsuba-b",
 		"futaba",
 		"dfwm98",
+		"goldSrc",
 		"blood",
 		"uboa",
 		"pxtone",
@@ -273,5 +274,42 @@
 			rgba(11, 12, 118, 1) 22%,
 			rgba(12, 121, 201, 1) 100%
 		) !important;
+	}
+
+	:global(.goldSrc) {
+		--alert: #96872f;
+		--news: #f10000;
+		--header-bg: #4c5945;
+		--main-font-1: #fff;
+		--main-font-2: #96872f;
+		--button-bg: #939989;
+		--button-color: #fff;
+		--header-color: #939989;
+		--card-bg: #4c5945;
+		--container-bg: #252f1c;
+		--gradient-col-1: #32392c;
+		--gradient-col-2: #b7b7b7;
+		--body-background: #606464;
+		--board-title-color: #968832;
+		--browser-color: var(--header-bg);
+	}
+	:global(
+			.goldSrc .instance-box,
+			.goldSrc .card,
+			.goldSrc .workspace-card,
+			.goldSrc .userbox,
+			.goldSrc .btn
+		) {
+		border-top: 2px solid #67715d;
+		border-left: 2px solid #67715d;
+		border-bottom: 2px solid #393e34;
+		border-right: 2px solid #393e34;
+		border-radius: 0px !important;
+	}
+	:global(.goldSrc .board-header .img-c) {
+		border-radius: 3px !important;
+	}
+	:global(.goldSrc nav) {
+		border-bottom: 2px solid #393e34;
 	}
 </style>

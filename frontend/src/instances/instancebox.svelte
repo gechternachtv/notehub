@@ -14,7 +14,7 @@
     };
 </script>
 
-<main>
+<main class="instance-box">
     <div class="title-container">
         <h1><a href="/#/usergroup/{instance.id}">{instance.name}</a></h1>
         <button
@@ -135,12 +135,12 @@
     .instancebox {
         background: var(--card-bg);
         padding: 16px;
-        margin-bottom: 30px;
+        /* margin-bottom: 30px; */
     }
     .users-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 30px;
+        gap: 10px;
     }
     .public {
         font-weight: bold;
