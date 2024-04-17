@@ -24,9 +24,15 @@
     const cardget = async () => {
         if (id) {
             try {
-                const res = await pb
-                    .collection("cards")
-                    .getOne(id, { expand: "tags,board.instance" });
+                const res = await pb.collection("cards").getOne(id, {
+                    expand: "board.instance,tags",
+                    fields:
+                        `id,board,expand.board.id,expand.board.cards,expand.board.expand.instance.users,expand.board.expand.instance.id,` +
+                        `collectionId,check,created,id,color,` +
+                        `file,imglink,favico,title,` +
+                        `link,raw,logs` +
+                        `expand.tags.name,tags.color`,
+                });
                 // console.log(res)
 
                 // console.log(res);
@@ -94,7 +100,7 @@
 
         if (thumb && milkdownimg) {
             if (thumb === milkdownimg) {
-                console.log("im equal!");
+                // console.log("im equal!");
                 document
                     .querySelector(".thumb .img-c img")
                     .setAttribute("style", "display:none");

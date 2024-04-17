@@ -1,7 +1,7 @@
 <script>
     // @ts-nocheck
 
-    import { pb } from "../pb.js";
+    // import { pb } from "../pb.js";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
     import getFile from "../getFile.js";
@@ -52,19 +52,20 @@
 
     let checked = card.check === "done";
     const handleCheckbox = async () => {
-        const record = await pb
-            .collection("cards")
-            .update(card.id, {
-                ...card,
-                check: checked ? "done" : "islist",
-                logs: [
-                    ...card.logs,
-                    `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
-                ],
-            });
-        card = record;
-        setInfo(card);
-        dispatch("updatefront", card);
+        console.log("checkboxed");
+        // const record = await pb
+        //     .collection("cards")
+        //     .update(card.id, {
+        //         ...card,
+        //         check: checked ? "done" : "islist",
+        //         logs: [
+        //             ...card.logs,
+        //             `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
+        //         ],
+        //     });
+        // card = record;
+        // setInfo(card);
+        // dispatch("updatefront", card);
     };
     // const handlemovetoBoard = async ()=>{ console.log("hey")}
 

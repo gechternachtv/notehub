@@ -46,12 +46,10 @@
                 .create({ ...data, instance: view.instance });
 
             console.log(data);
-            const res = await pb
-                .collection("views")
-                .update(view.id, {
-                    ...view,
-                    boards: [...view.boards, boardrecord.id],
-                });
+            const res = await pb.collection("views").update(view.id, {
+                ...view,
+                boards: [...view.boards, boardrecord.id],
+            });
             // const record = await pb.collection('views').getOne(view.id, {
             //     expand: 'boards.cards.tags',
             // });
@@ -78,7 +76,15 @@
         console.log(data);
         const res = await pb.collection("views").update(view.id, data);
         const record = await pb.collection("views").getOne(view.id, {
-            expand: "instance,boards.cards.tags",
+            expand: "boards.cards.tags",
+            fields:
+                `collectionId,boards,expand,grid,id,img,name,position` +
+                `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,` +
+                `expand.boards.expand,expand.boards.collectionId,` +
+                `expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,expand.boards.expand.cards.id,expand.boards.expand.cards.color,` +
+                `expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,expand.boards.expand.cards.title,` +
+                `expand.boards.expand.cards.link,expand.boards.expand.cards.text,` +
+                `expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.color`,
         });
 
         console.log(record);
@@ -107,8 +113,16 @@
     const getView = async () => {
         const record = await pb.collection("views").getOne(id, {
             expand: "instance,boards.cards.tags",
+            fields:
+                `collectionId,boards,expand,grid,id,img,instance,name,position,expand.instance.users` +
+                `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,` +
+                `expand.boards.expand,expand.boards.collectionId,` +
+                `expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,expand.boards.expand.cards.id,expand.boards.expand.cards.color,` +
+                `expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,expand.boards.expand.cards.title,` +
+                `expand.boards.expand.cards.link,expand.boards.expand.cards.text,` +
+                `expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.color`,
         });
-        console.log("%c ====", "color:red;font-size:40px");
+        console.log("%c ====>", "color:teal;font-size:40px");
         console.log(record);
         usergroup = record.expand?.instance;
         canedit = !!usergroup.users?.includes(
@@ -139,7 +153,17 @@
                 console.log("%c ------", "color:teal");
                 // views = e.record
             },
-            { expand: "instance,boards.cards.tags" },
+            {
+                expand: "boards.cards.tags",
+                fields:
+                    `collectionId,boards,expand,grid,id,img,name,position` +
+                    `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,` +
+                    `expand.boards.expand,expand.boards.collectionId,` +
+                    `expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,expand.boards.expand.cards.id,expand.boards.expand.cards.color,` +
+                    `expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,expand.boards.expand.cards.title,` +
+                    `expand.boards.expand.cards.link,expand.boards.expand.cards.text,` +
+                    `expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.color`,
+            },
         );
 
         return record;

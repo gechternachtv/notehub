@@ -17,10 +17,10 @@
   // import Sortgrid from './Boardpage/sortcardsgrid.svelte';
   import { wrap } from "svelte-spa-router/wrap";
 
-  import { pb } from "./pb.js";
+  // import { pb } from "./pb.js";
 
   console.log(import.meta.env);
-  console.log($localToken);
+  // console.log($localToken);
 </script>
 
 <svelte:head>
