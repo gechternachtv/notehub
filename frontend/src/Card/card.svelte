@@ -489,7 +489,7 @@
             overflow: hidden;
         }
         .card:not(.fullview) .updates {
-            max-height: 20px;
+            max-height: 29px;
         }
 
         .card:not(.fullview) .card-container---controls {

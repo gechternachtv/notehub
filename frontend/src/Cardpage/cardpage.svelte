@@ -145,7 +145,7 @@
 
 <style>
     main {
-        padding: 30px;
+        padding: 20px 0;
         box-sizing: border-box;
     }
 
