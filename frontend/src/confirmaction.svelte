@@ -6,18 +6,20 @@
 
 <main>
     {#if show}
-        <slot />
-        <div class="controls">
-            <button on:click={() => dispatch("close")}>Close</button>
-            <button on:click={() => dispatch("confirm")} class="alert"
-                >Yes</button
-            >
+        <div class="main">
+            <slot />
+            <div class="controls">
+                <button on:click={() => dispatch("close")}>Close</button>
+                <button on:click={() => dispatch("confirm")} class="alert"
+                    >Yes</button
+                >
+            </div>
         </div>
     {/if}
 </main>
 
 <style>
-    main {
+    .main {
         font-size: 1.3rem;
         margin-top: 12px;
     }

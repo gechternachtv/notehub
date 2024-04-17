@@ -83,6 +83,29 @@
         }
         editorBlocked = false;
     };
+
+    const oneditorready = () => {
+        const thumb = document
+            .querySelector(".thumb .img-c img")
+            ?.getAttribute("src");
+        const milkdownimg = document
+            .querySelector(".milkdown img")
+            ?.getAttribute("src");
+
+        if (thumb && milkdownimg) {
+            if (thumb === milkdownimg) {
+                console.log("im equal!");
+                document
+                    .querySelector(".thumb .img-c img")
+                    .setAttribute("style", "display:none");
+            }
+            if (milkdownimg.includes("data:image")) {
+                document
+                    .querySelector(".thumb .img-c img")
+                    .setAttribute("style", "display:none");
+            }
+        }
+    };
 </script>
 
 <main>
@@ -94,18 +117,18 @@
                 )}
                 class="grid"
             >
-                <div class="grid-ch grid-editor-container">
-                    <Editor
-                        bind:editorBlocked
-                        bind:files
-                        bind:fileelement
-                        {defaultValue}
-                        on:newcontent={handleNewCard}
-                        clearAllonEnter={false}
-                    ></Editor>
-                </div>
                 <div class="grid-ch">
-                    <Card fullView={true} card={showcard} />
+                    <Card fullView={true} card={showcard}>
+                        <Editor
+                            bind:editorBlocked
+                            bind:files
+                            bind:fileelement
+                            {defaultValue}
+                            on:newcontent={handleNewCard}
+                            clearAllonEnter={false}
+                            on:editorready={oneditorready}
+                        ></Editor>
+                    </Card>
                 </div>
             </div>
         {/if}
@@ -124,6 +147,9 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
+        max-width: 700px;
+        margin: auto;
+        width: 100%;
     }
     .grid-ch {
         max-width: 100%;

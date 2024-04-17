@@ -256,18 +256,15 @@
                     </a>
                 </div>
             {/if}
-            {#if fullView}
-                <button class="cardcontrols-move" on:click={handlemovetoBoard}
-                    >move ➜</button
-                >
-                <a href="/#/board/{card.board}">current board</a>
-                <button
-                    class="alert cardcontrols-delete"
-                    on:click={() => (showconfirmbox = true)}>delete</button
-                >
-            {:else}
-                <a href="/#/card/{card.id}">more</a>
-            {/if}
+
+            <button class="cardcontrols-move" on:click={handlemovetoBoard}
+                >move ➜</button
+            >
+            <a href="/#/board/{card.board}">current board</a>
+            <button
+                class="alert cardcontrols-delete"
+                on:click={() => (showconfirmbox = true)}>delete</button
+            >
         </div>
     </div>
     <Confirmaction
@@ -282,11 +279,6 @@
         Are you sure you want to delete this card?
     </Confirmaction>
 
-    <div class="tooltip">
-        <!-- {#each channel.laspost.split("\n") as content} -->
-        <!-- <div>id: {card.id} </div> -->
-        <!-- {/each} -->
-    </div>
     <!-- {#if card.logs}
                 <div class="log-container">
                     {#if card.logs.length > 1}
@@ -297,8 +289,8 @@
     
                 </div>
                 {/if} -->
-    {card.text}
-    {card.raw}
+    <!-- {card.text} -->
+    <slot />
 </div>
 
 <style>
@@ -314,7 +306,7 @@
         background-color: var(--card-bg);
         padding: 13px;
         width: 100%;
-        display: grid;
+        display: block;
         justify-content: space-between;
         gap: 5px;
         box-sizing: border-box;
@@ -322,7 +314,7 @@
         /* box-shadow: 2px 3px 4px #00000026; */
         /* border-radius: 4px; */
         height: 100%;
-        display: grid;
+        /* display: grid; */
         grid-row: span 3;
         grid-column: span 3;
         grid-template-rows: subgrid;
@@ -425,7 +417,7 @@
     .title {
         font-weight: bold;
         color: var(--main-font-2);
-        font-size: 1.3rem;
+        font-size: 1.9rem;
         margin-bottom: 5px;
     }
     .tags {
@@ -474,6 +466,7 @@
         max-height: 180px;
         z-index: 2;
         opacity: 1;
+        display: none;
     }
 
     .thumb .tooltip {
@@ -621,9 +614,6 @@
             position: absolute;
             bottom: 0;
             right: 10px;
-        }
-        .updates {
-            color: var(--main-font-1);
         }
     }
 </style>
