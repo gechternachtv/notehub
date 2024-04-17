@@ -215,20 +215,6 @@
                 </div>
             {/if}
         {/if}
-
-        {#if card.tags}
-            {#if card.tags.length > 0}
-                <div class="tags">
-                    {#each card.tags as tag}
-                        {#if tag.name != undefined}
-                            <span class="tag" style="background:{tag.color};"
-                                >{tag.name}</span
-                            >
-                        {/if}
-                    {/each}
-                </div>
-            {/if}
-        {/if}
     </div>
 
     <div class="card-container card-container---controls">

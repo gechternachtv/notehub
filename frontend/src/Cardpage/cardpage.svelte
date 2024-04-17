@@ -30,8 +30,8 @@
                         `id,board,expand.board.id,expand.board.cards,expand.board.expand.instance.users,expand.board.expand.instance.id,` +
                         `collectionId,check,created,id,color,` +
                         `file,imglink,favico,title,` +
-                        `link,raw,logs` +
-                        `expand.tags.name,tags.color`,
+                        `link,raw,logs,` +
+                        `expand.tags.name,expand.tags.color`,
                 });
                 // console.log(res)
 
