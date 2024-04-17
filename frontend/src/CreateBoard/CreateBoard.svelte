@@ -23,7 +23,7 @@
     let input;
     let image;
 
-    let placeholder;
+    // let placeholder;
 
     let boardPreview = {
         color: "",

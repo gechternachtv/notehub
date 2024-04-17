@@ -122,7 +122,7 @@
                         .getOne(params.id, {
                             expand: "cards.tags,instance",
                             fields:
-                                `id,img,instance,name,cards,color,collectionId,expand.instance.users,` +
+                                `id,img,name,cards,color,collectionId,instance,expand.instance.users,` +
                                 `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,` +
@@ -192,9 +192,9 @@
                         // views = e.record
                     },
                     {
-                        expand: "cards.tags",
+                        expand: "cards.tags,instance",
                         fields:
-                            `id,img,name,cards,color,collectionId,expand,` +
+                            `id,img,name,cards,color,collectionId,instance,expand.instance.users,` +
                             `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                             `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                             `expand.cards.link,expand.cards.text,` +
@@ -254,6 +254,7 @@
     };
 
     const handleUpdate = async (e) => {
+        console.log("DETAIL:");
         console.log(e.detail);
         if (e.detail.img === undefined || e.detail.img === "") {
             delete e.detail.img;
@@ -267,9 +268,10 @@
 
         console.log({ ...board, ...e.detail });
         const record = await pb.collection("boards").update(board.id, {
-            ...board,
-            ...e.detail,
-            cards: cards.map((e) => e.id),
+            color: e.detail.color,
+            img: e.detail.img,
+            name: e.detail.name,
+            // cards: cards.map((e) => e.id),
         });
         console.log(record);
         board = record;

@@ -14,6 +14,7 @@
         sort: "-created",
         expand: "users",
         filter: `users ~ "${$localToken ? $localToken.model.id : "aaa"}" || public = "global-view"`,
+        fields: "id,name,public,expand.users.avatar,expand.users.name,expand.users.id",
     });
 
     (async () => {
@@ -44,6 +45,9 @@
     {#await recordsinstance}
         ...
     {:then instances}
+        {(() => {
+            console.log(instances);
+        })()}
         <h1>User Groups</h1>
         {#if $localToken}
             <button

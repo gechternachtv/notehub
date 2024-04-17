@@ -71,7 +71,7 @@
             ...card,
             tags: card.tags.map((e) => e.id),
             logs: [
-                ...showcard.logs,
+                // ...showcard.logs,
                 `card content updated ${dateFormat(new Date())}`,
             ],
             board: showcard.board,

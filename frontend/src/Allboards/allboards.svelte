@@ -33,6 +33,7 @@
             sort: "created",
             expand: "tags",
             filter: `instance = "${usergroup.id}"`,
+            fields: "id,name,img,collectionId,color,cards",
         });
 
         boards = [...records];
@@ -72,7 +73,13 @@
             console.log("%c ------", "color:teal");
             // views = e.record
         },
-        { expand: "tags" },
+        // @ts-ignore
+        {
+            expand: "tags",
+            // @ts-ignore
+            filter: `instance = "${usergroup.id}"`,
+            fields: "id,name,img,collectionId,color,cards",
+        },
     );
 
     onDestroy(() => {

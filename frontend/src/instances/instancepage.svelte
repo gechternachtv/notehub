@@ -23,7 +23,7 @@
 
     const getUserGroup = async () => {
         const record = await pb.collection("instance").getOne(params.instance, {
-            fields: "id,name,public,users,expand",
+            fields: "id,name,users,public,expand.users.avatar,expand.users.name,expand.users.id",
             expand: "users",
         });
         console.log(record);

@@ -31,6 +31,7 @@
             sort: "-created",
             expand: "boards",
             filter: `instance = "${usergroup.id}"`,
+            fields: "boards,instance,id,users,img,collectionId,name,expand.boards.name,expand.boards.img,expand.boards.collectionId,expand.boards.id,expand.boards.color",
 
             // filter : 'instance == "pnfkrb2353g8zkp"'
         });
@@ -69,7 +70,12 @@
             console.log("%c ------", "color:teal");
             // views = e.record
         },
-        { expand: "boards", filter: `instance = "${params.instance}"` },
+        {
+            expand: "boards",
+            // @ts-ignore
+            filter: `instance = "${usergroup.id}"`,
+            fields: "boards,instance,id,users,img,collectionId,name,expand.boards.name,expand.boards.img,expand.boards.collectionId,expand.boards.id,expand.boards.color",
+        },
     );
 
     onDestroy(() => {
