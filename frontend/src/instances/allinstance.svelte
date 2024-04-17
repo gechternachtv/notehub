@@ -45,9 +45,6 @@
     {#await recordsinstance}
         ...
     {:then instances}
-        {(() => {
-            console.log(instances);
-        })()}
         <h1>User Groups</h1>
         {#if $localToken}
             <button
