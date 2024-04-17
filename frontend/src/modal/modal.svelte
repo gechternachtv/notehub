@@ -1,11 +1,10 @@
 <script>
+	//source = https://svelte.dev/examples/modal
 
-    //source = https://svelte.dev/examples/modal
-    
 	export let showModal; // boolean
 	let dialog; // HTMLDialogElement
-	
-	$:{
+
+	$: {
 		if (dialog && !showModal) dialog.close();
 		if (dialog && showModal) dialog.showModal();
 	}
@@ -19,7 +18,6 @@
 >
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div on:click|stopPropagation>
-
 		<slot />
 
 		<!-- svelte-ignore a11y-autofocus -->
@@ -29,7 +27,7 @@
 
 <style>
 	dialog {
-		width:auto;
+		width: auto;
 		max-width: 591px;
 		border-radius: 0.2em;
 		border: none;
