@@ -80,7 +80,7 @@
             fields:
                 `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
-                `expand.boards.expand,expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
+                `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                 `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text`,
         });
@@ -114,7 +114,7 @@
             fields:
                 `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
-                `expand.boards.expand,expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
+                `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                 `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text`,
         });
@@ -154,7 +154,7 @@
                 fields:
                     `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
                     `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
-                    `expand.boards.expand,expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
+                    `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                     `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                     `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text`,
             },
