@@ -32,6 +32,7 @@
 <div class="maincontainer">
   <nav>
     <a class="home" href="/#/">notehub </a>
+    <a class="search" href="/#/search">Search</a>
     {#if $localToken}
       <a class="navatar-container" href="/#/account">
         <div class="navavatar">
@@ -202,5 +203,12 @@
     padding: 9px 20px;
     width: 100%;
     text-align: left;
+  }
+
+  .search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
   }
 </style>

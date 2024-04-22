@@ -20,7 +20,16 @@
     let needslink = false;
     let needsimg = false;
     let needsfile = false;
-    let searchtag = "";
+    let searchtags = [];
+    let includeraw = false;
+    let sortby = "newest";
+    // let searchtag = "";
+
+    $: {
+        console.log(
+            `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`,
+        );
+    }
 
     async function handleDndFinalize(e) {
         console.log("%c drop details: <<<<<<-----", "color:teal");
@@ -40,8 +49,8 @@
             // console.log(text);
 
             const resultList = await pb.collection("cards").getList(1, 60, {
-                filter: `(text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || tags.name ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""} ${searchtag != "" ? `&& tags.name ~ "${searchtag}"` : ""}`,
-                sort: "-created",
+                filter: `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`,
+                sort: `${sortby === "oldest" ? "" : "-"}created`,
                 expand: "tags",
             });
             console.log(resultList);
@@ -88,10 +97,19 @@
         <div class="tags">
             {#each tags as tag}
                 <button
+                    class:active={searchtags.includes(tag.name)}
                     on:click={() => {
-                        textsearch = "";
-                        searchtag = tag.name;
-                        promise = getRecords();
+                        if (searchtags.includes(tag.name)) {
+                            searchtags = searchtags.filter(
+                                (e) => e != tag.name,
+                            );
+                            console.log(searchtags);
+                        } else {
+                            searchtags = [...searchtags, tag.name];
+                            console.log(searchtags);
+                        }
+
+                        // promise = getRecords();
                     }}
                     class="tag tag-{tag.id}"
                     style="background:{tag.color};">{tag.name}</button
@@ -110,13 +128,26 @@
     <div>
         <input type="checkbox" name="hasfile" bind:checked={needsfile} /> has file
     </div>
-    <input type="text" bind:value={textsearch} />
-    <button
-        on:click={() => {
-            searchtag = "";
-            promise = getRecords();
-        }}>search</button
-    >
+    <div>
+        <input type="checkbox" name="innertext" bind:checked={includeraw} /> search
+        inner text (may bring innacurate results)
+    </div>
+    <div class="flex">
+        sort by: <button
+            on:click={() => {
+                sortby = sortby === "oldest" ? "newest" : "oldest";
+            }}>{sortby}</button
+        >
+    </div>
+
+    <div class="search-container">
+        <input type="text" bind:value={textsearch} />
+        <button
+            on:click={() => {
+                promise = getRecords();
+            }}>search</button
+        >
+    </div>
 
     {#await promise}
         . . .
@@ -222,5 +253,31 @@
     .tags button {
         background: var(--header-bg);
         color: white;
+    }
+    .tag {
+        opacity: 0.6;
+    }
+    .tag.active {
+        opacity: 1;
+    }
+    .tag.active:before {
+        content: "☑️";
+        display: inline;
+    }
+
+    .search-container {
+        display: flex;
+        gap: 10px;
+        align-content: center;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .flex {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        gap: 10px;
     }
 </style>

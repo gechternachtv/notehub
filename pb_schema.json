@@ -1,0 +1,589 @@
+[
+  {
+    "id": "_pb_users_auth_",
+    "name": "users",
+    "type": "auth",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "users_name",
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "users_avatar",
+        "name": "avatar",
+        "type": "file",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "mimeTypes": [
+            "image/jpeg",
+            "image/png",
+            "image/svg+xml",
+            "image/gif",
+            "image/webp"
+          ],
+          "thumbs": [
+            "40x40"
+          ],
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "protected": false
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "id = @request.auth.id",
+    "viewRule": "",
+    "createRule": "",
+    "updateRule": "id = @request.auth.id",
+    "deleteRule": "id = @request.auth.id",
+    "options": {
+      "allowEmailAuth": true,
+      "allowOAuth2Auth": true,
+      "allowUsernameAuth": true,
+      "exceptEmailDomains": null,
+      "manageRule": null,
+      "minPasswordLength": 8,
+      "onlyEmailDomains": null,
+      "onlyVerified": false,
+      "requireEmail": false
+    }
+  },
+  {
+    "id": "bxcvaiy3smrpymr",
+    "name": "boards",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "uktcaikj",
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "opnsl1nk",
+        "name": "color",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "q9fslicb",
+        "name": "cards",
+        "type": "relation",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "o6w5dzlvtjz0voc",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": null
+        }
+      },
+      {
+        "system": false,
+        "id": "y9mnke2i",
+        "name": "img",
+        "type": "file",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "mimeTypes": [],
+          "thumbs": [
+            "90x90",
+            "40x40"
+          ],
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "protected": false
+        }
+      },
+      {
+        "system": false,
+        "id": "c3wxsmcu",
+        "name": "instance",
+        "type": "relation",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "2jgk9iohihx9k82",
+          "cascadeDelete": true,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": null
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"global-view\" || instance.public = \"view\")",
+    "viewRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"view\" || instance.public = \"global-view\")",
+    "createRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
+    "updateRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\") ",
+    "deleteRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
+    "options": {}
+  },
+  {
+    "id": "o6w5dzlvtjz0voc",
+    "name": "cards",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "jbc2s24h",
+        "name": "raw",
+        "type": "json",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSize": 2000000
+        }
+      },
+      {
+        "system": false,
+        "id": "co4rcblt",
+        "name": "title",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "yvy3zxzv",
+        "name": "link",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "8pnwbklg",
+        "name": "color",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "vlssk9qm",
+        "name": "imglink",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "yxhqnymf",
+        "name": "text",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "xkypropy",
+        "name": "tags",
+        "type": "relation",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "fqdkvl9wfy8dp8r",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": null
+        }
+      },
+      {
+        "system": false,
+        "id": "t64aoatf",
+        "name": "favico",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "3mcmejg6",
+        "name": "check",
+        "type": "select",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "islist",
+            "done"
+          ]
+        }
+      },
+      {
+        "system": false,
+        "id": "rcimqucy",
+        "name": "logs",
+        "type": "json",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSize": 2000000
+        }
+      },
+      {
+        "system": false,
+        "id": "okkxg306",
+        "name": "file",
+        "type": "file",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "mimeTypes": [],
+          "thumbs": [
+            "180x180"
+          ],
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "protected": false
+        }
+      },
+      {
+        "system": false,
+        "id": "afudoiu6",
+        "name": "data",
+        "type": "json",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSize": 2000000
+        }
+      },
+      {
+        "system": false,
+        "id": "bcuk94zd",
+        "name": "board",
+        "type": "relation",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "bxcvaiy3smrpymr",
+          "cascadeDelete": true,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": null
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" || board.instance.public = \"global-view\" || board.instance.public = \"view\")",
+    "viewRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" || board.instance.public = \"view\" || board.instance.public = \"global-view\")",
+    "createRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\")",
+    "updateRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" ) ",
+    "deleteRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" )",
+    "options": {}
+  },
+  {
+    "id": "2jgk9iohihx9k82",
+    "name": "instance",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "dzu1idxt",
+        "name": "users",
+        "type": "relation",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": null
+        }
+      },
+      {
+        "system": false,
+        "id": "ykbtid5n",
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "zqrwknho",
+        "name": "public",
+        "type": "select",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "view",
+            "edit",
+            "private",
+            "global-view"
+          ]
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "(users ~ @request.auth.id || public = \"global-view\" || public = \"view\")",
+    "viewRule": "(users ~ @request.auth.id || public = \"edit\" || public = \"view\" || public = \"global-view\")",
+    "createRule": "@request.auth.id != \"\" && public != \"global-view\"",
+    "updateRule": "(users ~ @request.auth.id || public = \"edit\")",
+    "deleteRule": "(users ~ @request.auth.id)",
+    "options": {}
+  },
+  {
+    "id": "fqdkvl9wfy8dp8r",
+    "name": "tags",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "jlv1oicz",
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "xdkw5zs2",
+        "name": "color",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "6gszh6vq",
+        "name": "instance",
+        "type": "relation",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "2jgk9iohihx9k82",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": null
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "instance.users ~ @request.auth.id",
+    "viewRule": "",
+    "createRule": "instance.users ~ @request.auth.id",
+    "updateRule": "instance.users ~ @request.auth.id",
+    "deleteRule": "instance.users ~ @request.auth.id",
+    "options": {}
+  },
+  {
+    "id": "4nysqnwxp6r7xa2",
+    "name": "views",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "jbzqzkj0",
+        "name": "boards",
+        "type": "relation",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "bxcvaiy3smrpymr",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": null,
+          "displayFields": null
+        }
+      },
+      {
+        "system": false,
+        "id": "ncw6i7fo",
+        "name": "name",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "8wipcjly",
+        "name": "grid",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "v3f23mei",
+        "name": "img",
+        "type": "file",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "mimeTypes": [],
+          "thumbs": [
+            "200x200"
+          ],
+          "maxSelect": 1,
+          "maxSize": 5242880,
+          "protected": false
+        }
+      },
+      {
+        "system": false,
+        "id": "sxiuyz9k",
+        "name": "position",
+        "type": "number",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": 0,
+          "max": 100,
+          "noDecimal": true
+        }
+      },
+      {
+        "system": false,
+        "id": "xo0vfwor",
+        "name": "instance",
+        "type": "relation",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "2jgk9iohihx9k82",
+          "cascadeDelete": true,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": null
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"global-view\" || instance.public = \"view\")",
+    "viewRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"view\" || instance.public = \"global-view\")",
+    "createRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
+    "updateRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
+    "deleteRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\") ",
+    "options": {}
+  }
+]
