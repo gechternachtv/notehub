@@ -55,6 +55,9 @@
         "/board/:id": wrap({
           asyncComponent: () => import("./Boardpage/boardpage.svelte"),
         }),
+        "/search/": wrap({
+          asyncComponent: () => import("./Search/search.svelte"),
+        }),
         "/card/:id": wrap({
           asyncComponent: () => import("./Cardpage/cardpage.svelte"),
         }),

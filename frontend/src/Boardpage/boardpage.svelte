@@ -9,7 +9,7 @@
     import Boardcard from "../Allboards/boardcard.svelte";
     import { pb } from "../pb.js";
     import Modal from "../modal/modal.svelte";
-    import { push } from "svelte-spa-router";
+    // import { push } from "svelte-spa-router";
     import { onDestroy } from "svelte";
     import { createEventDispatcher } from "svelte";
     import { localToken } from "../stores.js";
