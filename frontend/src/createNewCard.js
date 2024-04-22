@@ -3,9 +3,9 @@
 // import getFile from "./getFile"
 import { pb } from "./pb.js"
 
-export default async (markdownobj, fileInputelement = null, currentfile = null) => {
+export default async (instance, markdownobj, fileInputelement = null, currentfile = null) => {
 
-
+    console.log(instance)
     const filecontent = fileInputelement?.files ? fileInputelement?.files[0] : null
 
     const content = markdownobj.json.content
@@ -205,7 +205,7 @@ export default async (markdownobj, fileInputelement = null, currentfile = null) 
                 const name = tagWords[index].replace(/^#/, '')
                 const color = name.split("-").length > 1 ? name.split("-")[1] : `var(--card-bg)`
                 const searchTags = await pb.collection('tags').getList(1, 2, {
-                    filter: `created >= "2022-01-01 00:00:00" && name = "${name.split("-")[0]}"`,
+                    filter: `name = "${name.split("-")[0]}"`,
 
                 });
                 // console.log(`%c tags:`,"color:turquoise");
@@ -217,7 +217,8 @@ export default async (markdownobj, fileInputelement = null, currentfile = null) 
                     // create tag
                     const data = {
                         "name": `${name.split("-")[0]}`,
-                        "color": `${color}`
+                        "color": `${color}`,
+                        "instance": instance
                     };
                     // console.log(data)
                     const record = await pb.collection('tags').create(data);

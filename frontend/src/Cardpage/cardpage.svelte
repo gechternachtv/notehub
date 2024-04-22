@@ -66,7 +66,12 @@
         editorBlocked = true;
         // console.log(showcard)
 
-        const card = await createNewCard(e.detail, fileelement, currentfile);
+        const card = await createNewCard(
+            showcard.expand.board.expand.instance.id,
+            e.detail,
+            fileelement,
+            currentfile,
+        );
         const data = {
             ...card,
             tags: card.tags.map((e) => e.id),

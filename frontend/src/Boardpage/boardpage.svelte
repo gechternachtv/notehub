@@ -36,7 +36,9 @@
     let canedit = !!board.expand?.instance.users?.includes(
         $localToken ? $localToken?.model.id : "???",
     );
-    let usergroup = board.expand?.instance;
+    let usergroup = { ...board.expand?.instance, id: board.instance };
+
+    console.log(usergroup);
     export let listView = undefined;
 
     export let params = { id: board.id };
@@ -130,7 +132,11 @@
                         });
 
                     console.log(record);
-                    usergroup = record.expand?.instance;
+                    usergroup = {
+                        ...record.expand?.instance,
+                        id: record.instance,
+                    };
+
                     canedit = record.expand?.instance.users?.includes(
                         $localToken ? $localToken?.model.id : "???",
                     );
@@ -219,7 +225,7 @@
 
     const handleNewCard = async (e) => {
         editorBlocked = true;
-        const card = await createNewCard(e.detail, fileelement);
+        const card = await createNewCard(usergroup?.id, e.detail, fileelement);
 
         const data = {
             ...card,
