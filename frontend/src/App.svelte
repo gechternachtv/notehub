@@ -53,8 +53,8 @@
   <div class="app">
     <Router
       routes={{
-        "/test": wrap({
-          asyncComponent: () => import("./calendar.svelte"),
+        "/calendar": wrap({
+          asyncComponent: () => import("./Calendar/calendar.svelte"),
         }),
         "/board/:id": wrap({
           asyncComponent: () => import("./Boardpage/boardpage.svelte"),

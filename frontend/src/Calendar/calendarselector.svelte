@@ -1,6 +1,6 @@
 <script>
     import { Calendar } from "calendar-base";
-    import { pb } from "./pb.js";
+    import { pb } from "../pb.js";
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
 
@@ -35,7 +35,7 @@
     (async () => {
         cards = await pb.collection("cards").getFullList({
             sort: "-created",
-            fields: "id,created,title",
+            fields: "created,title",
         });
         console.log(cards);
     })();
@@ -60,14 +60,20 @@
     const fn = (n) => {
         return n >= 10 ? n : `0${n}`;
     };
+
+    const returncards = (day) => {};
 </script>
 
-<div class="controls">
-    <button on:click={monthsub}>←</button>
-    <button on:click={monthadd}>→</button>
-</div>
 <div class="container">
-    {months[month]} - {year}
+    <div class="header">
+        <div class="controls">
+            <button on:click={monthsub}>←</button>
+            <button on:click={monthadd}>→</button>
+        </div>
+        <div class="year">{year}</div>
+        <div class="month">{months[month]}</div>
+    </div>
+
     <div class="calendar">
         {#each weekdays as weekday}
             <div class="weekday">{weekday}</div>
@@ -75,22 +81,25 @@
         {#each calrows as day}
             <div class="day">
                 {#if day}
-                    <button
-                        on:click={(e) => {
-                            console.log(e);
-                            dispatch("dayclick", {
-                                day: fn(day.day),
-                                month: fn(month + 1),
-                                year: year,
-                            });
-                        }}
-                    >
-                        {day.day}
-                        <!-- {`${year}-${fn(month + 1)}-${fn(day.day)}`} -->
-                        {#each cards.filter((e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`) || e.title.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`)) as card}
-                            .
-                        {/each}
-                    </button>
+                    {#if !!cards.filter((e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`) || e.title.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`)).length}
+                        <button
+                            class="cardday"
+                            on:click={(e) => {
+                                console.log(e);
+                                dispatch("dayclick", {
+                                    day: fn(day.day),
+                                    month: fn(month + 1),
+                                    year: year,
+                                });
+                            }}>{day.day}</button
+                        >
+                    {:else}
+                        <div class="nocardday">
+                            {day.day}
+                        </div>
+                    {/if}
+
+                    <!-- {`${year}-${fn(month + 1)}-${fn(day.day)}`} -->
                 {/if}
             </div>
         {/each}
@@ -101,16 +110,46 @@
     .calendar {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        gap: 1px;
     }
     .container {
         max-width: 430px;
         font-weight: bold;
         font-size: 12px;
+        /* margin: auto; */
+        margin-bottom: 30px;
+        min-height: 280px;
     }
     .weekday {
         min-height: 30px;
     }
-    .day {
+    .day,
+    .weekday {
         min-height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .cardday,
+    .nocardday {
+        border-radius: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .year {
+        font-size: 30px;
+    }
+
+    .month {
+        font-size: 18px;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 </style>
