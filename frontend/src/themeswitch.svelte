@@ -9,6 +9,7 @@
 		"plankton",
 		"yotsuba",
 		"yotsuba-b",
+		"yotsuba-c",
 		"futaba",
 		"dfwm98",
 		"goldSrc",
@@ -111,6 +112,24 @@
 		);
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
+	}
+
+	:global(.yotsuba-c) {
+		--alert: #df223b;
+		--news: #cb4e16;
+		--header-bg: #5c9a45;
+		--main-font-2: #000;
+		--button-color: #fff;
+		--header-color: #fff;
+		--gradient-col-2: #f0f0f0;
+		--body-background: #f7f7f7;
+		--board-title-color: #47bcad;
+		--browser-color: var(--header-bg);
+		--main-font-1: #5c9a45;
+		--button-bg: #0f9998;
+		--card-bg: #ebe4cb;
+		--container-bg: #f3f0e4;
+		--gradient-col-1: #f3f0e4;
 	}
 
 	:global(.futaba) {

@@ -20,6 +20,7 @@
     "@milkdown/preset-commonmark": "^7.3.5",
     "@milkdown/prose": "^7.3.5",
     "@milkdown/transformer": "^7.3.5",
+    "calendar-base": "^2.0.1",
     "pocketbase": "^0.21.1",
     "sortablejs": "^1.15.2",
     "svelte-body": "^1.4.0",
