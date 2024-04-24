@@ -1,5 +1,5 @@
 {
-  "name": "my-svelte-app",
+  "name": "notehub",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -20,13 +20,10 @@
     "@milkdown/preset-commonmark": "^7.3.5",
     "@milkdown/prose": "^7.3.5",
     "@milkdown/transformer": "^7.3.5",
-    "@neodrag/svelte": "^2.0.3",
-    "muuri": "^0.9.5",
     "pocketbase": "^0.21.1",
     "sortablejs": "^1.15.2",
     "svelte-body": "^1.4.0",
     "svelte-dnd-action": "^0.9.40",
-    "svelte-spa-router": "^4.0.1",
-    "web-animations-js": "^2.3.2"
+    "svelte-spa-router": "^4.0.1"
   }
 }

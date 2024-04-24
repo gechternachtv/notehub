@@ -17,6 +17,7 @@
 
     console.log(card);
 
+    let readmode;
     let date;
     let showconfirmbox = false;
     let showModal = false;
@@ -110,6 +111,7 @@
     class="card"
     class:fullview={fullView}
     class:listview={listView}
+    class:locked={readmode}
     style="border-left: 3px solid {card.color}"
 >
     <!-- {card.board}<br/>
@@ -251,6 +253,16 @@
                 class="alert cardcontrols-delete"
                 on:click={() => (showconfirmbox = true)}>delete</button
             >
+            <button
+                class="readmodetoggle"
+                on:click={() => (readmode = !readmode)}
+            >
+                {#if readmode}
+                    📝 edit
+                {:else}
+                    📄 view
+                {/if}
+            </button>
         </div>
     </div>
     <Confirmaction

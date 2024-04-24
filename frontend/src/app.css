@@ -461,3 +461,8 @@ button {
   border: 1px solid transparent;
   pointer-events: none;
 }
+
+
+.grid.locked .readmodetoggle {
+  display: none
+}
