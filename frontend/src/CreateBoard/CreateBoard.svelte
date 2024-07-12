@@ -2,6 +2,7 @@
     import { createEventDispatcher } from "svelte";
     import { pb } from "../pb";
     import { pop } from "svelte-spa-router";
+    import { server } from "../stores";
     import Confirmaction from "../confirmaction.svelte";
     let showconfirmbox = false;
     const dispatch = createEventDispatcher();
@@ -100,7 +101,7 @@
             showImage = true;
             image.setAttribute(
                 "src",
-                `${import.meta.env.VITE_API_URL}/api/files/${board.collectionId}/${board.id}/${board.img}`,
+                `${$server.url}/api/files/${board.collectionId}/${board.id}/${board.img}`,
             );
             return;
         }
@@ -115,8 +116,7 @@
                 <div class="img-c">
                     <img
                         bind:this={image}
-                        src="{import.meta.env
-                            .VITE_API_URL}/api/files/{board.collectionId}/{board.id}/{board.img}"
+                        src="{$server.url}/api/files/{board.collectionId}/{board.id}/{board.img}"
                         alt=""
                     />
                 </div>

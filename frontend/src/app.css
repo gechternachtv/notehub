@@ -1,42 +1,42 @@
 @font-face {
   font-family: 'Spec';
-  src: url('fonts/Spec-100.woff2') format('woff2');
+  src: url('assets/fonts/Spec-100.woff2') format('woff2');
   font-weight: 100;
 }
 
 @font-face {
   font-family: 'Spec';
-  src: url('fonts/Spec-200.woff2') format('woff2');
+  src: url('assets/fonts/Spec-200.woff2') format('woff2');
   font-weight: 200;
 }
 
 @font-face {
   font-family: 'Spec';
-  src: url('fonts/Spec-300.woff2') format('woff2');
+  src: url('assets/fonts/Spec-300.woff2') format('woff2');
   font-weight: 300;
 }
 
 @font-face {
   font-family: 'Spec';
-  src: url('assets/Spec-400.woff2') format('woff2');
+  src: url('assets/fonts/Spec-400.woff2') format('woff2');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'Spec';
-  src: url('assets/Spec-500.woff2') format('woff2');
+  src: url('assets/fonts/Spec-500.woff2') format('woff2');
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'Spec';
-  src: url('assets/Spec-600.woff2') format('woff2');
+  src: url('assets/fonts/Spec-600.woff2') format('woff2');
   font-weight: 600;
 }
 
 @font-face {
   font-family: 'Spec';
-  src: url('assets/Spec-700.woff2') format('woff2');
+  src: url('assets/fonts/Spec-700.woff2') format('woff2');
   font-weight: 700;
 }
 
@@ -75,7 +75,7 @@ body {
 }
 
 * {
-  letter-spacing: 0.04em
+  letter-spacing: 0.04em;
 }
 
 a {
@@ -278,6 +278,7 @@ button {
 
 
 .card-grid {
+
   gap: 20px;
   opacity: 1;
   min-height: 150px;
@@ -289,6 +290,7 @@ button {
   ;
   container-type: inline-size;
   container-name: card-container;
+  /* transition: all 0.3s; */
 
 
 }

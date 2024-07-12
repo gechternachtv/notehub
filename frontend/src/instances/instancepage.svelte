@@ -6,7 +6,7 @@
     import { pb } from "../pb";
     import Modal from "../modal/modal.svelte";
     import CreateUsergroup from "../createUsergroup.svelte";
-    import { localToken } from "../stores.js";
+    import { localToken, server } from "../stores.js";
     import { push } from "svelte-spa-router";
 
     export let params;
@@ -123,8 +123,7 @@
                     <div class="navavatar">
                         <img
                             loading="lazy"
-                            src="{import.meta.env
-                                .VITE_API_URL}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"
+                            src="{$server.url}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"
                         />
                     </div>
                     {user.name}

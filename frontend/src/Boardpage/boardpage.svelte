@@ -225,7 +225,16 @@
 
     const handleNewCard = async (e) => {
         editorBlocked = true;
+        window.scrollTo(0, 0);
+        document
+            .querySelector(".card-grid")
+            .setAttribute("style", `max-height: 300px;opacity:0.6`);
+        debugger;
+
         const card = await createNewCard(usergroup?.id, e.detail, fileelement);
+        debugger;
+        document.querySelector(".card-grid").setAttribute("style", ``);
+        window.scrollTo(0, 0);
 
         const data = {
             ...card,

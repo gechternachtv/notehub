@@ -2,6 +2,8 @@
 // import dateFormat from "./dateFormat"
 // import getFile from "./getFile"
 import { pb } from "./pb.js"
+import { server } from "./stores"
+import { get } from "svelte/store"
 
 export default async (instance, markdownobj, fileInputelement = null, currentfile = null) => {
 
@@ -131,7 +133,7 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
                 else {
                     try { //metadata
 
-                        const res = await (await fetch(`${import.meta.env.VITE_API_URL}/meta`, {
+                        const res = await (await fetch(`${get(server).url}/meta`, {
                             method: "POST",
                             mode: "cors", // no-cors, *cors, same-origin
                             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -320,8 +322,6 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
 
     }
 
-    console.log("here:")
     console.log(card)
-
     return card
 }

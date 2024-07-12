@@ -6,6 +6,7 @@
     import Boardcard from "../Allboards/boardcard.svelte";
     import Confirmaction from "../confirmaction.svelte";
     import { createEventDispatcher } from "svelte";
+    import { server } from "../stores";
     // import {localToken} from '../stores.js'
     export let instance;
     export let isopen = false;
@@ -128,7 +129,7 @@
             showImage = true;
             image.setAttribute(
                 "src",
-                `${import.meta.env.VITE_API_URL}/api/files/${view.collectionId}/${view.id}/${view.img}`,
+                `${$server.url}/api/files/${view.collectionId}/${view.id}/${view.img}`,
             );
             return;
         }
@@ -143,8 +144,7 @@
                 <img
                     style="object-position: 0px {imageposition}%"
                     bind:this={image}
-                    src="{import.meta.env
-                        .VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}"
+                    src="{$server.url}/api/files/{view.collectionId}/{view.id}/{view.img}"
                     alt=""
                 />
             {/if}

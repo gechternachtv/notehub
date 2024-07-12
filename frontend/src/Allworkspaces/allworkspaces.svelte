@@ -11,7 +11,7 @@
 
     export let usergroup = null;
     export let params = { instance: "" };
-    import { localToken } from "../stores.js";
+    import { localToken, server } from "../stores.js";
     // console.log(usergroup)
 
     let showModal = false;
@@ -114,8 +114,7 @@
                             <div class="img-c">
                                 <img
                                     style="object-position: 0px {view.position}%;"
-                                    src="{import.meta.env
-                                        .VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}"
+                                    src="{$server.url}/api/files/{view.collectionId}/{view.id}/{view.img}"
                                     alt=""
                                 />
                             </div>

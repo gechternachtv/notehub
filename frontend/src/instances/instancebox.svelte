@@ -1,5 +1,6 @@
 <script>
     import Boardcard from "../Allboards/boardcard.svelte";
+    import { server } from "../stores";
     export let instance;
     export let workspaces;
     export let boards;
@@ -35,8 +36,7 @@
                             <div class="navavatar">
                                 <img
                                     loading="lazy"
-                                    src="{import.meta.env
-                                        .VITE_API_URL}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"
+                                    src="{$server.url}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"
                                 />
                             </div>
                             {user.name}
@@ -56,8 +56,7 @@
                                 <img
                                     loading="lazy"
                                     style="object-position: 0px {workspace.position}%;"
-                                    src="{import.meta.env
-                                        .VITE_API_URL}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}?thumb=200x200"
+                                    src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}?thumb=200x200"
                                     alt=""
                                 />
                             </div>

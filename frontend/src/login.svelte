@@ -1,8 +1,9 @@
 <script>
   import { pb } from "./pb.js";
   // import {push} from 'svelte-spa-router'
-  import { localToken } from "./stores.js";
+  import { localToken, server } from "./stores.js";
   import { push } from "svelte-spa-router";
+  import Serverselect from "./serverselect.svelte";
 
   const localStorageItem = window.localStorage.getItem("pocketbase_auth");
 
@@ -126,8 +127,7 @@
             <img
               alt="profile pic"
               class="profilepic"
-              src="{import.meta.env
-                .VITE_API_URL}/api/files/_pb_users_auth_/{$localToken.model
+              src="{$server.url}/api/files/_pb_users_auth_/{$localToken.model
                 .id}/{$localToken.model.avatar}"
             />
           </div>
@@ -140,6 +140,10 @@
             {:else}
               <div class="pleaseverify">Welcome to notehub!</div>
             {/if}
+          </div>
+          <div class="success server">
+            <div>Server : {$server.name}</div>
+            <div>{$server.url}</div>
           </div>
           <div class="controls">
             <button on:click={logout}>logout</button>
@@ -155,6 +159,8 @@
       </div>
     {:else}
       <h1>Notehub login</h1>
+      <Serverselect />
+
       <div class="input">
         email: <input type="text" bind:value={state.email} name="" />
       </div>
@@ -268,5 +274,13 @@
   }
   .success {
     margin-bottom: 10px;
+  }
+  .server {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
   }
 </style>

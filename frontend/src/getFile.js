@@ -1,3 +1,5 @@
+import { get } from "svelte/store";
+import { server } from "./stores";
 export default (element) => {
     try {
 
@@ -30,7 +32,7 @@ export default (element) => {
 
         return {
             type: fileTypes[suffix],
-            link: `${import.meta.env.VITE_API_URL}/api/files/${element.collectionId}/${element.id}/${name}`
+            link: `${get(server).url}/api/files/${element.collectionId}/${element.id}/${name}`
         }
     } catch (error) {
         console.warn(`error getting filename:`)

@@ -11,7 +11,7 @@
     import { onDestroy } from "svelte";
     import Contextmenu from "../contextmenu.svelte";
     import Sortgrid from "../Boardpage/sortcardsgrid.svelte";
-    import { localToken } from "../stores.js";
+    import { localToken, server } from "../stores.js";
 
     let showModal = false;
     let boardisactive = true;
@@ -230,8 +230,7 @@
                 <div class="img">
                     <img
                         style="object-position: 0% {view.position}%;"
-                        src="{import.meta.env
-                            .VITE_API_URL}/api/files/{view.collectionId}/{view.id}/{view.img}"
+                        src="{$server.url}/api/files/{view.collectionId}/{view.id}/{view.img}"
                         alt=""
                     />
                 </div>

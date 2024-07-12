@@ -10,17 +10,23 @@
   // import Login from './login.svelte';
   // import Account from './account.svelte';
   // import Allinstances from './instances/allinstance.svelte';
-  import { localToken } from "./stores.js";
+  import { localToken, server } from "./stores.js";
   // import Instancepage from './instances/instancepage.svelte';
   // import Allinstance from './instances/allinstance.svelte';
   // import Register from './register.svelte';
   // import Sortgrid from './Boardpage/sortcardsgrid.svelte';
   import { wrap } from "svelte-spa-router/wrap";
 
-  // import { pb } from "./pb.js";
+  import { pb } from "./pb.js";
 
-  console.log(import.meta.env);
-  // console.log($localToken);
+  if (!pb.authStore.isValid) {
+    pb.authStore.clear();
+    localToken.set(false);
+  }
+
+  console.log(server);
+
+  console.log($localToken);
 </script>
 
 <svelte:head>
@@ -31,21 +37,27 @@
 
 <div class="maincontainer">
   <nav>
-    <a class="home" href="/#/">notehub </a>
+    <a class="home" href="/#/"
+      >notehub
+      {#if $server.name != "🌐 pockethost"}
+        <span class="servername">{$server.name}</span>
+      {/if}
+    </a>
     <a class="search" href="/#/search">Search</a>
     {#if $localToken}
       <a class="navatar-container" href="/#/account">
         <div class="navavatar">
           <img
             alt="user avatar"
-            src="{import.meta.env
-              .VITE_API_URL}/api/files/_pb_users_auth_/{$localToken.model
+            src="{$server.url}/api/files/_pb_users_auth_/{$localToken.model
               .id}/{$localToken.model?.avatar}"
           />
         </div></a
       >
     {:else}
-      <a class:active={$location === "/login"} href="/#/login">Login </a>
+      <a class="loginlink" class:active={$location === "/login"} href="/#/login"
+        >Login
+      </a>
     {/if}
     <div class="settings"></div>
   </nav>
@@ -212,6 +224,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 10px;
+    font-size: 11px;
+  }
+
+  .servername {
+    font-size: 9px;
+    margin: 0px;
+    background: var(--header-color);
+    color: var(--header-bg);
+    padding: 3px 6px;
+    border-radius: 6px;
+    position: absolute;
+    top: 0;
+    height: 12px;
+    line-height: 6px;
+    left: auto;
+    top: 5px;
+  }
+  .loginlink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

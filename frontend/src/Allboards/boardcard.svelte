@@ -1,4 +1,5 @@
 <script>
+  import { server } from "../stores";
   export let board = {
     color: "",
     name: "",
@@ -16,11 +17,10 @@
 >
   {#if board.img}
     <!-- content here -->
-    <!-- <div class="img" style="background-image:url('import.meta.env.VITE_API_URL/api/files/{board.collectionId}/{board.id}/{board.img}{workspacecard ? "?thumb=40x40" : ""}')"></div> -->
+    <!-- <div class="img" style="background-image:url('{$server.url}/api/files/{board.collectionId}/{board.id}/{board.img}{workspacecard ? "?thumb=40x40" : ""}')"></div> -->
     <div class="img-c">
       <img
-        src="{import.meta.env
-          .VITE_API_URL}/api/files/{board.collectionId}/{board.id}/{board.img}{workspacecard
+        src="{$server.url}/api/files/{board.collectionId}/{board.id}/{board.img}{workspacecard
           ? '?thumb=40x40'
           : ''}"
         alt=""
