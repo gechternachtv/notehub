@@ -161,17 +161,25 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
                             meta.text = tempDocument.head.querySelector('meta[property="og:description"]')?.getAttribute("content")
 
                             //favico
-
-                            if (validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)) {
-                                meta.favico = validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)
-                            } else if (validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)) {
-                                meta.favico = validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)
+                            try {
+                                if (validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)) {
+                                    meta.favico = validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)
+                                } else if (validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)) {
+                                    meta.favico = validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)
+                                }
+                            } catch (err) {
+                                console.warn(err)
                             }
                             //image
-                            if (validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)) {
-                                meta.img = validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)
-                            } else if (validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)) {
-                                meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
+                            try {
+                                if (validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)) {
+                                    meta.img = validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)
+                                } else if (validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)) {
+                                    meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
+                                }
+                                console.log(meta.img)
+                            } catch (err) {
+                                console.warn(err)
                             }
 
                         }
@@ -307,18 +315,24 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
 
     if (card.imglink.includes("data")) {
 
-        const imgTitle = 'image';
-        const imgExtension = card.imglink.substring(card.imglink.lastIndexOf('.') + 1);
+        try {
 
-        const blob = await (await fetch(card.imglink)).blob()
 
-        const newfile = new File([blob], imgTitle + '.' + imgExtension, { type: blob.type });
-        console.log("🤯")
-        console.log(newfile)
-        card.file = newfile
-        card.imglink = ""
+            const imgTitle = 'image';
+            const imgExtension = card.imglink.substring(card.imglink.lastIndexOf('.') + 1);
 
-        //imgtest
+            const blob = await (await fetch(card.imglink)).blob()
+
+            const newfile = new File([blob], imgTitle + '.' + imgExtension, { type: blob.type });
+            console.log("🤯")
+            console.log(newfile)
+            card.file = newfile
+            card.imglink = ""
+
+            //imgtest
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 

@@ -4,8 +4,7 @@ routerAdd("POST", "/meta", (c) => {
 
     console.log("url:",data.url)
 
-    if(data.url.includes("twitter")){
-        console.log("IS TWEET!");
+    if(data.url.includes("twitter") || data.url.includes("x.com") || data.url.includes("youtu")){
         const apiUrl = `https://api.linkpreview.net/?q=${data.url}`;
 
 
@@ -14,15 +13,15 @@ routerAdd("POST", "/meta", (c) => {
             method:  "GET",
             body:    "",
             headers: {
-                'X-Linkpreview-Api-Key': "",
+                'X-Linkpreview-Api-Key': "cc30c453f69296da0c6dff082856c83e",
               },
             timeout: 120, // in seconds
         })
         
         console.log(res.json)
         return c.json(res.statusCode, `
-           
-                <meta name="theme-color" content="#4bacd2"/>
+                <link rel="icon" href="${(data.url.includes("twitter") || data.url.includes("x.com")) ? "https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf" : "https://www.youtube.com/s/desktop/0c61234c/img/favicon_32x32.png"}" sizes="32x32">
+                <meta name="theme-color" content="${(data.url.includes("twitter") || data.url.includes("x.com")) ? `#5eaade` : "#ff0000"}"/>
                 <title>${res.json.title}</title>
                 <meta property="og:description" content="${res.json.description}"/>
                 <meta property="og:image" content="${res.json.image}"/>

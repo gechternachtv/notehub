@@ -40,7 +40,7 @@
 
 <style>
   .cards-length {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     opacity: 0.6;
   }
   .board-header {
@@ -90,7 +90,7 @@
   }
 
   .workspacecard h1 {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: normal;
   }
 </style>

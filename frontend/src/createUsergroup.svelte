@@ -155,7 +155,7 @@
     }
 
     .cards-length {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.6;
     }
 </style>

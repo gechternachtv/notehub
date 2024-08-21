@@ -318,6 +318,7 @@
         grid-template-rows: subgrid;
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
+        font-size: 13px;
     }
 
     .card.listview {
@@ -357,7 +358,7 @@
         margin-top: 20px;
     }
     .log {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.6;
         margin: 3px;
         padding: 3px;
@@ -415,7 +416,7 @@
     .title {
         font-weight: bold;
         color: var(--main-font-2);
-        font-size: 1.9rem;
+        font-size: 2.9rem;
         margin-bottom: 5px;
     }
     .tags {
@@ -497,7 +498,7 @@
     }
     .inputholder label {
         cursor: pointer;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.6;
     }
     .inputholder {
@@ -526,7 +527,7 @@
     }
 
     .date {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.7;
         margin-top: 17px;
     }

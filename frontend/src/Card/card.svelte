@@ -278,7 +278,7 @@
         margin-top: 20px;
     }
     .log {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.6;
         margin: 3px;
         padding: 3px;
@@ -381,7 +381,7 @@
     }
     .inputholder label {
         cursor: pointer;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.6;
     }
     .inputholder {
@@ -410,7 +410,7 @@
     }
 
     .date {
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         opacity: 0.7;
         margin-top: 17px;
     }
