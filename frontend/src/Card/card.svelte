@@ -278,7 +278,7 @@
         margin-top: 20px;
     }
     .log {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         opacity: 0.6;
         margin: 3px;
         padding: 3px;
@@ -320,7 +320,7 @@
         color: var(--button-color);
         padding: 5px;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -336,11 +336,11 @@
     .title {
         font-weight: bold;
         color: var(--main-font-2);
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         margin-bottom: 5px;
     }
     .tags {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         opacity: 0.8;
     }
 
@@ -364,7 +364,7 @@
     }
 
     .updates {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         white-space: pre-wrap;
         overflow: hidden;
         max-height: 8ch;
@@ -381,7 +381,7 @@
     }
     .inputholder label {
         cursor: pointer;
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         opacity: 0.6;
     }
     .inputholder {
@@ -410,7 +410,7 @@
     }
 
     .date {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         opacity: 0.7;
         margin-top: 17px;
     }

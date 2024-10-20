@@ -47,7 +47,7 @@
 
 <style>
 	select {
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 		padding: 2px;
 		border: 0px;
 		background: var(--button-bg);

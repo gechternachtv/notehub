@@ -26,6 +26,7 @@
     let year = today.getUTCFullYear();
     let month = today.getUTCMonth();
     let calrows = cal.getCalendar(year, month);
+
     $: {
         calrows = cal.getCalendar(year, month);
     }
@@ -38,6 +39,12 @@
             fields: "created,title",
         });
         console.log(cards);
+
+        dispatch("dayclick", {
+            day: today.getDate(),
+            month: month + 1,
+            year: year,
+        });
     })();
 
     const monthadd = () => {
@@ -84,6 +91,9 @@
                     {#if !!cards.filter((e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`) || e.title.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`)).length}
                         <button
                             class="cardday"
+                            class:today={day.day === new Date().getDate() &&
+                                month === new Date().getUTCMonth() &&
+                                year === new Date().getUTCFullYear()}
                             on:click={(e) => {
                                 console.log(e);
                                 dispatch("dayclick", {
@@ -94,7 +104,12 @@
                             }}>{day.day}</button
                         >
                     {:else}
-                        <div class="nocardday">
+                        <div
+                            class:today={day.day === new Date().getDate() &&
+                                month === new Date().getUTCMonth() &&
+                                year === new Date().getUTCFullYear()}
+                            class="nocardday"
+                        >
                             {day.day}
                         </div>
                     {/if}
@@ -113,7 +128,7 @@
         gap: 1px;
     }
     .container {
-        max-width: 430px;
+        max-width: 300px;
         font-weight: bold;
         font-size: 12px;
         /* margin: auto; */
@@ -129,6 +144,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        border-bottom: 2px solid transparent;
     }
 
     .cardday,
@@ -137,6 +153,9 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        border-bottom: 2px solid transparent;
+        height: 100%;
+        align-items: center;
     }
 
     .year {
@@ -151,5 +170,9 @@
         display: flex;
         align-items: center;
         gap: 10px;
+    }
+
+    .today {
+        border-bottom: 2px solid var(--alert);
     }
 </style>

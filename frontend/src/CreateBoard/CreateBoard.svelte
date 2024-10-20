@@ -202,7 +202,7 @@
         color: var(--button-color);
         padding: 5px;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -254,7 +254,7 @@
     }
 
     .cards-length {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         opacity: 0.6;
     }
 </style>

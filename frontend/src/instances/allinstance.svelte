@@ -5,6 +5,7 @@
     import { push } from "svelte-spa-router";
     import Modal from "../modal/modal.svelte";
     import { localToken } from "../stores.js";
+    import Calendar from "../Calendar/calendar.svelte";
 
     let recordboards = [];
     let recordworkspaces = [];
@@ -14,7 +15,7 @@
         sort: "-created",
         expand: "users",
         filter: `users ~ "${$localToken ? $localToken.model.id : "aaa"}" || public = "global-view"`,
-        fields: "id,name,public,expand.users.avatar,expand.users.name,expand.users.id",
+        fields: "owner, id,name,public,expand.users.avatar,expand.users.name,expand.users.id",
     });
 
     (async () => {
@@ -42,6 +43,8 @@
 </script>
 
 <main>
+    <h1>Today</h1>
+    <Calendar></Calendar>
     {#await recordsinstance}
         ...
     {:then instances}
@@ -57,34 +60,36 @@
                 <CreateUsergroup on:new={handlenewusergroup}></CreateUsergroup>
             </Modal>
         {/if}
-        {#each instances.filter((e) => e.public === "global-view") as instance}
-            <Instancebox
-                {instance}
-                boards={recordboards}
-                workspaces={recordworkspaces}
-            ></Instancebox>
-        {/each}
-        {#each instances.filter((e) => e.public === "edit") as instance}
-            <Instancebox
-                {instance}
-                boards={recordboards}
-                workspaces={recordworkspaces}
-            ></Instancebox>
-        {/each}
-        {#each instances.filter((e) => e.public === "view") as instance}
-            <Instancebox
-                {instance}
-                boards={recordboards}
-                workspaces={recordworkspaces}
-            ></Instancebox>
-        {/each}
-        {#each instances.filter((e) => e.public === "private") as instance}
-            <Instancebox
-                {instance}
-                boards={recordboards}
-                workspaces={recordworkspaces}
-            ></Instancebox>
-        {/each}
+        <div class="instance-grid">
+            {#each instances.filter((e) => e.public === "global-view") as instance}
+                <Instancebox
+                    {instance}
+                    boards={recordboards}
+                    workspaces={recordworkspaces}
+                ></Instancebox>
+            {/each}
+            {#each instances.filter((e) => e.public === "edit") as instance}
+                <Instancebox
+                    {instance}
+                    boards={recordboards}
+                    workspaces={recordworkspaces}
+                ></Instancebox>
+            {/each}
+            {#each instances.filter((e) => e.public === "view") as instance}
+                <Instancebox
+                    {instance}
+                    boards={recordboards}
+                    workspaces={recordworkspaces}
+                ></Instancebox>
+            {/each}
+            {#each instances.filter((e) => e.public === "private") as instance}
+                <Instancebox
+                    {instance}
+                    boards={recordboards}
+                    workspaces={recordworkspaces}
+                ></Instancebox>
+            {/each}
+        </div>
     {:catch error}
         {error}
     {/await}
@@ -99,5 +104,11 @@
     }
     h1 {
         font-size: 32px;
+    }
+
+    .instance-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
     }
 </style>

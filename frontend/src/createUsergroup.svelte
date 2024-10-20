@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { server } from "./stores";
     // import { pb } from './pb';
 
     import { localToken } from "./stores.js";
@@ -7,7 +8,17 @@
     export let currentUsergroup = {
         name: "new User Group",
         public: "private",
-        users: [],
+        users: [...$localToken?.model?.id],
+        expand: {
+            users: [
+                {
+                    id: $localToken?.model?.id,
+                    name: $localToken?.model?.name,
+                    avatar: $localToken?.model?.avatar,
+                },
+            ],
+        },
+        owner: $localToken?.model?.id,
     };
     console.log(currentUsergroup);
     // let showconfirmbox = false;
@@ -15,9 +26,8 @@
 
     let name = currentUsergroup.name;
     let publicperm = currentUsergroup.public;
-    let users = currentUsergroup.users
-        ?.filter((e) => e != ($localToken ? $localToken?.model?.id : "???"))
-        .join(",");
+    let users = currentUsergroup.expand.users;
+    let newusers = "";
 
     const publicopt = [
         { value: "edit", desc: "edit - everyone with the link can join" },
@@ -34,17 +44,22 @@
                 id: currentUsergroup.id,
                 name: name,
                 public: publicperm,
-                users: [$localToken?.model?.id, ...users.split(",")].filter(
-                    (e) => e != "",
-                ),
+                users: [
+                    $localToken?.model?.id,
+                    ...users.map((e) => e.id),
+                    ...newusers.split(","),
+                ],
             });
         } else {
             dispatch("new", {
                 name: name,
                 public: publicperm,
-                users: [$localToken?.model?.id, ...users.split(",")].filter(
-                    (e) => e != "",
-                ),
+                users: [
+                    $localToken?.model?.id,
+                    ...users.map((e) => e.id),
+                    ...newusers.split(","),
+                ],
+                owner: $localToken?.model?.id,
             });
         }
     }
@@ -67,8 +82,41 @@
                 <option value={option.value}>{option.desc}</option>
             {/each}
         </select>
-        members ids (values separated by comma, the creator is a user by default)
-        : <input bind:value={users} />
+        <div>users:</div>
+        <div class="users-container">
+            {#each users as user}
+                <div
+                    class="userbox"
+                    class:owner={currentUsergroup.owner === user.id}
+                >
+                    <div class="navavatar">
+                        <img
+                            loading="lazy"
+                            src="{$server.url}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"
+                        />
+                    </div>
+                    {user.name}
+
+                    {#if currentUsergroup.owner === user.id}
+                        <span title="user group admin" class="workspace-admin">
+                            ⚙
+                        </span>
+                    {/if}
+                    {#if currentUsergroup.owner != user.id && $localToken?.model?.id != user.id}
+                        <button
+                            class="remove-user"
+                            on:click={() => {
+                                users = users.filter((e) => e.id != user.id);
+                                console.log(users);
+                            }}>x</button
+                        >
+                    {/if}
+                </div>
+            {/each}
+        </div>
+
+        add users via id (multiple values sepparated by comma)
+        <input bind:value={newusers} placeholder="id1,id2" />
     </div>
 
     <button class="btn" on:click={handleSubmit}>
@@ -103,7 +151,7 @@
         color: var(--button-color);
         padding: 5px;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -155,7 +203,49 @@
     }
 
     .cards-length {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         opacity: 0.6;
+    }
+
+    .userbox {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--container-bg);
+        overflow: hidden;
+        border-radius: 9px;
+        padding: 0 9px 0 0;
+    }
+    .navavatar {
+        width: 39px;
+        height: 39px;
+        overflow: hidden;
+    }
+    .navavatar img {
+        object-fit: contain;
+        height: 39px;
+    }
+
+    .users-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 8px;
+    }
+
+    /* Inline #11 | http://localhost:5173/#/usergroup/on2fxwy3tks5tds */
+
+    button.remove-user {
+        min-width: auto;
+        background: var(--button-color);
+        color: var(--button-bg);
+        padding: 0px;
+        border-radius: 0px;
+        display: bloc;
+        margin: 0px;
+        max-width: auto;
+    }
+    .owner {
+        order: -1;
     }
 </style>

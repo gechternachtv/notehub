@@ -4,6 +4,7 @@
     import Card from "../Card/card.svelte";
     import { pb } from "../pb.js";
     import Calendarselector from "./calendarselector.svelte";
+    import { onMount } from "svelte";
 
     //flip
 
@@ -25,18 +26,18 @@
     let includeraw = false;
     let sortby = "newest";
     // let searchtag = "";
-    let filter = `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`;
+    let filter = ``;
 
     $: {
         console.log(filter);
     }
 
     async function handleDndFinalize(e) {
-        console.log("%c drop details: <<<<<<-----", "color:teal");
-        console.log(counter, cards);
-        console.log(board.name);
-        console.log("%c  ----->>>>>", "color:red");
-        console.log(e.detail.tochildren);
+        // console.log("%c drop details: <<<<<<-----", "color:teal");
+        // console.log(counter, cards);
+        // console.log(board.name);
+        // console.log("%c  ----->>>>>", "color:red");
+        // console.log(e.detail.tochildren);
         // dragDisabled = true
     }
 
@@ -155,18 +156,19 @@
             }}>search</button
         >
     </div> -->
+    <div class="calendar-wrapper">
+        <Calendarselector on:dayclick={handledayclick}></Calendarselector>
+    </div>
+    <div class="calendar-result">
+        {#await promise}
+            . . .
+        {:then searchresult}
+            {#if searchresult}
+                <div class="locked container">
+                    <!-- {board.id} -->
 
-    <Calendarselector on:dayclick={handledayclick}></Calendarselector>
-
-    {#await promise}
-        . . .
-    {:then searchresult}
-        {#if searchresult}
-            <div class="locked container">
-                <!-- {board.id} -->
-
-                <div class="grid-container">
-                    <!-- <div class="grid"
+                    <div class="grid-container">
+                        <!-- <div class="grid"
                 class:list={listView} use:dndzone={{items:cards,
                 morphDisabled:true,
                 dragDisabled:false,
@@ -176,25 +178,34 @@
                 }
                 } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
-                    <Sortgrid
-                        class="card-grid {listView ? 'list' : ''}"
-                        on:change={handleDndFinalize}
-                    >
-                        {#each searchresult.items as card (card.id)}
-                            <Card {listView} {card}></Card>
-                        {/each}
-                    </Sortgrid>
+                        <Sortgrid
+                            class="card-grid {listView ? 'list' : ''}"
+                            on:change={handleDndFinalize}
+                        >
+                            {#each searchresult.items as card (card.id)}
+                                <Card {listView} {card}></Card>
+                            {/each}
+                        </Sortgrid>
+                    </div>
                 </div>
-            </div>
-        {/if}
-    {:catch error}
-        {error}
-    {/await}
+            {/if}
+        {:catch error}
+            {error}
+        {/await}
+    </div>
 </main>
 
 <style>
+    .calendar-result {
+        width: 100%;
+    }
+    .calendar-wrapper {
+        min-width: 300px;
+    }
     main {
         position: relative;
+        display: flex;
+        gap: 30px;
     }
 
     .con {
@@ -251,7 +262,7 @@
     }
 
     .tags {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         opacity: 0.8;
         margin-bottom: 20px;
         display: flex;

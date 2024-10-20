@@ -40,8 +40,14 @@
   font-weight: 700;
 }
 
+::-webkit-scrollbar {
+  width: 10px;
+  /* Width of the scrollbar */
+}
+
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
 }
 
 html {
@@ -127,7 +133,7 @@ button,
   color: var(--button-color);
   padding: 6px;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -193,7 +199,7 @@ input::file-selector-button {
   color: var(--button-color);
   padding: 5px;
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-radius: 8px;
   align-items: center;
   gap: 5px;

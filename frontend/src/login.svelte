@@ -142,9 +142,13 @@
             {/if}
           </div>
           <div class="success server">
+            <div>User ID : {$localToken.model.id}</div>
+          </div>
+          <div class="success server">
             <div>Server : {$server.name}</div>
             <div>{$server.url}</div>
           </div>
+
           <div class="controls">
             <button on:click={logout}>logout</button>
             <!-- <button on:click={newavatar.click()}>change avatar</button>

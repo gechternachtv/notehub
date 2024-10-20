@@ -242,7 +242,7 @@
     }
 
     .tags {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         opacity: 0.8;
         margin-bottom: 20px;
         display: flex;

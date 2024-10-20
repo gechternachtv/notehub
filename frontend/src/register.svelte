@@ -162,9 +162,13 @@
             {/if}
           </div>
           <div class="success server">
+            <div>User ID : {$localToken.model.id}</div>
+          </div>
+          <div class="success server">
             <div>Server : {$server.name}</div>
             <div>{$server.url}</div>
           </div>
+
           <button on:click={logout}>logout</button>
         </div>
       </div>

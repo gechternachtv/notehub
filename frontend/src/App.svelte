@@ -119,7 +119,7 @@
     /* display: flex; */
     display: flex;
     grid-template-columns: auto auto 1fr;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     position: sticky;
     top: 0;
     z-index: 2;
@@ -228,7 +228,7 @@
   }
 
   .servername {
-    font-size: 9px;
+    font-size: 8px;
     margin: 0px;
     background: var(--header-color);
     color: var(--header-bg);

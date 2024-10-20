@@ -5,7 +5,7 @@
     export let workspaces;
     export let boards;
 
-    let showfull = true;
+    // let showfull = true;
 
     const getPublictext = {
         private: { text: "🔒 private" },
@@ -17,73 +17,91 @@
 
 <main class="instance-box">
     <div class="title-container">
-        <h1><a href="/#/usergroup/{instance.id}">{instance.name}</a></h1>
-        <button
+        <div class="title-subcontainer">
+            <h1><a href="/#/usergroup/{instance.id}">{instance.name}</a></h1>
+            <!-- <button
             class="minimizebtn"
             on:click={() => {
                 showfull = !showfull;
-            }}>-</button
+            }}
         >
-    </div>
-    {#if showfull}
-        <div class="instancebox">
-            <!-- {console.log(instance)} -->
-
+            {#if showfull}
+                -
+            {:else}
+                +
+            {/if}
+        </button> -->
+            <div class="public">{getPublictext[instance.public].text}</div>
+        </div>
+        <div>
             {#if instance.expand?.users}
                 <div class="users-container">
                     {#each instance.expand.users as user}
-                        <div class="userbox">
+                        <div
+                            class="userbox"
+                            class:owner={instance.owner === user.id}
+                        >
                             <div class="navavatar">
                                 <img
                                     loading="lazy"
-                                    src="{$server.url}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=40x40"
+                                    src="{$server.url}/api/files/_pb_users_auth_/{user.id}/{user.avatar}?thumb=25x25"
                                 />
                             </div>
                             {user.name}
+
+                            {#if instance.owner === user.id}
+                                <span
+                                    title="user group admin"
+                                    class="workspace-admin"
+                                >
+                                    ⚙
+                                </span>
+                            {/if}
                         </div>
                     {/each}
                 </div>
             {/if}
-            <div class="public">{getPublictext[instance.public].text}</div>
-            <div class="workspacecontainer viewcard-container">
-                {#each workspaces.filter((e) => e.instance === instance.id) as workspace}
-                    <a
-                        class="workspace-card"
-                        href="/#/workspace/{workspace.id}"
-                    >
-                        {#if workspace.img}
-                            <div class="img-c">
-                                <img
-                                    loading="lazy"
-                                    style="object-position: 0px {workspace.position}%;"
-                                    src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}?thumb=200x200"
-                                    alt=""
-                                />
-                            </div>
-                        {:else}
-                            <div
-                                class="img-c"
-                                style="background-color:var(--gradient-col-1)"
-                            ></div>
-                        {/if}
-                        <div class="text">
-                            {workspace.name}
-                        </div>
-                    </a>
-                {/each}
-            </div>
-            <div class="boardscontainer viewcard-container">
-                {#each boards.filter((e) => e.instance === instance.id) as board}
-                    <Boardcard workspacecard={true} {board} />
-                {/each}
-            </div>
-            <div class="controls">
-                <a class="btn" href="/#/usergroup/{instance.id}">view</a>
-                <!-- <a class="btn" href="/#/workspaces/{instance.id}">workspaces</a>
-        <a class="btn" href="/#/allboards/{instance.id}">boards</a> -->
-            </div>
         </div>
-    {/if}
+    </div>
+
+    <div class="instancebox">
+        <!-- {console.log(instance)} -->
+
+        <div class="workspacecontainer viewcard-container">
+            {#each workspaces.filter((e) => e.instance === instance.id) as workspace}
+                <a class="workspace-card" href="/#/workspace/{workspace.id}">
+                    {#if workspace.img}
+                        <div class="img-c">
+                            <img
+                                loading="lazy"
+                                style="object-position: 0px {workspace.position}%;"
+                                src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}?thumb=200x200"
+                                alt=""
+                            />
+                        </div>
+                    {:else}
+                        <div
+                            class="img-c"
+                            style="background-color:var(--gradient-col-1)"
+                        ></div>
+                    {/if}
+                    <div class="text">
+                        {workspace.name}
+                    </div>
+                </a>
+            {/each}
+        </div>
+        <div class="boardscontainer viewcard-container">
+            {#each boards.filter((e) => e.instance === instance.id) as board}
+                <Boardcard workspacecard={true} {board} />
+            {/each}
+        </div>
+        <div class="controls">
+            <!-- <a class="btn" href="/#/usergroup/{instance.id}">full view</a> -->
+            <!-- <a class="btn" href="/#/workspaces/{instance.id}">workspaces</a>
+        <a class="btn" href="/#/allboards/{instance.id}">boards</a> -->
+        </div>
+    </div>
 </main>
 
 <style>
@@ -97,13 +115,17 @@
         color: var(--header-color);
     }
     main {
-        margin-bottom: 20px;
+        border-radius: 8px;
+        overflow: hidden;
     }
-    .title-container {
+    .title-subcontainer {
         display: flex;
         flex-wrap: wrap;
         gap: 20px;
         align-items: center;
+    }
+
+    .title-container {
         margin-bottom: 0px;
         background: var(--header-bg);
         padding: 6px 13px;
@@ -123,18 +145,19 @@
         padding: 0 9px 0 0;
     }
     .navavatar {
-        width: 39px;
-        height: 39px;
+        width: 25px;
+        height: 25px;
         overflow: hidden;
     }
     .navavatar img {
         object-fit: contain;
-        height: 39px;
+        height: 25px;
     }
     .instancebox {
         background: var(--card-bg);
         padding: 16px;
         /* margin-bottom: 30px; */
+        height: 100%;
     }
     .users-container {
         display: flex;
@@ -157,6 +180,7 @@
 
     h1 {
         margin: 0px;
+        font-size: 2.5rem;
     }
     .boardscontainer {
         margin-top: 20px;
@@ -197,5 +221,12 @@
     }
     .workspacecontainer .text {
         padding: 5px;
+    }
+    .owner {
+        order: -1;
+    }
+
+    .title-container .btn {
+        color: var(--header-bg);
     }
 </style>

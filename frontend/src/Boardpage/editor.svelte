@@ -172,7 +172,7 @@
 	}
 	.filename {
 		padding: 16px 0;
-		font-size: 1.3rem;
+		font-size: 1.2rem;
 		font-weight: bold;
 	}
 	.file {

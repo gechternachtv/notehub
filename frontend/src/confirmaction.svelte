@@ -20,7 +20,7 @@
 
 <style>
     .main {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         margin-top: 12px;
     }
 </style>
