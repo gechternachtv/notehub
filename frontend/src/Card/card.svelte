@@ -19,7 +19,7 @@
 
     const dispatch = createEventDispatcher();
     const setInfo = (card) => {
-        checked = card.check === "done";
+        // checked = card.check === "done";
         date = dateFormat(new Date(card.created));
     };
     window.scrollTo(0, 0);
@@ -50,23 +50,23 @@
         return `${icon} ${limitlink} ${link.length > 80 ? ". . ." : ""}`;
     };
 
-    let checked = card.check === "done";
-    const handleCheckbox = async () => {
-        console.log("checkboxed");
-        // const record = await pb
-        //     .collection("cards")
-        //     .update(card.id, {
-        //         ...card,
-        //         check: checked ? "done" : "islist",
-        //         logs: [
-        //             ...card.logs,
-        //             `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
-        //         ],
-        //     });
-        // card = record;
-        // setInfo(card);
-        // dispatch("updatefront", card);
-    };
+    // let checked = card.check === "done";
+    // const handleCheckbox = async () => {
+    //     console.log("checkboxed");
+    //     // const record = await pb
+    //     //     .collection("cards")
+    //     //     .update(card.id, {
+    //     //         ...card,
+    //     //         check: checked ? "done" : "islist",
+    //     //         logs: [
+    //     //             ...card.logs,
+    //     //             `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
+    //     //         ],
+    //     //     });
+    //     // card = record;
+    //     // setInfo(card);
+    //     // dispatch("updatefront", card);
+    // };
     // const handlemovetoBoard = async ()=>{ console.log("hey")}
 
     setInfo(card);
@@ -100,11 +100,11 @@
                 /></svg
             >
         </div>
+        <a class="img-c thumblink" href="/#/card/{card.id}">
+            <div class="thumb">
+                <!-- {#if channel.thumb} -->
+                <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
 
-        <div class="thumb">
-            <!-- {#if channel.thumb} -->
-            <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
-            <a class="img-c thumblink" href="/#/card/{card.id}">
                 {#if card.file}
                     {#if getFile(card).type === "image/jpeg"}
                         <img loading="lazy" src={getFile(card).link} alt="" />
@@ -114,8 +114,8 @@
                 {/if}
 
                 <!-- {/if} -->
-            </a>
-        </div>
+            </div>
+        </a>
     </div>
     <div class="card-container card-container---info">
         <!-- <div class="title">{channel.name}</div> -->
@@ -132,7 +132,7 @@
             </div>
             <div class="link">{linkPreview(card)}</div>
         </a>
-        {#if card.check}
+        <!-- {#if card.check}
             {#if card.check === "done" || card.check === "islist"}
                 <div class:checked class="inputholder">
                     <label
@@ -145,7 +145,7 @@
                     >
                 </div>
             {/if}
-        {/if}
+        {/if} -->
 
         <a class="nodeco" href="/#/card/{card.id}">
             <div class="updates">{card.text}</div>
@@ -157,8 +157,10 @@
                 <div class="tags">
                     {#each card.expand?.tags as tag}
                         {#if tag.name != undefined}
-                            <span class="tag" style="background:{tag.color};"
-                                >{tag.name}</span
+                            <a
+                                href="/#/search?tag={tag.name}"
+                                class="tag"
+                                style="background:{tag.color};">{tag.name}</a
                             >
                         {/if}
                     {/each}
@@ -312,6 +314,7 @@
         display: block;
         width: 100%;
         /* min-height: 100px; */
+        height: 100%;
     }
 
     .feed-btn a,
@@ -344,7 +347,7 @@
         opacity: 0.8;
     }
 
-    .tags span {
+    .tags a {
         display: inline-block;
         margin-right: 4px;
         border-radius: 5px;
@@ -499,6 +502,10 @@
         }
         .updates {
             color: var(--main-font-1);
+        }
+
+        .editor-panel {
+            display: none;
         }
     }
     .listview .card-container---info {

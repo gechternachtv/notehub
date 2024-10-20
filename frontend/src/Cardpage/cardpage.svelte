@@ -31,7 +31,7 @@
                         `collectionId,check,created,id,color,` +
                         `file,imglink,favico,title,` +
                         `link,raw,logs,` +
-                        `expand.tags.name,expand.tags.color`,
+                        `expand.tags.name,expand.tags.color,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.instance.name`,
                 });
                 // console.log(res)
 

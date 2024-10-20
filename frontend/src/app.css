@@ -214,7 +214,8 @@ input::file-selector-button {
   height: 90px;
 }
 
-.viewcard-container .img-c {
+.viewcard-container .img-c,
+.card.fullview .board-header .img-c {
   width: 36px;
   height: 36px;
 }
@@ -474,6 +475,9 @@ button {
   pointer-events: none;
 }
 
+.locked .filename {
+  display: none;
+}
 
 .grid.locked .readmodetoggle {
   display: none

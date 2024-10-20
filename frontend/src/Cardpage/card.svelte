@@ -6,8 +6,10 @@
     import dateFormat from "../dateFormat.js";
     import getFile from "../getFile.js";
     import Confirmaction from "../confirmaction.svelte";
-    import Modal from "../modal/modal.svelte";
-    import Moveoptions from "../Card/moveoptions.svelte";
+    // import Modal from "../modal/modal.svelte";
+    // import Moveoptions from "../Card/moveoptions.svelte";
+    import Boardcard from "../Allboards/boardcard.svelte";
+
     export let card = {
         id: "",
         check: "",
@@ -17,13 +19,13 @@
 
     console.log(card);
 
-    let readmode;
+    let readmode = true;
     let date;
     let showconfirmbox = false;
-    let showModal = false;
+    // let showModal = false;
     const dispatch = createEventDispatcher();
     const setInfo = (card) => {
-        checked = card.check === "done";
+        // checked = card.check === "done";
         date = dateFormat(new Date(card.created));
     };
     window.scrollTo(0, 0);
@@ -59,47 +61,47 @@
     };
 
     let checked = card.check === "done";
-    const handleCheckbox = async () => {
-        const record = await pb.collection("cards").update(card.id, {
-            ...card,
-            check: checked ? "done" : "islist",
-            logs: [
-                ...card.logs,
-                `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
-            ],
-        });
-        card = record;
-        setInfo(card);
-        dispatch("updatefront", card);
-    };
+    // const handleCheckbox = async () => {
+    //     const record = await pb.collection("cards").update(card.id, {
+    //         ...card,
+    //         check: checked ? "done" : "islist",
+    //         logs: [
+    //             ...card.logs,
+    //             `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
+    //         ],
+    //     });
+    //     card = record;
+    //     setInfo(card);
+    //     dispatch("updatefront", card);
+    // };
     // const handlemovetoBoard = async ()=>{ console.log("hey")}
-    const handlemovetoBoard = async () => {
-        showModal = true;
-        // movetoBoard("tw5augb2ospnnzx")
-    };
+    // const handlemovetoBoard = async () => {
+    //     showModal = true;
+    //     // movetoBoard("tw5augb2ospnnzx")
+    // };
 
-    const movetoBoard = async (boardtoinsert) => {
-        showModal = false;
-        const currentboard = await pb
-            .collection("boards")
-            .getOne(card.board, { fields: "cards" });
-        await pb.collection("boards").update(card.board, {
-            cards: currentboard.cards.filter((e) => e != card.id),
-        });
+    // const movetoBoard = async (boardtoinsert) => {
+    //     showModal = false;
+    //     const currentboard = await pb
+    //         .collection("boards")
+    //         .getOne(card.board, { fields: "cards" });
+    //     await pb.collection("boards").update(card.board, {
+    //         cards: currentboard.cards.filter((e) => e != card.id),
+    //     });
 
-        const newboard = await pb
-            .collection("boards")
-            .getOne(boardtoinsert, { fields: "cards" });
-        await pb
-            .collection("boards")
-            .update(boardtoinsert, { cards: [card.id, ...newboard.cards] });
+    //     const newboard = await pb
+    //         .collection("boards")
+    //         .getOne(boardtoinsert, { fields: "cards" });
+    //     await pb
+    //         .collection("boards")
+    //         .update(boardtoinsert, { cards: [card.id, ...newboard.cards] });
 
-        const record = await pb
-            .collection("cards")
-            .update(card.id, { board: boardtoinsert });
+    //     const record = await pb
+    //         .collection("cards")
+    //         .update(card.id, { board: boardtoinsert });
 
-        card = record;
-    };
+    //     card = record;
+    // };
 
     setInfo(card);
 
@@ -114,9 +116,7 @@
     class:locked={readmode}
     style="border-left: 3px solid {card.color}"
 >
-    <!-- {card.board}<br/>
-            {card.expand?.board.name} -->
-    <Modal bind:showModal>
+    <!-- <Modal bind:showModal>
         <Moveoptions
             instance={card?.expand?.board?.instance}
             isopen={showModal}
@@ -125,7 +125,7 @@
                 movetoBoard(e.detail);
             }}
         ></Moveoptions>
-    </Modal>
+    </Modal> -->
     <!-- {card.board} -->
     <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
 
@@ -184,7 +184,7 @@
             </div>
             <div class="link">{linkPreview(card)}</div>
         </a>
-        {#if card.check}
+        <!-- {#if card.check}
             {#if card.check === "done" || card.check === "islist"}
                 <div class:checked class="inputholder">
                     <label
@@ -197,7 +197,7 @@
                     >
                 </div>
             {/if}
-        {/if}
+        {/if} -->
 
         <!-- <a class="nodeco" href="/#/card/{card.id}">
                     <div class="updates">{card.text}</div>
@@ -209,8 +209,10 @@
                 <div class="tags">
                     {#each card.expand?.tags as tag}
                         {#if tag.name != undefined}
-                            <span class="tag" style="background:{tag.color};"
-                                >{tag.name}</span
+                            <a
+                                href="/#/search?tag={tag.name}"
+                                class="tag"
+                                style="background:{tag.color};">{tag.name}</a
                             >
                         {/if}
                     {/each}
@@ -218,7 +220,14 @@
             {/if}
         {/if}
     </div>
-
+    <div class="usergroup-area">
+        <a
+            class="usergroup-link"
+            href="/#/usergroup/{card.expand?.board?.expand?.instance?.id}"
+            >{card.expand?.board?.expand?.instance?.name}</a
+        >
+        <Boardcard board={card.expand?.board} workspacecard={true} />
+    </div>
     <div class="card-container card-container---controls">
         <div class="controls editor-panel">
             {#if card.link != "" || card.imglink != "" || card.file != ""}
@@ -245,10 +254,10 @@
                 </div>
             {/if}
 
-            <button class="cardcontrols-move" on:click={handlemovetoBoard}
+            <!-- <button class="cardcontrols-move" on:click={handlemovetoBoard}
                 >move ➜</button
-            >
-            <a href="/#/board/{card.board}">current board</a>
+            > -->
+            <!-- <a href="/#/board/{card.board}">current board</a> -->
             <button
                 class="alert cardcontrols-delete"
                 on:click={() => (showconfirmbox = true)}>delete</button
@@ -424,7 +433,7 @@
         opacity: 0.8;
     }
 
-    .tags span {
+    .tags a {
         display: inline-block;
         margin-right: 4px;
         border-radius: 5px;
@@ -615,5 +624,15 @@
             bottom: 0;
             right: 10px;
         }
+    }
+
+    .usergroup-area {
+        display: grid;
+        gap: 13px;
+        margin: 10px 0;
+    }
+    .usergroup-link {
+        font-weight: bold;
+        font-size: 1.6rem;
     }
 </style>

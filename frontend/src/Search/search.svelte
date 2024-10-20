@@ -3,6 +3,9 @@
 
     import Card from "../Card/card.svelte";
     import { pb } from "../pb.js";
+    import { localToken } from "../stores.js";
+    import { querystring } from "svelte-spa-router";
+    import { onMount } from "svelte";
 
     //flip
 
@@ -24,11 +27,17 @@
     let includeraw = false;
     let sortby = "newest";
     // let searchtag = "";
+    let hasparam;
 
     $: {
         console.log(
             `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`,
         );
+    }
+
+    if (new URLSearchParams($querystring).get("tag")) {
+        searchtags.push(new URLSearchParams($querystring).get("tag"));
+        hasparam = true;
     }
 
     async function handleDndFinalize(e) {
@@ -49,7 +58,7 @@
             // console.log(text);
 
             const resultList = await pb.collection("cards").getList(1, 60, {
-                filter: `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`,
+                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.instance.users ~ "${$localToken.model.id}"`,
                 sort: `${sortby === "oldest" ? "" : "-"}created`,
                 expand: "tags",
             });
@@ -62,6 +71,7 @@
     }
 
     let promise;
+    let parameterTag;
 
     const getTags = async () => {
         // fetch a paginated records list
@@ -86,6 +96,12 @@
             listView = false;
         }
     };
+
+    onMount(() => {
+        if (hasparam) {
+            promise = getRecords();
+        }
+    });
 </script>
 
 <main>

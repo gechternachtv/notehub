@@ -5,6 +5,7 @@
     import { pb } from "../pb.js";
     import Calendarselector from "./calendarselector.svelte";
     import { onMount } from "svelte";
+    import { localToken } from "../stores.js";
 
     //flip
 
@@ -90,7 +91,7 @@
 
     const handledayclick = (e) => {
         console.log(e.detail);
-        filter = `(created >= "${e.detail.year}-${e.detail.month}-${e.detail.day} 00:00:00" && created <= "${e.detail.year}-${e.detail.month}-${e.detail.day} 23:59:59") || title ~ "${e.detail.day}-${e.detail.month}-${e.detail.year}"`;
+        filter = `((created >= "${e.detail.year}-${e.detail.month}-${e.detail.day} 00:00:00" && created <= "${e.detail.year}-${e.detail.month}-${e.detail.day} 23:59:59") || title ~ "${e.detail.day}-${e.detail.month}-${e.detail.year}") && board.instance.users ~ "${$localToken.model.id}"`;
         promise = getRecords();
     };
 </script>

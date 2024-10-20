@@ -99,15 +99,15 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
         console.log(words);
 
 
-        if (words[0] === "[]") {
-            card.check = "islist";
+        // if (words[0] === "[]") {
+        //     card.check = "islist";
 
-        } else if (words[0] === "[x]") {
-            card.check = "done"
+        // } else if (words[0] === "[x]") {
+        //     card.check = "done"
 
-        } else {
-            card.check = "";
-        }
+        // } else {
+        //     card.check = "";
+        // }
 
         //link-check
         // console.log(texts)
