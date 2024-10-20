@@ -539,8 +539,8 @@
     .card.listview .date {
         position: absolute;
 
-        top: -10px;
-        right: 26px;
+        right: 12px;
+        bottom: 8px;
     }
 
     .card.listview .card-container---controls {
@@ -549,6 +549,7 @@
         position: absolute;
         bottom: 10px;
         right: 12px;
+        display: none;
     }
 
     .listview .updates {

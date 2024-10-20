@@ -179,11 +179,11 @@
                 } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
                         <Sortgrid
-                            class="card-grid {listView ? 'list' : ''}"
+                            class="card-grid list"
                             on:change={handleDndFinalize}
                         >
                             {#each searchresult.items as card (card.id)}
-                                <Card {listView} {card}></Card>
+                                <Card listView="true" {card}></Card>
                             {/each}
                         </Sortgrid>
                     </div>
@@ -208,6 +208,14 @@
         gap: 30px;
     }
 
+    @media (max-width: 991px) {
+        .calendar-wrapper {
+            min-width: 100%;
+        }
+        main {
+            display: grid;
+        }
+    }
     .con {
         display: grid;
         grid-template-columns: 1fr;

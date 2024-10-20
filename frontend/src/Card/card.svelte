@@ -422,8 +422,8 @@
     .card.listview .date {
         position: absolute;
 
-        top: -10px;
-        right: 26px;
+        right: 12px;
+        bottom: 8px;
     }
 
     .card.listview .card-container---controls {
@@ -500,5 +500,8 @@
         .updates {
             color: var(--main-font-1);
         }
+    }
+    .listview .card-container---info {
+        padding-bottom: 25px;
     }
 </style>

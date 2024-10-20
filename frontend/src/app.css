@@ -330,6 +330,10 @@ button {
 
 }
 
+.card.listview .editor-panel {
+  display: none;
+}
+
 
 
 

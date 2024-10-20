@@ -111,4 +111,10 @@
         grid-template-columns: 1fr 1fr;
         gap: 15px;
     }
+
+    @media (max-width: 991px) {
+        .instance-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
