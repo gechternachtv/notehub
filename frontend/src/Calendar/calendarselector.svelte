@@ -2,6 +2,8 @@
     import { Calendar } from "calendar-base";
     import { pb } from "../pb.js";
     import { createEventDispatcher } from "svelte";
+    import { localToken } from "../stores.js";
+
     const dispatch = createEventDispatcher();
 
     const months = [
@@ -37,6 +39,7 @@
         cards = await pb.collection("cards").getFullList({
             sort: "-created",
             fields: "created,title",
+            filter: `(board.instance.users ~ "${$localToken.model.id}" || board.instance.public = "global-view")`,
         });
         console.log(cards);
 

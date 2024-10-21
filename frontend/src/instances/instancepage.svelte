@@ -278,7 +278,8 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        background: #ffffff0f;
+        /* background: #ffffff0f; */
+        background: var(--container-bg);
         overflow: hidden;
         border-radius: 9px;
         padding: 0 9px 0 0;
@@ -324,5 +325,8 @@
 
         display: block;
         width: fit-content;
+    }
+    .usergroup-card h1 {
+        color: var(--header-color);
     }
 </style>

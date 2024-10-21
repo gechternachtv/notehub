@@ -27,7 +27,7 @@
     let includeraw = false;
     let sortby = "newest";
     // let searchtag = "";
-    let filter = ``;
+    let filter = `(board.instance.users ~ "${$localToken.model.id}" || board.instance.public = "global-view")`;
 
     $: {
         console.log(filter);
@@ -91,72 +91,12 @@
 
     const handledayclick = (e) => {
         console.log(e.detail);
-        filter = `((created >= "${e.detail.year}-${e.detail.month}-${e.detail.day} 00:00:00" && created <= "${e.detail.year}-${e.detail.month}-${e.detail.day} 23:59:59") || title ~ "${e.detail.day}-${e.detail.month}-${e.detail.year}") && board.instance.users ~ "${$localToken.model.id}"`;
+        filter = `((created >= "${e.detail.year}-${e.detail.month}-${e.detail.day} 00:00:00" && created <= "${e.detail.year}-${e.detail.month}-${e.detail.day} 23:59:59") || title ~ "${e.detail.day}-${e.detail.month}-${e.detail.year}") && (board.instance.users ~ "${$localToken.model.id}" || board.instance.public = "global-view")`;
         promise = getRecords();
     };
 </script>
 
 <main>
-    <!-- {#await promisetags}
-        . . .
-    {:then tags}
-        <div class="tags">
-            {#each tags as tag}
-                <button
-                    class:active={searchtags.includes(tag.name)}
-                    on:click={() => {
-                        if (searchtags.includes(tag.name)) {
-                            searchtags = searchtags.filter(
-                                (e) => e != tag.name,
-                            );
-                            console.log(searchtags);
-                        } else {
-                            searchtags = [...searchtags, tag.name];
-                            console.log(searchtags);
-                        }
-
-                        // promise = getRecords();
-                    }}
-                    class="tag tag-{tag.id}"
-                    style="background:{tag.color};">{tag.name}</button
-                >
-            {/each}
-        </div>
-    {:catch error}
-        {error}
-    {/await}
-    <div>
-        <input type="checkbox" name="haslink" bind:checked={needslink} /> has link
-    </div>
-    <div>
-        <input type="checkbox" name="hasimage" bind:checked={needsimg} /> has image
-        (link or file)
-    </div>
-    <div>
-        <input type="checkbox" name="hasfile" bind:checked={needsfile} /> has (any
-        kind of) file
-    </div>
-    <div>
-        <input type="checkbox" name="innertext" bind:checked={includeraw} /> search
-        inner text (may bring innacurate results)
-    </div>
-    <div class="flex">
-        sort by: <button
-            on:click={() => {
-                sortby = sortby === "oldest" ? "newest" : "oldest";
-            }}>{sortby}</button
-        >
-    </div>
-
-    <div class="search-container">
-        <input type="text" bind:value={textsearch} />
-        <button
-            on:click={() => {
-                filter = `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`;
-                promise = getRecords();
-            }}>search</button
-        >
-    </div> -->
     <div class="calendar-wrapper">
         <Calendarselector on:dayclick={handledayclick}></Calendarselector>
     </div>
@@ -308,5 +248,11 @@
         align-content: center;
         align-items: center;
         gap: 10px;
+    }
+
+    main {
+        background: var(--card-bg);
+        padding: min(30px, 2vw);
+        border-radius: 10px;
     }
 </style>

@@ -211,7 +211,7 @@
 		color: var(--button-color);
 	}
 	:global(.plankton) {
-		--alert: #ff2164;
+		--alert: #6bad00;
 		--news: #ff2164;
 		--main-font-1: black;
 		--main-font-2: black;

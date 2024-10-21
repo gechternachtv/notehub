@@ -81,7 +81,7 @@
     onMount(() => {
         sortableObj = new Sortable(sortableElement, defaults);
 
-        console.log(sortableObj);
+        // console.log(sortableObj);
     });
 
     onDestroy(() => {
