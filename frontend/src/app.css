@@ -482,3 +482,61 @@ button {
 .grid.locked .readmodetoggle {
   display: none
 }
+
+
+
+.workspace-board-container .feed-btn a,
+.workspace-board-container .editor-panel a {
+  padding: 10px;
+}
+
+.workspace-board-container .thumb a {
+  pointer-events: none;
+}
+
+.workspace-board-container .card:not(.fullview) {
+  grid-template-rows: auto;
+  grid-template-columns: subgrid;
+  gap: 14px;
+  min-height: 83px;
+  max-width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: subgrid;
+  gap: 14px;
+  min-height: 83px;
+  max-width: 100%;
+  gap: 8px;
+  min-height: 54px;
+  padding: 5px;
+}
+
+.workspace-board-container .card:not(.fullview) .card-container---controls {
+  grid-column: span 3;
+}
+
+.workspace-board-container .card:not(.fullview) .card-container---info {
+  grid-column: span 2;
+}
+
+.workspace-board-container .card:not(.fullview) .thumb {
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.workspace-board-container .card:not(.fullview) .updates {
+  max-height: 29px;
+}
+
+.workspace-board-container .card:not(.fullview) .card-container---controls {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+}
+
+.workspace-board-container .updates {
+  color: var(--main-font-1);
+}
+
+.workspace-board-container .card:not(.fullview) {
+  padding-bottom: 28px !important;
+}

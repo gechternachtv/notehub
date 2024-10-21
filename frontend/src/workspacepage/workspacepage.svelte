@@ -259,7 +259,7 @@
                         }}
                     >
                         {#each boards as board (board.id)}
-                            <div id={board.id} class="board-container">
+                            <div id={board.id} class="board-container workspace-board-container">
                                 <div
                                     class="grabber-board"
                                     on:focus={() => (dragDisabled = false)}
