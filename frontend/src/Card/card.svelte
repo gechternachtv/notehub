@@ -373,12 +373,6 @@
         max-height: 8ch;
     }
 
-    @media only screen and (max-width: 991px) {
-        .thumb a {
-            pointer-events: none;
-        }
-    }
-
     input {
         cursor: pointer;
     }
@@ -441,13 +435,6 @@
         max-width: 87%;
     }
 
-    @media (max-width: 991px) {
-        .feed-btn a,
-        .editor-panel a {
-            padding: 10px;
-        }
-    }
-
     .grabber {
         position: absolute;
         right: 15px;
@@ -463,6 +450,13 @@
     }
 
     @media (max-width: 991px) {
+        .feed-btn a,
+        .editor-panel a {
+            padding: 10px;
+        }
+        .thumb a {
+            pointer-events: none;
+        }
         .card:not(.fullview) {
             grid-template-rows: auto;
             grid-template-columns: subgrid;
