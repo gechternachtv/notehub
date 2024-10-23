@@ -43,7 +43,7 @@
             const data = e.detail;
             const boardrecord = await pb
                 .collection("boards")
-                .create({ ...data, instance: workspace.instance });
+                .create({ ...data, usergroup: workspace.usergroup });
 
             console.log(data);
             const res = await pb.collection("workspaces").update(workspace.id, {
@@ -69,7 +69,7 @@
         const data = {
             boards: e.detail.boards,
             name: e.detail.name,
-            position: e.detail.position,
+            imgposition: e.detail.imgposition,
             img: e.detail.img ? e.detail.img : workspace.img,
         };
 
@@ -78,9 +78,9 @@
             .collection("workspaces")
             .update(workspace.id, data);
         const record = await pb.collection("workspaces").getOne(workspace.id, {
-            expand: "instance,boards.cards.tags",
+            expand: "usergroup,boards.cards.tags",
             fields:
-                `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
+                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                 `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -112,9 +112,9 @@
 
     const getWorkspace = async () => {
         const record = await pb.collection("workspaces").getOne(id, {
-            expand: "instance,boards.cards.tags",
+            expand: "usergroup,boards.cards.tags",
             fields:
-                `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
+                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                 `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -122,7 +122,7 @@
         });
         console.log("%c ====>", "color:teal;font-size:40px");
         console.log(record);
-        usergroup = record.expand?.instance;
+        usergroup = record.expand?.usergroup;
         canedit = !!usergroup.users?.includes(
             $localToken ? $localToken?.model.id : "???",
         );
@@ -154,9 +154,9 @@
                 // views = e.record
             },
             {
-                expand: "instance,boards.cards.tags",
+                expand: "usergroup,boards.cards.tags",
                 fields:
-                    `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
+                    `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,` +
                     `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                     `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                     `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -218,13 +218,13 @@
                             isopen={showModal}
                             {workspace}
                             on:newcontent={handleEditWorkspace}
-                            instance={workspace.instance}
+                            usergroup={workspace.usergroup}
                         />
                     {/if}
                     {#if modalcontent === "create"}
                         <CreateBoard
                             on:newcontent={handleNewBoard}
-                            instance={params.instance}
+                            usergroup={params.usergroup}
                         />
                     {/if}
                 </Modal>
@@ -233,7 +233,7 @@
             {#if workspace.img}
                 <div class="img">
                     <img
-                        style="object-position: 0% {workspace.position}%;"
+                        style="object-position: 0% {workspace.imgposition}%;"
                         src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}"
                         alt=""
                     />
@@ -294,8 +294,8 @@
                                         ...board,
                                         expand: {
                                             ...board.expand,
-                                            instance:
-                                                workspace.expand?.instance,
+                                            usergroup:
+                                                workspace.expand?.usergroup,
                                         },
                                     }}
                                     boardpage={false}

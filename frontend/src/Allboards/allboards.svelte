@@ -12,7 +12,7 @@
     let showModal = false;
 
     export let usergroup = null;
-    export let params = { instance: "" };
+    export let params = { usergroup: "" };
 
     console.log(params, usergroup);
 
@@ -22,8 +22,8 @@
         if (!usergroup) {
             // console.log("...getting")
             usergroup = await pb
-                .collection("instance")
-                .getOne(params.instance, {
+                .collection("usergroup")
+                .getOne(params.usergroup, {
                     fields: "public,id,users",
                 });
             console.log(usergroup);
@@ -32,7 +32,7 @@
         const records = await pb.collection("boards").getFullList({
             sort: "created",
             expand: "tags",
-            filter: `instance = "${usergroup.id}"`,
+            filter: `usergroup = "${usergroup.id}"`,
             fields: "id,name,img,collectionId,color,cards",
         });
 
@@ -77,7 +77,7 @@
         {
             expand: "tags",
             // @ts-ignore
-            filter: `instance = "${usergroup.id}"`,
+            filter: `usergroup = "${usergroup.id}"`,
             fields: "id,name,img,collectionId,color,cards",
         },
     );
@@ -98,7 +98,7 @@
                 <Modal bind:showModal>
                     <CreateBoard
                         on:newcontent={handleNewBoard}
-                        instance={usergroup.id}
+                        usergroup={usergroup.id}
                     />
                 </Modal>
             {/if}

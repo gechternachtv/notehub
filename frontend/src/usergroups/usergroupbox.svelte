@@ -1,7 +1,7 @@
 <script>
     import Boardcard from "../Allboards/boardcard.svelte";
     import { server } from "../stores";
-    export let instance;
+    export let usergroup;
     export let workspaces;
     export let boards;
 
@@ -18,7 +18,7 @@
 <main class="instance-box">
     <div class="title-container">
         <div class="title-subcontainer">
-            <h1><a href="/#/usergroup/{instance.id}">{instance.name}</a></h1>
+            <h1><a href="/#/usergroup/{usergroup.id}">{usergroup.name}</a></h1>
             <!-- <button
             class="minimizebtn"
             on:click={() => {
@@ -31,15 +31,15 @@
                 +
             {/if}
         </button> -->
-            <div class="public">{getPublictext[instance.public].text}</div>
+            <div class="public">{getPublictext[usergroup.public].text}</div>
         </div>
         <div>
-            {#if instance.expand?.users}
+            {#if usergroup.expand?.users}
                 <div class="users-container">
-                    {#each instance.expand.users as user}
+                    {#each usergroup.expand.users as user}
                         <div
                             class="userbox"
-                            class:owner={instance.owner === user.id}
+                            class:owner={usergroup.owner === user.id}
                         >
                             <div class="navavatar">
                                 <img
@@ -49,7 +49,7 @@
                             </div>
                             {user.name}
 
-                            {#if instance.owner === user.id}
+                            {#if usergroup.owner === user.id}
                                 <span
                                     title="user group admin"
                                     class="workspace-admin"
@@ -68,13 +68,13 @@
         <!-- {console.log(instance)} -->
 
         <div class="workspacecontainer viewcard-container">
-            {#each workspaces.filter((e) => e.instance === instance.id) as workspace}
+            {#each workspaces.filter((e) => e.usergroup === usergroup.id) as workspace}
                 <a class="workspace-card" href="/#/workspace/{workspace.id}">
                     {#if workspace.img}
                         <div class="img-c">
                             <img
                                 loading="lazy"
-                                style="object-position: 0px {workspace.position}%;"
+                                style="object-position: 0px {workspace.imgposition}%;"
                                 src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}?thumb=200x200"
                                 alt=""
                             />
@@ -92,7 +92,7 @@
             {/each}
         </div>
         <div class="boardscontainer viewcard-container">
-            {#each boards.filter((e) => e.instance === instance.id) as board}
+            {#each boards.filter((e) => e.usergroup === usergroup.id) as board}
                 <Boardcard workspacecard={true} {board} />
             {/each}
         </div>

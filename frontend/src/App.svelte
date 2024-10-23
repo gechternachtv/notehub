@@ -77,7 +77,7 @@
         "/card/:id": wrap({
           asyncComponent: () => import("./Cardpage/cardpage.svelte"),
         }),
-        "/allboards/:instance": wrap({
+        "/allboards/:usergroup": wrap({
           asyncComponent: () => import("./Allboards/allboards.svelte"),
         }),
         "/workspace/:id": wrap({
@@ -90,14 +90,14 @@
         "/register/": wrap({
           asyncComponent: () => import("./register.svelte"),
         }),
-        "/workspaces/:instance": wrap({
+        "/workspaces/:usergroup": wrap({
           asyncComponent: () => import("./Allworkspaces/allworkspaces.svelte"),
         }),
-        "/usergroup/:instance": wrap({
-          asyncComponent: () => import("./instances/instancepage.svelte"),
+        "/usergroup/:usergroup": wrap({
+          asyncComponent: () => import("./usergroups/usergrouppage.svelte"),
         }),
         "/": wrap({
-          asyncComponent: () => import("./instances/allinstance.svelte"),
+          asyncComponent: () => import("./usergroups/allusergroups.svelte"),
         }),
       }}
     />

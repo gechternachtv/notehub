@@ -33,10 +33,10 @@
         cards: [],
     };
 
-    let canedit = !!board.expand?.instance.users?.includes(
+    let canedit = !!board.expand?.usergroup.users?.includes(
         $localToken ? $localToken?.model.id : "???",
     );
-    let usergroup = { ...board.expand?.instance, id: board.instance };
+    let usergroup = { ...board.expand?.usergroup, id: board.usergroup };
 
     console.log(usergroup);
     export let listView = undefined;
@@ -122,9 +122,9 @@
                     const record = await pb
                         .collection("boards")
                         .getOne(params.id, {
-                            expand: "cards.tags,instance",
+                            expand: "cards.tags,usergroup",
                             fields:
-                                `id,img,name,cards,color,collectionId,instance,expand.instance.users,` +
+                                `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,` +
                                 `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,` +
@@ -133,11 +133,11 @@
 
                     console.log(record);
                     usergroup = {
-                        ...record.expand?.instance,
-                        id: record.instance,
+                        ...record.expand?.usergroup,
+                        id: record.usergroup,
                     };
 
-                    canedit = record.expand?.instance.users?.includes(
+                    canedit = record.expand?.usergroup.users?.includes(
                         $localToken ? $localToken?.model.id : "???",
                     );
                     board = record;
@@ -198,9 +198,9 @@
                         // views = e.record
                     },
                     {
-                        expand: "cards.tags,instance",
+                        expand: "cards.tags,usergroup,authors",
                         fields:
-                            `id,img,name,cards,color,collectionId,instance,expand.instance.users,` +
+                            `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,` +
                             `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                             `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                             `expand.cards.link,expand.cards.text,` +
@@ -413,7 +413,7 @@
                                 <CreateBoard
                                     on:newcontent={handleUpdate}
                                     {board}
-                                    instance={usergroup?.id}
+                                    usergroup={usergroup?.id}
                                 />
                             </Modal>
                         </div>

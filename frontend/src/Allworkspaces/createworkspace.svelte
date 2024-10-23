@@ -8,7 +8,7 @@
     import { createEventDispatcher } from "svelte";
     import { server } from "../stores";
     // import {localToken} from '../stores.js'
-    export let instance;
+    export let usergroup;
     export let isopen = false;
     const dispatch = createEventDispatcher();
 
@@ -18,18 +18,18 @@
         name: "",
         boards: [],
         grid: "",
-        position: 0,
+        imgposition: 0,
     };
 
     let showconfirmbox = false;
-    let imageposition = workspace.position;
+    let imageposition = workspace.imgposition;
     let hasboards = workspace.boards.length > 0;
     let boardlist = workspace.boards;
     let checkboxholder;
 
     const getallBoards = async () => {
         return await pb.collection("boards").getFullList({
-            filter: `instance = "${instance}"`,
+            filter: `usergroup = "${usergroup}"`,
         });
     };
     let promise;
@@ -57,8 +57,8 @@
             name: name,
             img: input.files[0],
             boards: boardlist,
-            position: imageposition,
-            instance: instance,
+            imgposition: imageposition,
+            usergroup: usergroup,
         };
 
         if (workspace.id === "") {

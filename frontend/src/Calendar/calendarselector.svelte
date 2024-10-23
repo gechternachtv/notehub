@@ -39,7 +39,7 @@
         cards = await pb.collection("cards").getFullList({
             sort: "-created",
             fields: "created,title",
-            filter: `(board.instance.users ~ "${$localToken.model.id}" || board.instance.public = "global-view")`,
+            filter: `(board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`,
         });
         console.log(cards);
 

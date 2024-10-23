@@ -5,7 +5,7 @@ import { pb } from "./pb.js"
 import { server } from "./stores"
 import { get } from "svelte/store"
 
-export default async (instance, markdownobj, authors, fileInputelement = null, currentfile = null) => {
+export default async (usergroup, markdownobj, authors, fileInputelement = null, currentfile = null) => {
 
 
     const filecontent = fileInputelement?.files ? fileInputelement?.files[0] : null
@@ -227,7 +227,7 @@ export default async (instance, markdownobj, authors, fileInputelement = null, c
                     const data = {
                         "name": `${name.split("-")[0]}`,
                         "color": `${color}`,
-                        "instance": instance
+                        "usergroup": usergroup
                     };
                     // console.log(data)
                     const record = await pb.collection('tags').create(data);

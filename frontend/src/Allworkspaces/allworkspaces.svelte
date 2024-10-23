@@ -10,7 +10,7 @@
     import Contextmenu from "../contextmenu.svelte";
 
     export let usergroup = null;
-    export let params = { instance: "" };
+    export let params = { usergroup: "" };
     import { localToken, server } from "../stores.js";
     // console.log(usergroup)
 
@@ -20,8 +20,8 @@
     const records = async () => {
         if (!usergroup) {
             usergroup = await pb
-                .collection("instance")
-                .getOne(params.instance, {
+                .collection("usergroup")
+                .getOne(params.usergroup, {
                     fields: "public,id,users",
                 });
             console.log(usergroup);
@@ -30,10 +30,10 @@
         const records = await pb.collection("workspaces").getFullList({
             sort: "-created",
             expand: "boards",
-            filter: `instance = "${usergroup.id}"`,
-            fields: "boards,instance,id,users,img,collectionId,name,expand.boards.name,expand.boards.img,expand.boards.collectionId,expand.boards.id,expand.boards.color",
+            filter: `usergroup = "${usergroup.id}"`,
+            fields: "boards,usergroup,id,users,img,collectionId,name,expand.boards.name,expand.boards.img,expand.boards.collectionId,expand.boards.id,expand.boards.color",
 
-            // filter : 'instance == "pnfkrb2353g8zkp"'
+            // filter : 'usergroup == "pnfkrb2353g8zkp"'
         });
         console.log(records);
         workspaces = records;
@@ -75,8 +75,8 @@
         {
             expand: "boards",
             // @ts-ignore
-            filter: `instance = "${usergroup.id}"`,
-            fields: "boards,instance,id,users,img,collectionId,name,expand.boards.name,expand.boards.img,expand.boards.collectionId,expand.boards.id,expand.boards.color",
+            filter: `usergroup = "${usergroup.id}"`,
+            fields: "boards,usergroup,id,users,img,collectionId,name,expand.boards.name,expand.boards.img,expand.boards.collectionId,expand.boards.id,expand.boards.color",
         },
     );
 
@@ -98,7 +98,7 @@
                     <Createworkspace
                         isopen={showModal}
                         on:newcontent={handleNewWorkspace}
-                        instance={usergroup.id}
+                        usergroup={usergroup.id}
                     />
                 </Modal>
             {/if}
@@ -115,7 +115,7 @@
                         {#if workspace.img}
                             <div class="img-c">
                                 <img
-                                    style="object-position: 0px {workspace.position}%;"
+                                    style="object-position: 0px {workspace.imgposition}%;"
                                     src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}"
                                     alt=""
                                 />

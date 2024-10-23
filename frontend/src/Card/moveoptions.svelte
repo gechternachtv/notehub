@@ -6,7 +6,7 @@
     import { createEventDispatcher } from "svelte";
     export let currentboard;
     export let isopen = false;
-    export let instance;
+    export let usergroup;
     import { onMount } from "svelte";
 
     const getAllBoards = async () => {
@@ -14,7 +14,7 @@
         return await pb.collection("boards").getFullList({
             sort: "-created",
             expand: "boards",
-            filter: `instance = "${instance}"`,
+            filter: `usergroup = "${usergroup}"`,
         });
     };
 

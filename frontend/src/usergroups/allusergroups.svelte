@@ -1,6 +1,6 @@
 <script>
     import { pb } from "../pb";
-    import Instancebox from "./instancebox.svelte";
+    import Usergroupbox from "./usergroupbox.svelte";
     import CreateUsergroup from "../createUsergroup.svelte";
     import { push } from "svelte-spa-router";
     import Modal from "../modal/modal.svelte";
@@ -11,7 +11,7 @@
     let recordworkspaces = [];
     let showModal = false;
 
-    const recordsinstance = pb.collection("instance").getFullList({
+    const recordusergroup = pb.collection("usergroups").getFullList({
         sort: "-created",
         expand: "users",
         filter: `users ~ "${$localToken ? $localToken.model.id : "aaa"}" || public = "global-view"`,
@@ -21,22 +21,22 @@
     (async () => {
         recordboards = await pb.collection("boards").getFullList({
             sort: "-created",
-            fields: "id,collectionId,name,img,instance,color",
-            filter: `instance.users ~ "${$localToken ? $localToken.model.id : "aaa"}" || instance.public = "global-view"`,
+            fields: "id,collectionId,name,img,usergroup,color",
+            filter: `usergroup.users ~ "${$localToken ? $localToken.model.id : "aaa"}" || usergroup.public = "global-view"`,
         });
         console.log(recordboards);
 
         recordworkspaces = await pb.collection("workspaces").getFullList({
             sort: "-created",
-            fields: "id,name,img,collectionId,position,instance",
-            filter: `instance.users ~ "${$localToken ? $localToken?.model.id : "aaa"}" || instance.public = "global-view"`,
+            fields: "id,name,img,collectionId,imgposition,usergroup",
+            filter: `usergroup.users ~ "${$localToken ? $localToken?.model.id : "aaa"}" || usergroup.public = "global-view"`,
         });
         console.log(recordworkspaces);
     })();
 
     const handlenewusergroup = async (e) => {
         const data = e.detail;
-        const record = await pb.collection("instance").create(data);
+        const record = await pb.collection("usergroups").create(data);
         showModal = false;
         push(`/usergroup/${record.id}`);
     };
@@ -45,9 +45,9 @@
 <main>
     <h1>Today</h1>
     <Calendar></Calendar>
-    {#await recordsinstance}
+    {#await recordusergroup}
         ...
-    {:then instances}
+    {:then usergroups}
         <h1>User Groups</h1>
         {#if $localToken}
             <button
@@ -61,33 +61,33 @@
             </Modal>
         {/if}
         <div class="instance-grid">
-            {#each instances.filter((e) => e.public === "global-view") as instance}
-                <Instancebox
-                    {instance}
+            {#each usergroups.filter((e) => e.public === "global-view") as usergroup}
+                <Usergroupbox
+                    {usergroup}
                     boards={recordboards}
                     workspaces={recordworkspaces}
-                ></Instancebox>
+                ></Usergroupbox>
             {/each}
-            {#each instances.filter((e) => e.public === "edit") as instance}
-                <Instancebox
-                    {instance}
+            {#each usergroups.filter((e) => e.public === "edit") as usergroup}
+                <Usergroupbox
+                    {usergroup}
                     boards={recordboards}
                     workspaces={recordworkspaces}
-                ></Instancebox>
+                ></Usergroupbox>
             {/each}
-            {#each instances.filter((e) => e.public === "view") as instance}
-                <Instancebox
-                    {instance}
+            {#each usergroups.filter((e) => e.public === "view") as usergroup}
+                <Usergroupbox
+                    {usergroup}
                     boards={recordboards}
                     workspaces={recordworkspaces}
-                ></Instancebox>
+                ></Usergroupbox>
             {/each}
-            {#each instances.filter((e) => e.public === "private") as instance}
-                <Instancebox
-                    {instance}
+            {#each usergroups.filter((e) => e.public === "private") as usergroup}
+                <Usergroupbox
+                    {usergroup}
                     boards={recordboards}
                     workspaces={recordworkspaces}
-                ></Instancebox>
+                ></Usergroupbox>
             {/each}
         </div>
     {:catch error}

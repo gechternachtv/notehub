@@ -225,8 +225,8 @@
         <div>Usergroup:</div>
         <a
             class="usergroup-link"
-            href="/#/usergroup/{card.expand?.board?.expand?.instance?.id}"
-            >{card.expand?.board?.expand?.instance?.name}</a
+            href="/#/usergroup/{card.expand?.board?.expand?.usergroup?.id}"
+            >{card.expand?.board?.expand?.usergroup?.name}</a
         >
 
         {#if card.authors?.length}

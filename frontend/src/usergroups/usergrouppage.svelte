@@ -24,10 +24,12 @@
     };
 
     const getUserGroup = async () => {
-        const record = await pb.collection("instance").getOne(params.instance, {
-            fields: "owner, id,name,users,public,expand.users.avatar,expand.users.name,expand.users.id",
-            expand: "users",
-        });
+        const record = await pb
+            .collection("usergroups")
+            .getOne(params.usergroup, {
+                fields: "owner, id,name,users,public,expand.users.avatar,expand.users.name,expand.users.id",
+                expand: "users",
+            });
         console.log(record);
         usergroup = record;
     };
@@ -40,8 +42,8 @@
             usergroup.public === "edit"
         ) {
             const newrecord = await pb
-                .collection("instance")
-                .update(params.instance, {
+                .collection("usergroup")
+                .update(params.usergroup, {
                     name: usergroup.name,
                     public: usergroup.public,
                     users: [...usergroup.users, $localToken?.model.id],
@@ -69,8 +71,8 @@
             )
         ) {
             const newrecord = await pb
-                .collection("instance")
-                .update(params.instance, {
+                .collection("usergroup")
+                .update(params.usergroup, {
                     name: usergroup.name,
                     public: usergroup.public,
                     users: usergroup.users.filter(
@@ -90,7 +92,7 @@
     };
 
     const deleteUsergroup = async () => {
-        await pb.collection("instance").delete(usergroup.id);
+        await pb.collection("usergroups").delete(usergroup.id);
         push("/");
     };
 
@@ -101,9 +103,9 @@
         console.log(e.detail);
 
         const record = await pb
-            .collection("instance")
+            .collection("usergroup")
             .update(e.detail.id, e.detail);
-        const users = await pb.collection("instance").getOne(e.detail.id, {
+        const users = await pb.collection("usergroups").getOne(e.detail.id, {
             fields: "expand",
             expand: "users",
         });

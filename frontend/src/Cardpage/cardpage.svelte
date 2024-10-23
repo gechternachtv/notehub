@@ -25,13 +25,13 @@
         if (id) {
             try {
                 const res = await pb.collection("cards").getOne(id, {
-                    expand: "board.instance,tags,authors",
+                    expand: "board.usergroup,tags,authors",
                     fields:
-                        `id,board,expand.board.id,expand.board.cards,expand.board.expand.instance.users,expand.board.expand.instance.id,` +
+                        `id,board,expand.board.id,expand.board.cards,expand.board.expand.usergroup.users,expand.board.expand.usergroup.id,` +
                         `collectionId,check,created,id,color,` +
                         `file,imglink,favico,title,` +
                         `link,raw,` +
-                        `authors,expand.tags.name,expand.tags.color,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.instance.name,expand.authors.id, expand.authors.avatar,expand.authors.name,expand.authors.collectionId`,
+                        `authors,expand.tags.name,expand.tags.color,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.usergroup.name,expand.authors.id, expand.authors.avatar,expand.authors.name,expand.authors.collectionId`,
                 });
                 // console.log(res.expand.authors);
 
@@ -42,7 +42,7 @@
                 currentfile = res.file;
                 editorBlocked = false;
 
-                // console.log(showcard.expand?.board?.expand?.instance?.users.includes($localToken ? $localToken?.model.id : "???"))
+                // console.log(showcard.expand?.board?.expand?.usergroup?.users.includes($localToken ? $localToken?.model.id : "???"))
 
                 if (res.file) {
                     files = [{ name: res.file }];
@@ -67,7 +67,7 @@
         // console.log(showcard)
 
         const card = await createNewCard(
-            showcard.expand.board.expand.instance.id,
+            showcard.expand.board.expand.usergroup.id,
             e.detail,
             showcard.authors
                 ? [...showcard.authors, $localToken?.model.id]
@@ -126,7 +126,7 @@
     {#await promise then defaultValue}
         {#if showcard.id}
             <div
-                class:locked={!showcard.expand?.board?.expand?.instance?.users.includes(
+                class:locked={!showcard.expand?.board?.expand?.usergroup?.users.includes(
                     $localToken ? $localToken?.model.id : "???",
                 )}
                 class="grid"

@@ -13,7 +13,7 @@
         name: "",
         id: "",
     };
-    export let instance;
+    export let usergroup;
 
     console.log(board);
 
@@ -38,7 +38,7 @@
             name: name,
             img: input.files[0],
             cards: [],
-            instance: instance,
+            usergroup: usergroup,
         };
         if (board.id === "") {
             color = "var(--main-font-1)";
