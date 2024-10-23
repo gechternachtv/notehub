@@ -9,6 +9,7 @@
     // import Modal from "../modal/modal.svelte";
     // import Moveoptions from "../Card/moveoptions.svelte";
     import Boardcard from "../Allboards/boardcard.svelte";
+    import { localToken, server } from "../stores.js";
 
     export let card = {
         id: "",
@@ -221,11 +222,54 @@
         {/if}
     </div>
     <div class="usergroup-area">
+        <div>Usergroup:</div>
         <a
             class="usergroup-link"
             href="/#/usergroup/{card.expand?.board?.expand?.instance?.id}"
             >{card.expand?.board?.expand?.instance?.name}</a
         >
+
+        {#if card.authors?.length}
+            {#if card.authors.length > 1}
+                <div>Authors:</div>
+            {:else}
+                <div>Author:</div>
+            {/if}
+            <div class="users-container">
+                {#each card.authors as author}
+                    {#if card.expand?.authors?.find((e) => e.id === author)}
+                        <div class="userbox">
+                            <div class="navavatar">
+                                <img
+                                    loading="lazy"
+                                    src="{$server.url}/api/files/_pb_users_auth_/{card.expand.authors.find(
+                                        (e) => e.id === author,
+                                    ).id}/{card.expand.authors.find(
+                                        (e) => e.id === author,
+                                    ).avatar}?thumb=25x25"
+                                />
+                            </div>
+                            {card.expand.authors.find((e) => e.id === author)
+                                .name}
+                        </div>
+                    {:else}
+                        <div class="userbox">
+                            <div class="navavatar">
+                                <img
+                                    loading="lazy"
+                                    src="{$server.url}/api/files/_pb_users_auth_/{$localToken
+                                        ?.model?.id}/{$localToken?.model
+                                        .avatar}?thumb=25x25"
+                                />
+                            </div>
+                            {$localToken?.model.name}
+                        </div>
+                    {/if}
+                {/each}
+            </div>
+        {/if}
+
+        <div>Board:</div>
         <Boardcard board={card.expand?.board} workspacecard={true} />
     </div>
     <div class="card-container card-container---controls">
@@ -634,5 +678,35 @@
     .usergroup-link {
         font-weight: bold;
         font-size: 1.6rem;
+    }
+
+    .userbox {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--container-bg);
+        overflow: hidden;
+        border-radius: 9px;
+        padding: 0 9px 0 0;
+    }
+    .navavatar {
+        width: 25px;
+        height: 25px;
+        overflow: hidden;
+    }
+    .navavatar img {
+        object-fit: contain;
+        height: 25px;
+    }
+    .instancebox {
+        background: var(--card-bg);
+        padding: 16px;
+        /* margin-bottom: 30px; */
+        height: 100%;
+    }
+    .users-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 </style>

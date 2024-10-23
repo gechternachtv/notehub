@@ -231,7 +231,12 @@
             .setAttribute("style", `max-height: 300px;opacity:0.6`);
         debugger;
 
-        const card = await createNewCard(usergroup?.id, e.detail, fileelement);
+        const card = await createNewCard(
+            usergroup?.id,
+            e.detail,
+            [$localToken?.model.id],
+            fileelement,
+        );
         debugger;
         document.querySelector(".card-grid").setAttribute("style", ``);
         window.scrollTo(0, 0);

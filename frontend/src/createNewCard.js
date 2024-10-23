@@ -5,9 +5,9 @@ import { pb } from "./pb.js"
 import { server } from "./stores"
 import { get } from "svelte/store"
 
-export default async (instance, markdownobj, fileInputelement = null, currentfile = null) => {
+export default async (instance, markdownobj, authors, fileInputelement = null, currentfile = null) => {
 
-    console.log(instance)
+
     const filecontent = fileInputelement?.files ? fileInputelement?.files[0] : null
 
     const content = markdownobj.json.content
@@ -71,11 +71,10 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
         link: "",
         text: "",
         favico: "",
-        data: {},
         raw: content,
         created: new Date(),
         file: filecontent ? filecontent : currentfile ? currentfile : null,
-        logs: [],
+        authors: authors,
         board: ""
     }
 
@@ -285,8 +284,6 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
 
                     card[name] = data;
                     card.text = card.text.replace(dataWord, "")
-                } else {
-                    card.data[name] = data
                 }
             } catch (error) {
                 console.warn(error)
@@ -335,7 +332,7 @@ export default async (instance, markdownobj, fileInputelement = null, currentfil
         }
 
     }
-
+    console.log("here:")
     console.log(card)
     return card
 }

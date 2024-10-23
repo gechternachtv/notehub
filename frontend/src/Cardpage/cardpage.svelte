@@ -25,15 +25,15 @@
         if (id) {
             try {
                 const res = await pb.collection("cards").getOne(id, {
-                    expand: "board.instance,tags",
+                    expand: "board.instance,tags,authors",
                     fields:
                         `id,board,expand.board.id,expand.board.cards,expand.board.expand.instance.users,expand.board.expand.instance.id,` +
                         `collectionId,check,created,id,color,` +
                         `file,imglink,favico,title,` +
-                        `link,raw,logs,` +
-                        `expand.tags.name,expand.tags.color,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.instance.name`,
+                        `link,raw,` +
+                        `authors,expand.tags.name,expand.tags.color,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.instance.name,expand.authors.id, expand.authors.avatar,expand.authors.name,expand.authors.collectionId`,
                 });
-                // console.log(res)
+                // console.log(res.expand.authors);
 
                 // console.log(res);
                 showcard = res;
@@ -69,21 +69,24 @@
         const card = await createNewCard(
             showcard.expand.board.expand.instance.id,
             e.detail,
+            showcard.authors
+                ? [...showcard.authors, $localToken?.model.id]
+                : [$localToken?.model.id],
             fileelement,
             currentfile,
         );
         const data = {
             ...card,
             tags: card.tags.map((e) => e.id),
-            logs: [
-                // ...showcard.logs,
-                `card content updated ${dateFormat(new Date())}`,
-            ],
+            // logs: [
+            //     // ...showcard.logs,
+            //     `card content updated ${dateFormat(new Date())}`,
+            // ],
             board: showcard.board,
         };
 
         // console.log(data)
-        const oldexpand = showcard.expand;
+        const oldexpand = { ...showcard.expand, tags: card.tags };
         const record = await pb.collection("cards").update(cardid, data);
         // console.log("%c record:","color:turquoise")
         // console.log(record)
