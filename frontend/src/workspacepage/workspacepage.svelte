@@ -24,7 +24,7 @@
     let modalcontent;
     let defaults = ["1fr", "2fr 1fr", `repeat(3, minmax(322px, 1fr))`];
 
-    let view;
+    let workspace;
     let dragDisabled = true;
     const gridDefaults = (len) => {
         defaults = ["1fr", "2fr 1fr", `repeat(${len + 1}, minmax(322px, 1fr))`];
@@ -43,12 +43,12 @@
             const data = e.detail;
             const boardrecord = await pb
                 .collection("boards")
-                .create({ ...data, instance: view.instance });
+                .create({ ...data, instance: workspace.instance });
 
             console.log(data);
-            const res = await pb.collection("views").update(view.id, {
-                ...view,
-                boards: [...view.boards, boardrecord.id],
+            const res = await pb.collection("workspaces").update(workspace.id, {
+                ...workspace,
+                boards: [...workspace.boards, boardrecord.id],
             });
             // const record = await pb.collection('views').getOne(view.id, {
             //     expand: 'boards.cards.tags',
@@ -63,19 +63,21 @@
         }
     };
 
-    const handleEditView = async (e) => {
-        console.log(e.detail, view);
+    const handleEditWorkspace = async (e) => {
+        console.log(e.detail, workspace);
 
         const data = {
             boards: e.detail.boards,
             name: e.detail.name,
             position: e.detail.position,
-            img: e.detail.img ? e.detail.img : view.img,
+            img: e.detail.img ? e.detail.img : workspace.img,
         };
 
         console.log(data);
-        const res = await pb.collection("views").update(view.id, data);
-        const record = await pb.collection("views").getOne(view.id, {
+        const res = await pb
+            .collection("workspaces")
+            .update(workspace.id, data);
+        const record = await pb.collection("workspaces").getOne(workspace.id, {
             expand: "instance,boards.cards.tags",
             fields:
                 `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
@@ -86,10 +88,10 @@
         });
 
         console.log(record);
-        view = record;
-        boards = view.expand?.boards;
+        workspace = record;
+        boards = workspace.expand?.boards;
         showModal = false;
-        grid = gridDefaults(view.boards.length - 1);
+        grid = gridDefaults(workspace.boards.length - 1);
     };
 
     let boards = [];
@@ -101,15 +103,15 @@
         console.log(e.detail);
 
         const record = await pb
-            .collection("views")
+            .collection("workspaces")
             .update(id, { boards: e.detail.tochildren });
 
         console.log(record);
         //  dragDisabled = true
     }
 
-    const getView = async () => {
-        const record = await pb.collection("views").getOne(id, {
+    const getWorkspace = async () => {
+        const record = await pb.collection("workspaces").getOne(id, {
             expand: "instance,boards.cards.tags",
             fields:
                 `collectionId,boards,grid,id,img,name,position,instance,expand.instance.users,` +
@@ -125,10 +127,12 @@
             $localToken ? $localToken?.model.id : "???",
         );
         boards = record.expand?.boards;
-        view = record;
-        grid = view.grid ? view.grid : gridDefaults(view.boards.length - 1);
+        workspace = record;
+        grid = workspace.grid
+            ? workspace.grid
+            : gridDefaults(workspace.boards.length - 1);
 
-        pb.collection("views").subscribe(
+        pb.collection("workspaces").subscribe(
             params.id,
             (e) => {
                 console.log("%c subscribe!", "color:teal");
@@ -136,14 +140,14 @@
                 console.log(e.record);
 
                 if (e.action === "update") {
-                    view = e.record;
-                    grid = view.grid
-                        ? view.grid
-                        : gridDefaults(view.boards.length - 1);
+                    workspace = e.record;
+                    grid = workspace.grid
+                        ? workspace.grid
+                        : gridDefaults(workspace.boards.length - 1);
                     boards = e.record.expand?.boards;
                 } else if (e.action === "delete") {
                     boardisactive = false;
-                    pb.collection("views").unsubscribe(params.id);
+                    pb.collection("workspaces").unsubscribe(params.id);
                     console.log("deleted!");
                 }
                 console.log("%c ------", "color:teal");
@@ -162,7 +166,7 @@
 
         return record;
     };
-    const promise = getView();
+    const promise = getWorkspace();
 
     const boardUpdate = (data) => {
         console.log(`%c ${data.detail.id}!!!!`, "color:skyblue;font-size:20px");
@@ -174,7 +178,7 @@
     };
 
     onDestroy(() => {
-        pb.collection("views").unsubscribe(params.id);
+        pb.collection("workspaces").unsubscribe(params.id);
     });
 </script>
 
@@ -212,9 +216,9 @@
                     {#if modalcontent === "edit"}
                         <Createworkspace
                             isopen={showModal}
-                            {view}
-                            on:newcontent={handleEditView}
-                            instance={view.instance}
+                            {workspace}
+                            on:newcontent={handleEditWorkspace}
+                            instance={workspace.instance}
                         />
                     {/if}
                     {#if modalcontent === "create"}
@@ -226,11 +230,11 @@
                 </Modal>
             {/if}
 
-            {#if view.img}
+            {#if workspace.img}
                 <div class="img">
                     <img
-                        style="object-position: 0% {view.position}%;"
-                        src="{$server.url}/api/files/{view.collectionId}/{view.id}/{view.img}"
+                        style="object-position: 0% {workspace.position}%;"
+                        src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}"
                         alt=""
                     />
                 </div>
@@ -259,7 +263,10 @@
                         }}
                     >
                         {#each boards as board (board.id)}
-                            <div id={board.id} class="board-container workspace-board-container">
+                            <div
+                                id={board.id}
+                                class="board-container workspace-board-container"
+                            >
                                 <div
                                     class="grabber-board"
                                     on:focus={() => (dragDisabled = false)}
@@ -287,7 +294,8 @@
                                         ...board,
                                         expand: {
                                             ...board.expand,
-                                            instance: view.expand?.instance,
+                                            instance:
+                                                workspace.expand?.instance,
                                         },
                                     }}
                                     boardpage={false}

@@ -12,7 +12,7 @@
     export let isopen = false;
     const dispatch = createEventDispatcher();
 
-    export let view = {
+    export let workspace = {
         id: "",
         img: "",
         name: "",
@@ -22,9 +22,9 @@
     };
 
     let showconfirmbox = false;
-    let imageposition = view.position;
-    let hasboards = view.boards.length > 0;
-    let boardlist = view.boards;
+    let imageposition = workspace.position;
+    let hasboards = workspace.boards.length > 0;
+    let boardlist = workspace.boards;
     let checkboxholder;
 
     const getallBoards = async () => {
@@ -39,15 +39,15 @@
         }
     }
 
-    console.log(view);
+    console.log(workspace);
 
-    let name = view.name;
-    let showImage = view.img != "";
+    let name = workspace.name;
+    let showImage = workspace.img != "";
 
     let input;
     let image;
 
-    let viewPreview = {
+    let workspacePreview = {
         name: "",
         img: null,
     };
@@ -61,14 +61,14 @@
             instance: instance,
         };
 
-        if (view.id === "") {
+        if (workspace.id === "") {
             name = "";
             showImage = false;
             input.value = "";
         }
         handleChange();
         console.log(checkboxholder?.querySelectorAll("input"));
-        if (view.id === "") {
+        if (workspace.id === "") {
             try {
                 checkboxholder.querySelectorAll("input").forEach((element) => {
                     element.checked = false;
@@ -82,8 +82,8 @@
     };
 
     const handleDelete = async () => {
-        console.log("delete", view.id);
-        await pb.collection("views").delete(view.id);
+        console.log("delete", workspace.id);
+        await pb.collection("workspaces").delete(workspace.id);
         push("/");
     };
 
@@ -103,33 +103,33 @@
 
     function handleChange() {
         console.log("change");
-        viewPreview = {
+        workspacePreview = {
             name: name,
             img: input.files[0],
         };
-        console.log(viewPreview);
+        console.log(workspacePreview);
 
-        if (viewPreview.img) {
+        if (workspacePreview.img) {
             showImage = true;
 
             const reader = new FileReader();
             reader.addEventListener("load", function () {
                 image.setAttribute("src", reader.result);
-                viewPreview = {
+                workspacePreview = {
                     name: name,
                     img: reader.result,
                 };
                 console.log(reader.result);
             });
 
-            reader.readAsDataURL(viewPreview.img);
+            reader.readAsDataURL(workspacePreview.img);
 
             return;
-        } else if (view.img != "") {
+        } else if (workspace.img != "") {
             showImage = true;
             image.setAttribute(
                 "src",
-                `${$server.url}/api/files/${view.collectionId}/${view.id}/${view.img}`,
+                `${$server.url}/api/files/${workspace.collectionId}/${workspace.id}/${workspace.img}`,
             );
             return;
         }
@@ -138,13 +138,13 @@
 </script>
 
 <main>
-    {#if input?.files?.length || view.img != ""}
+    {#if input?.files?.length || workspace.img != ""}
         <div class="board-header">
             {#if showImage}
                 <img
                     style="object-position: 0px {imageposition}%"
                     bind:this={image}
-                    src="{$server.url}/api/files/{view.collectionId}/{view.id}/{view.img}"
+                    src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}"
                     alt=""
                 />
             {/if}
@@ -174,7 +174,7 @@
                     {#each boards as board}
                         <div class="checkbox">
                             <input
-                                checked={view.boards.includes(board.id)}
+                                checked={workspace.boards.includes(board.id)}
                                 type="checkbox"
                                 id="checkbox-{board.id}"
                                 name={board.id}
@@ -198,7 +198,7 @@
         />
 
         <div class="flex">
-            {#if view.id != "" && name != ""}
+            {#if workspace.id != "" && name != ""}
                 <button on:click={handleSend}>Edit workspace</button>
                 <button
                     class="alert"

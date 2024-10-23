@@ -214,7 +214,8 @@ input::file-selector-button {
   height: 90px;
 }
 
-.viewcard-container .img-c,
+.workspacecard-container .img-c,
+.instance-box .board-header .img-c,
 .card.fullview .board-header .img-c {
   width: 36px;
   height: 36px;

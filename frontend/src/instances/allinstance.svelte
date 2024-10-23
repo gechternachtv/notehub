@@ -26,7 +26,7 @@
         });
         console.log(recordboards);
 
-        recordworkspaces = await pb.collection("views").getFullList({
+        recordworkspaces = await pb.collection("workspaces").getFullList({
             sort: "-created",
             fields: "id,name,img,collectionId,position,instance",
             filter: `instance.users ~ "${$localToken ? $localToken?.model.id : "aaa"}" || instance.public = "global-view"`,

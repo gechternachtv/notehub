@@ -1,7 +1,7 @@
 <script>
     import Boardcard from "../Allboards/boardcard.svelte";
     // @ts-ignore
-    import Createview from "./createworkspace.svelte";
+    import Createworkspace from "./createworkspace.svelte";
     import { push } from "svelte-spa-router";
     import { pb } from "../pb.js";
     // import {dndzone} from "svelte-dnd-action";
@@ -16,7 +16,7 @@
 
     let showModal = false;
 
-    let views = [];
+    let workspaces = [];
     const records = async () => {
         if (!usergroup) {
             usergroup = await pb
@@ -27,7 +27,7 @@
             console.log(usergroup);
         }
 
-        const records = await pb.collection("views").getFullList({
+        const records = await pb.collection("workspaces").getFullList({
             sort: "-created",
             expand: "boards",
             filter: `instance = "${usergroup.id}"`,
@@ -36,24 +36,24 @@
             // filter : 'instance == "pnfkrb2353g8zkp"'
         });
         console.log(records);
-        views = records;
+        workspaces = records;
         return records;
     };
     const promise = records();
 
-    const handleNewView = async (e) => {
+    const handleNewWorkspace = async (e) => {
         const data = e.detail;
-        const record = await pb.collection("views").create(data);
-        // const viewfull = await pb.collection('views').getOne(record.id, {
+        const record = await pb.collection("workspaces").create(data);
+        // const viewfull = await pb.collection('workspaces').getOne(record.id, {
         //     expand: 'boards',
         // });
-        //     views.unshift({...viewfull});
-        //     views = views;
+        //     workspaces.unshift({...viewfull});
+        //     workspaces = workspaces;
         //     console.log(data)
         push(`/workspace/${record.id}`);
     };
 
-    pb.collection("views").subscribe(
+    pb.collection("workspaces").subscribe(
         "*",
         (e) => {
             console.log("%c subscribe!", "color:teal");
@@ -61,14 +61,16 @@
             console.log(e.record);
 
             if (e.action === "create") {
-                views = [...views, e.record];
+                workspaces = [...workspaces, e.record];
             } else if (e.action === "update") {
-                views = views.map((a) => (a.id === e.record.id ? e.record : a));
+                workspaces = workspaces.map((a) =>
+                    a.id === e.record.id ? e.record : a,
+                );
             } else if (e.action === "delete") {
-                views = views.filter((a) => a.id != e.record.id);
+                workspaces = workspaces.filter((a) => a.id != e.record.id);
             }
             console.log("%c ------", "color:teal");
-            // views = e.record
+            // workspaces = e.record
         },
         {
             expand: "boards",
@@ -79,7 +81,7 @@
     );
 
     onDestroy(() => {
-        pb.collection("views").unsubscribe("*");
+        pb.collection("workspaces").unsubscribe("*");
     });
 </script>
 
@@ -93,9 +95,9 @@
                 </button>
 
                 <Modal bind:showModal>
-                    <Createview
+                    <Createworkspace
                         isopen={showModal}
-                        on:newcontent={handleNewView}
+                        on:newcontent={handleNewWorkspace}
                         instance={usergroup.id}
                     />
                 </Modal>
@@ -107,14 +109,14 @@
     </Contextmenu> -->
 
         <div class="grid">
-            {#each views as view}
-                <div class="viewcard-container">
-                    <a href="/#/workspace/{view.id}" class="img">
-                        {#if view.img}
+            {#each workspaces as workspace}
+                <div class="workspacecard-container">
+                    <a href="/#/workspace/{workspace.id}" class="img">
+                        {#if workspace.img}
                             <div class="img-c">
                                 <img
-                                    style="object-position: 0px {view.position}%;"
-                                    src="{$server.url}/api/files/{view.collectionId}/{view.id}/{view.img}"
+                                    style="object-position: 0px {workspace.position}%;"
+                                    src="{$server.url}/api/files/{workspace.collectionId}/{workspace.id}/{workspace.img}"
                                     alt=""
                                 />
                             </div>
@@ -126,11 +128,13 @@
                         {/if}
                     </a>
                     <div class="title">
-                        <a href="/#/workspace/{view.id}">{view.name}</a>
+                        <a href="/#/workspace/{workspace.id}"
+                            >{workspace.name}</a
+                        >
                     </div>
                     <div class="boardlist">
-                        {#if view.expand?.boards}
-                            {#each view.expand.boards as board}
+                        {#if workspace.expand?.boards}
+                            {#each workspace.expand.boards as board}
                                 <Boardcard workspacecard={true} {board} />
                             {/each}
                         {/if}
@@ -149,7 +153,7 @@
 </main>
 
 <style>
-    .viewcard-container {
+    .workspacecard-container {
         border-radius: 10px;
         overflow: hidden;
     }
@@ -191,7 +195,7 @@
             grid-template-columns: 1fr;
         }
     }
-    .viewcard-container {
+    .workspacecard-container {
         background: var(--card-bg);
         padding: 22px;
         padding-bottom: 0;
