@@ -31,7 +31,7 @@
                         `collectionId,check,created,id,color,` +
                         `file,imglink,favico,title,` +
                         `link,raw,` +
-                        `authors,expand.tags.name,expand.tags.color,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.usergroup.name,expand.authors.id, expand.authors.avatar,expand.authors.name,expand.authors.collectionId`,
+                        `authors,expand.tags.name,expand.tags.color,expand.tags.id,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.usergroup.name,expand.authors.id, expand.authors.avatar,expand.authors.name,expand.authors.collectionId`,
                 });
                 // console.log(res.expand.authors);
 

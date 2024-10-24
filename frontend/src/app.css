@@ -541,3 +541,7 @@ button {
 .workspace-board-container .card:not(.fullview) {
   padding-bottom: 28px !important;
 }
+
+.locked .labelcolor {
+  display: none !important;
+}

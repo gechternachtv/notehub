@@ -6,6 +6,7 @@
     import dateFormat from "../dateFormat.js";
     import getFile from "../getFile.js";
     import Confirmaction from "../confirmaction.svelte";
+    import colorsames from "../colorsnames";
     // import Modal from "../modal/modal.svelte";
     // import Moveoptions from "../Card/moveoptions.svelte";
     import Boardcard from "../Allboards/boardcard.svelte";
@@ -210,11 +211,32 @@
                 <div class="tags">
                     {#each card.expand?.tags as tag}
                         {#if tag.name != undefined}
-                            <a
-                                href="/#/search?tag={tag.name}"
-                                class="tag"
-                                style="background:{tag.color};">{tag.name}</a
-                            >
+                            <div class="tagcolor-container">
+                                <a
+                                    href="/#/search?tag={tag.name}"
+                                    class="tag"
+                                    style="background:{tag.color};"
+                                    >{tag.name}</a
+                                >
+                                <label class="labelcolor" for="color-{tag.name}"
+                                    >🖉
+                                    <input
+                                        id="color-{tag.name}"
+                                        class="color"
+                                        type="color"
+                                        value={colorsames(tag.color)}
+                                        on:change={async (e) => {
+                                            console.log(e.target.value);
+                                            tag.color = e.target.value;
+                                            await pb
+                                                .collection("tags")
+                                                .update(tag.id, {
+                                                    color: e.target.value,
+                                                });
+                                        }}
+                                    /></label
+                                >
+                            </div>
                         {/if}
                     {/each}
                 </div>
@@ -708,5 +730,23 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
+    }
+
+    .color {
+        display: none;
+    }
+    label {
+        cursor: pointer;
+        background: var(--button-bg);
+        color: var(--button-color);
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        max-height: 21px;
+    }
+    .tagcolor-container {
+        display: flex;
     }
 </style>

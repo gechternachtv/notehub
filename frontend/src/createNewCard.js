@@ -4,6 +4,7 @@
 import { pb } from "./pb.js"
 import { server } from "./stores"
 import { get } from "svelte/store"
+import colorhex from "./colorsnames"
 
 export default async (usergroup, markdownobj, authors, fileInputelement = null, currentfile = null) => {
 
@@ -212,7 +213,7 @@ export default async (usergroup, markdownobj, authors, fileInputelement = null, 
             if (tagWords[index].startsWith('#')) {
                 // search tag
                 const name = tagWords[index].replace(/^#/, '')
-                const color = name.split("-").length > 1 ? name.split("-")[1] : `var(--card-bg)`
+                const color = name.split("-").length > 1 ? name.split("-")[1] : `black`
                 const searchTags = await pb.collection('tags').getList(1, 2, {
                     filter: `name = "${name.split("-")[0]}"`,
 
@@ -220,13 +221,18 @@ export default async (usergroup, markdownobj, authors, fileInputelement = null, 
                 // console.log(`%c tags:`,"color:turquoise");
                 // console.log(searchTags);
                 if (searchTags.items[0]) {
+
+
                     tags.push(searchTags.items[0])
                     console.log(searchTags.items[0]);
+
+
+
                 } else {
                     // create tag
                     const data = {
                         "name": `${name.split("-")[0]}`,
-                        "color": `${color}`,
+                        "color": `${colorhex(color)}`,
                         "usergroup": usergroup
                     };
                     // console.log(data)
