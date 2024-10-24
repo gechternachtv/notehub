@@ -110,6 +110,8 @@ routerAdd("POST", "/meta", (c) => {
 
 onRecordBeforeUpdateRequest((e) => {
 
+    // console.log(JSON.stringify(e))
+
     const tags = e.record.get("tags")
     const currentCards = $app.dao().findRecordById("cards", e.record.get("id"))
 
@@ -123,6 +125,8 @@ onRecordBeforeUpdateRequest((e) => {
             const result = $app.dao().findRecordsByFilter(
                 "cards", `tags ~ "${excludedtag}"`
             )
+            console.log(result)
+
 
             if (result.length === 1) {
 
@@ -139,5 +143,30 @@ onRecordBeforeUpdateRequest((e) => {
 
     }
 
+
+}, "cards")
+
+
+onRecordBeforeDeleteRequest((e) => {
+    console.log(e.record)
+
+    const tags = e.record.get("tags")
+
+    tags?.forEach(tag => {
+
+        const result = $app.dao().findRecordsByFilter(
+            "cards", `tags ~ "${tag}"`
+        )
+
+        if (result.length === 1) {
+
+            const tagtodelete = $app.dao().findRecordById("tags", tag)
+            if (tagtodelete) {
+
+                const res = $app.dao().deleteRecord(tagtodelete)
+
+            }
+        }
+    })
 
 }, "cards")
