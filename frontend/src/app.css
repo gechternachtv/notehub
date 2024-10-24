@@ -545,3 +545,34 @@ button {
 .locked .labelcolor {
   display: none !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+.milkdown ul {
+  list-style-type: none;
+}
+
+
+.milkdown .list-item {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  gap: 7px;
+}
+
+.milkdown .list-item input {
+  margin: 0px;
+}
+
+.milkdown ul {
+  padding-inline-start: 20px;
+}

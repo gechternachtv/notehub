@@ -5,12 +5,12 @@
 		rootCtx,
 		defaultValueCtx,
 		editorViewCtx,
-		serializerCtx,
 	} from "@milkdown/core";
 	import { commonmark } from "@milkdown/preset-commonmark";
-	import { insert, replaceAll } from "@milkdown/utils";
+	import { replaceAll } from "@milkdown/utils";
 	import { createEventDispatcher } from "svelte";
-	import { onDestroy } from "svelte";
+	import { gfm } from "@milkdown/kit/preset/gfm";
+	import { listItemBlockComponent } from "@milkdown/kit/component/list-item-block";
 
 	let editorel;
 	let sendBtn = (e) => {
@@ -60,6 +60,8 @@
 			// .use(nord)
 			// .use(emoji)
 			.use(commonmark)
+			.use(gfm)
+			.use(listItemBlockComponent)
 			// .use(listener)
 			.create();
 
