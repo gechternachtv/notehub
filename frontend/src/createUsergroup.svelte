@@ -39,26 +39,30 @@
     ];
 
     function handleSubmit() {
+        const validateUsers = (arr) => {
+            return Array.from(new Set(arr.filter((e) => e.length > 14)));
+        };
+
         if (currentUsergroup.id) {
             dispatch("edit", {
                 id: currentUsergroup.id,
                 name: name,
                 public: publicperm,
-                users: [
+                users: validateUsers([
                     $localToken?.model?.id,
                     ...users.map((e) => e.id),
                     ...newusers.split(","),
-                ],
+                ]),
             });
         } else {
             dispatch("new", {
                 name: name,
                 public: publicperm,
-                users: [
+                users: validateUsers([
                     $localToken?.model?.id,
                     ...users.map((e) => e.id),
                     ...newusers.split(","),
-                ],
+                ]),
                 owner: $localToken?.model?.id,
             });
         }

@@ -193,7 +193,7 @@
         {#await promise then res}
             {#if canedit}
                 <Contextmenu>
-                    <!-- {view.name} -->
+                    <!-- {workspace.name} -->
                     <button
                         on:click={() => {
                             showModal = true;

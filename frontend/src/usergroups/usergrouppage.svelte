@@ -42,7 +42,7 @@
             usergroup.public === "edit"
         ) {
             const newrecord = await pb
-                .collection("usergroup")
+                .collection("usergroups")
                 .update(params.usergroup, {
                     name: usergroup.name,
                     public: usergroup.public,
@@ -71,7 +71,7 @@
             )
         ) {
             const newrecord = await pb
-                .collection("usergroup")
+                .collection("usergroups")
                 .update(params.usergroup, {
                     name: usergroup.name,
                     public: usergroup.public,
@@ -100,11 +100,13 @@
 
     const handleeditusergroup = async (e) => {
         console.log("edit!");
+        console.log(usergroup);
         console.log(e.detail);
 
         const record = await pb
-            .collection("usergroup")
+            .collection("usergroups")
             .update(e.detail.id, e.detail);
+
         const users = await pb.collection("usergroups").getOne(e.detail.id, {
             fields: "expand",
             expand: "users",

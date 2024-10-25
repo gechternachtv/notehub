@@ -32,14 +32,15 @@
         border-radius: 0 0px 10px 0px;
         padding-left: 16px;
         font-size: 2.1rem;
-        gap: 17px;
+        gap: 9px;
     }
 
     @media (min-width: 991px) {
         .absolute {
-            padding: 5px 20px;
+            padding: 6px 7px;
+            padding-left: 20px;
             top: 20px;
-            font-size: 3.2rem;
+            font-size: 1.9rem;
             z-index: 2;
         }
     }

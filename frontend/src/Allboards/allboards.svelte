@@ -22,7 +22,7 @@
         if (!usergroup) {
             // console.log("...getting")
             usergroup = await pb
-                .collection("usergroup")
+                .collection("usergroups")
                 .getOne(params.usergroup, {
                     fields: "public,id,users",
                 });

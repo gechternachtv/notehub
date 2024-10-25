@@ -20,7 +20,7 @@
     const records = async () => {
         if (!usergroup) {
             usergroup = await pb
-                .collection("usergroup")
+                .collection("usergroups")
                 .getOne(params.usergroup, {
                     fields: "public,id,users",
                 });
