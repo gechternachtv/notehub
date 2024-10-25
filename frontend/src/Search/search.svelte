@@ -28,15 +28,18 @@
     let sortby = "newest";
     // let searchtag = "";
     let hasparam;
+    let usergroupid = false;
 
     $: {
         console.log(
-            `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}`,
+            `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""} ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
         );
     }
 
-    if (new URLSearchParams($querystring).get("tag")) {
-        searchtags.push(new URLSearchParams($querystring).get("tag"));
+    const params = new URLSearchParams($querystring);
+    if (params.get("tag") && params.get("usergroup")) {
+        usergroupid = params.get("usergroup");
+        searchtags.push(params.get("tag"));
         hasparam = true;
     }
 
@@ -58,7 +61,7 @@
             // console.log(text);
 
             const resultList = await pb.collection("cards").getList(1, 60, {
-                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}"`,
+                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
                 sort: `${sortby === "oldest" ? "" : "-"}created`,
                 expand: "tags",
             });
@@ -72,13 +75,31 @@
 
     let promise;
     let parameterTag;
+    let allTagsUsergroups;
 
     const getTags = async () => {
         // fetch a paginated records list
         const records = await pb.collection("tags").getFullList({
             sort: "-created",
+            expand: "usergroup",
+            fields: "name,color,id,expand.usergroup.id,expand.usergroup.name",
         });
 
+        let allTagsUsergroupsMap = new Map();
+
+        records.forEach((a) => {
+            allTagsUsergroupsMap.set(
+                a.expand.usergroup.id,
+                a.expand.usergroup.name,
+            );
+        });
+
+        allTagsUsergroups = Array.from(
+            allTagsUsergroupsMap,
+            ([name, value]) => ({ id: name, name: value }),
+        );
+
+        console.log(allTagsUsergroups);
         return records;
     };
 
@@ -110,28 +131,36 @@
     {#await promisetags}
         <!-- promise is pending -->
     {:then tags}
-        <div class="tags">
-            {#each tags as tag}
-                <button
-                    class:active={searchtags.includes(tag.name)}
-                    on:click={() => {
-                        if (searchtags.includes(tag.name)) {
-                            searchtags = searchtags.filter(
-                                (e) => e != tag.name,
-                            );
-                            console.log(searchtags);
-                        } else {
-                            searchtags = [...searchtags, tag.name];
-                            console.log(searchtags);
-                        }
+        {#each allTagsUsergroups as usergroup}
+            {usergroup.name}
+            <!-- content here -->
+            <div class="tags">
+                {#each tags.filter((a) => a.expand.usergroup.id === usergroup.id) as tag}
+                    <button
+                        class:active={searchtags.includes(tag.name) &&
+                            usergroupid === tag.expand.usergroup.id}
+                        on:click={() => {
+                            if (searchtags.includes(tag.name)) {
+                                searchtags = searchtags.filter(
+                                    (e) => e != tag.name,
+                                );
+                            } else {
+                                searchtags = [...searchtags, tag.name];
+                            }
 
-                        // promise = getRecords();
-                    }}
-                    class="tag tag-{tag.id}"
-                    style="background:{tag.color};">{tag.name}</button
-                >
-            {/each}
-        </div>
+                            if (tag.expand.usergroup.id != usergroupid) {
+                                usergroupid = tag.expand.usergroup.id;
+                                searchtags = [tag.name];
+                            }
+
+                            // promise = getRecords();
+                        }}
+                        class="tag tag-{tag.id}"
+                        style="background:{tag.color};">{tag.name}</button
+                    >
+                {/each}
+            </div>
+        {/each}
     {:catch error}
         <!-- promise was rejected -->
     {/await}

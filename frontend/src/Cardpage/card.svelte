@@ -7,8 +7,8 @@
     import getFile from "../getFile.js";
     import Confirmaction from "../confirmaction.svelte";
     import colorsames from "../colorsnames";
-    // import Modal from "../modal/modal.svelte";
-    // import Moveoptions from "../Card/moveoptions.svelte";
+    import Modal from "../modal/modal.svelte";
+    import Moveoptions from "../Card/moveoptions.svelte";
     import Boardcard from "../Allboards/boardcard.svelte";
     import { localToken, server } from "../stores.js";
 
@@ -24,7 +24,7 @@
     let readmode = true;
     let date;
     let showconfirmbox = false;
-    // let showModal = false;
+    let showModalMove = false;
     const dispatch = createEventDispatcher();
     const setInfo = (card) => {
         // checked = card.check === "done";
@@ -77,12 +77,20 @@
     //     dispatch("updatefront", card);
     // };
     // const handlemovetoBoard = async ()=>{ console.log("hey")}
-    // const handlemovetoBoard = async () => {
-    //     showModal = true;
-    //     // movetoBoard("tw5augb2ospnnzx")
-    // };
+    const handlemovetoBoard = async () => {
+        showModalMove = true;
+        // movetoBoard("tw5augb2ospnnzx")
+    };
 
-    // const movetoBoard = async (boardtoinsert) => {
+    const movetoBoard = async (boardtoinsert) => {
+        console.log(boardtoinsert);
+        const record = await pb.collection("cards").update(card.id, {
+            board: boardtoinsert.id,
+        });
+        console.log(record);
+        card.board = boardtoinsert.id;
+        card.expand.board = boardtoinsert;
+    };
     //     showModal = false;
     //     const currentboard = await pb
     //         .collection("boards")
@@ -118,16 +126,16 @@
     class:locked={readmode}
     style="border-left: 3px solid {card.color}"
 >
-    <!-- <Modal bind:showModal>
+    <Modal bind:showModal={showModalMove}>
         <Moveoptions
-            instance={card?.expand?.board?.instance}
-            isopen={showModal}
-            currentboard={card.board}
+            usergroup={card?.expand?.board?.usergroup}
+            isopen={showModalMove}
+            currentboard={{ id: card.board }}
             on:submit={(e) => {
                 movetoBoard(e.detail);
             }}
         ></Moveoptions>
-    </Modal> -->
+    </Modal>
     <!-- {card.board} -->
     <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
 
@@ -213,7 +221,8 @@
                         {#if tag.name != undefined}
                             <div class="tagcolor-container">
                                 <a
-                                    href="/#/search?tag={tag.name}"
+                                    href="/#/search?tag={tag.name}&usergroup={card
+                                        .expand.board.usergroup}"
                                     class="tag"
                                     style="background:{tag.color};"
                                     >{tag.name}</a
@@ -320,9 +329,9 @@
                 </div>
             {/if}
 
-            <!-- <button class="cardcontrols-move" on:click={handlemovetoBoard}
+            <button class="cardcontrols-move" on:click={handlemovetoBoard}
                 >move ➜</button
-            > -->
+            >
             <!-- <a href="/#/board/{card.board}">current board</a> -->
             <button
                 class="alert cardcontrols-delete"

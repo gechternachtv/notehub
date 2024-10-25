@@ -61,53 +61,27 @@
     let counter = cards.length;
 
     async function handleDndFinalize(e) {
-        console.log("%c drop details: <<<<<<-----", "color:teal");
-        console.log(counter, cards);
-        console.log(board.name);
-        console.log("%c  ----->>>>>", "color:red");
-        console.log(e.detail.tochildren);
-        // console.log(cards)
-        //log
+        console.log(e);
+        // console.log("%c drop details: <<<<<<-----", "color:teal");
+        // console.log(counter, cards);
+        // console.log(board.name);
+        // console.log("%c  ----->>>>>", "color:red");
+        // console.log(e.detail.tochildren);
+        console.log(board.cards.length, e.detail.tochildren.length);
+        if (e.detail.tochildren.length >= board.cards.length) {
+            console.log(
+                "%c  ----->>>>> e to children:",
+                "color:teal;font-size:50px",
+            );
+            console.log(e.detail.tochildren);
+            const record = await pb
+                .collection("boards")
+                .update(params.id, { cards: e.detail.tochildren });
 
-        //
-
-        // cards = e.detail.items;
-
-        // if(counter<cards.length){
-        //     const card = cards.find(o => o.id === e.detail.info.id)
-        //     if(board.name === "done"){
-        //         card.check = "done"
-        //         card.logs = [...card.logs,`card marked as "completed" at ${dateFormat(new Date())}`]
-        //     }
-        //     const carddata = {...card, logs:[...card.logs,`moved the card to ${board.name} - ${dateFormat(new Date())}`],board:board.id}
-
-        //     console.log(carddata);
-        //     await pb.collection('cards').update(e.detail.info.id,carddata);
-
-        // }
-
-        // if(e.detail.fromchildren){
-        //     const record = await pb.collection('boards').update(e.detail.fromtarget, {cards:e.detail.fromchildren});
-        //     console.log(record)
-        // }
-        console.log("%c  ----->>>>>", "color:teal;font-size:50px");
-        console.log(e.detail);
-        e.detail.tochildren.forEach(async (item) => {
-            const itemrec = await pb
-                .collection("cards")
-                .update(item, { board: params.id });
-        });
-        // const cardrecord = await pb.collection('boards').update(params.id, {cards:e.detail.tochildren});
-        const record = await pb
-            .collection("boards")
-            .update(params.id, { cards: e.detail.tochildren });
-        // board = {...record,cards:cards}
-        // dispatch('boardupdate',{...board,cards:cards})
-
-        console.log(record);
+            console.log(record);
+        }
 
         counter = e.detail.tochildren.length;
-        // dragDisabled = true
     }
 
     //
@@ -125,11 +99,11 @@
                         .getOne(params.id, {
                             expand: "cards.tags,usergroup",
                             fields:
-                                `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,` +
+                                `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.id,` +
                                 `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,` +
-                                `expand.cards.expand.tags.name,expand.cards.expand.tags.color`,
+                                `expand.cards.expand.tags.name,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
                         });
 
                     console.log(record);
@@ -201,11 +175,11 @@
                     {
                         expand: "cards.tags,usergroup,authors",
                         fields:
-                            `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,` +
+                            `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.id,` +
                             `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                             `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                             `expand.cards.link,expand.cards.text,` +
-                            `expand.cards.expand.tags.name,expand.cards.expand.tags.color`,
+                            `expand.cards.expand.tags.name,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
                     },
                 );
 
@@ -230,7 +204,6 @@
         document
             .querySelector(".card-grid")
             .setAttribute("style", `max-height: 300px;opacity:0.6`);
-        debugger;
 
         const card = await createNewCard(
             usergroup?.id,
@@ -238,7 +211,7 @@
             [$localToken?.model.id],
             fileelement,
         );
-        debugger;
+
         document.querySelector(".card-grid").setAttribute("style", ``);
         window.scrollTo(0, 0);
 
@@ -258,9 +231,9 @@
             cards: newcardlist,
         };
 
-        const boardrecord = await pb
-            .collection("boards")
-            .update(board.id, boarddata);
+        // const boardrecord = await pb
+        //     .collection("boards")
+        //     .update(board.id, boarddata);
 
         // card.id = cardrecord.id
 

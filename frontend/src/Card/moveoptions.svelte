@@ -11,9 +11,11 @@
 
     const getAllBoards = async () => {
         console.log("got all boards!");
+        console.log(usergroup);
         return await pb.collection("boards").getFullList({
             sort: "-created",
-            expand: "boards",
+            expand: "usergroup",
+            fields: "id,name,color,img,collectionId,expand.usergroup.name,expand.usergroup.id,usergroup",
             filter: `usergroup = "${usergroup}"`,
         });
     };
@@ -34,7 +36,7 @@
             `input[name="boards"]:checked`,
         )?.value;
         if (id) {
-            dispatch("submit", id);
+            dispatch("submit", currentboard);
         }
     };
 </script>
@@ -51,11 +53,18 @@
                         <div class="checkbox">
                             <input
                                 class=""
-                                checked={board.id === currentboard}
+                                checked={board.id === currentboard.id}
                                 type="radio"
                                 id="checkbox-{board.id}"
                                 name="boards"
                                 value={board.id}
+                                on:change={(e) => {
+                                    console.log(e);
+                                    if (e.target.checked) {
+                                        console.log(board);
+                                        currentboard = board;
+                                    }
+                                }}
                             />
                             <label for="checkbox-{board.id}">
                                 <div class="boardcontainer">

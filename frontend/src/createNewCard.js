@@ -26,8 +26,6 @@ export default async (usergroup, markdownobj, authors, fileInputelement = null, 
             resultString = resultString.replaceAll(element, "")
         });
 
-        console.log(resultString)
-        console.log("😬")
         return resultString;
 
     }
@@ -99,15 +97,7 @@ export default async (usergroup, markdownobj, authors, fileInputelement = null, 
         console.log(words);
 
 
-        // if (words[0] === "[]") {
-        //     card.check = "islist";
 
-        // } else if (words[0] === "[x]") {
-        //     card.check = "done"
-
-        // } else {
-        //     card.check = "";
-        // }
 
         //link-check
         // console.log(texts)
@@ -207,46 +197,46 @@ export default async (usergroup, markdownobj, authors, fileInputelement = null, 
         const tags = []
 
         const tagWords = words.filter(e => e.startsWith("#"))
+        const searchTags = []
         for (let index = 0; index < tagWords.length; index++) {
             const e = tagWords[index];
+            // search tag
+            const namewithouthash = tagWords[index].replace(/^#/, '')
+            const name = namewithouthash.split("-").length > 1 ? namewithouthash.split("-")[0] : namewithouthash
+            const color = namewithouthash.split("-").length > 1 ? namewithouthash.split("-")[1] : `#294873`
 
-            if (tagWords[index].startsWith('#')) {
-                // search tag
-                const name = tagWords[index].replace(/^#/, '')
-                const color = name.split("-").length > 1 ? name.split("-")[1] : `black`
-                const searchTags = await pb.collection('tags').getList(1, 2, {
-                    filter: `name = "${name.split("-")[0]}"`,
+            searchTags.push({ name: name, color: color, usergroup: usergroup })
 
-                });
-                // console.log(`%c tags:`,"color:turquoise");
-                // console.log(searchTags);
-                if (searchTags.items[0]) {
+        }
 
 
-                    tags.push(searchTags.items[0])
-                    console.log(searchTags.items[0]);
+        //
+        if (searchTags.length) {
+            console.log("sending...")
+            console.log(searchTags)
+            const res = await (await fetch(`${get(server).url}/createtags`, {
+                method: "POST",
+                mode: "cors", // no-cors, *cors, same-origin
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, *same-origin, omit
+                headers: {
+                    "Content-Type": "application/json",
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: "follow", // manual, *follow, error
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify({ tags: searchTags })
+            })).json()
+
+            console.log(res)
+            card.tags = res
+            console.log(card.tags)
 
 
-
-                } else {
-                    // create tag
-                    const data = {
-                        "name": `${name.split("-")[0]}`,
-                        "color": `${colorhex(color)}`,
-                        "usergroup": usergroup
-                    };
-                    // console.log(data)
-                    const record = await pb.collection('tags').create(data);
-                    console.log(record)
-                    tags.push(record)
-                }
-            }
 
 
 
         }
-        card.tags = tags
-
 
 
 

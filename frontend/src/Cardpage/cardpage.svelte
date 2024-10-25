@@ -27,7 +27,7 @@
                 const res = await pb.collection("cards").getOne(id, {
                     expand: "board.usergroup,tags,authors",
                     fields:
-                        `id,board,expand.board.id,expand.board.cards,expand.board.expand.usergroup.users,expand.board.expand.usergroup.id,` +
+                        `id,board,expand.board.id,expand.board.usergroup,expand.board.cards,expand.board.expand.usergroup.users,expand.board.expand.usergroup.id,` +
                         `collectionId,check,created,id,color,` +
                         `file,imglink,favico,title,` +
                         `link,raw,` +

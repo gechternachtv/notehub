@@ -158,7 +158,7 @@
                     {#each card.expand?.tags as tag}
                         {#if tag.name != undefined}
                             <a
-                                href="/#/search?tag={tag.name}"
+                                href="/#/search?tag={tag.name}&usergroup={tag.usergroup}"
                                 class="tag"
                                 style="background:{tag.color};">{tag.name}</a
                             >
@@ -173,8 +173,10 @@
                 <div class="tags">
                     {#each card.tags as tag}
                         {#if tag.name != undefined}
-                            <span class="tag" style="background:{tag.color};"
-                                >{tag.name}</span
+                            <a
+                                href="/#/search?tag={tag.name}&usergroup={tag.usergroup}"
+                                class="tag"
+                                style="background:{tag.color};">{tag.name}</a
                             >
                         {/if}
                     {/each}

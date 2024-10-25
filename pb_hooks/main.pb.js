@@ -1,3 +1,4 @@
+//get meta from link
 routerAdd("POST", "/meta", (c) => {
 
     const data = $apis.requestInfo(c).data
@@ -38,7 +39,7 @@ routerAdd("POST", "/meta", (c) => {
             timeout: 120, // in seconds
         })
 
-        // console.log(res.raw)
+
         const headRegex = /<head>([\s\S]*?)<\/head>/i;
         const matches = res.raw?.match(headRegex);
         if (matches) {
@@ -50,82 +51,91 @@ routerAdd("POST", "/meta", (c) => {
 
 })
 
+routerAdd("POST", "/createtags", (c) => {
+    const data = $apis.requestInfo(c).data
 
-// routerAdd("POST", "/getsingle", (c) => {
-
-//     const data = $apis.requestInfo(c).data
-
-//     console.log("url:",data.url)
-
-//     const res = $http.send({
-//         url:     data.url,
-//         method:  "GET",
-//         body:    "", // eg. JSON.stringify({"test": 123})
-//         headers: {"content-type": "application/json"},
-//         timeout: 120, // in seconds
-//     })
-
-//             return c.json(200, res)
-
-// })
-
-// routerAdd("GET", "/getupdates", async (c) => {
-
-//     //console.log(c)
-
-//     console.log("cards:")
+    const returnTags = []
 
 
-//     const result = arrayOf(new DynamicModel({
-//         "id":"",
-//         "link":""
-//     }))
+    data.tags.forEach(tag => {
+        try {
+            const tagrecord = $app.dao().findFirstRecordByFilter(
+                "tags", `name = "${tag.name}" && usergroup = "${tag.usergroup}"`)
+            console.log(JSON.stringify(tagrecord))
+            returnTags.push(tagrecord)
+        }
+        catch (error) {
 
-//     $app.dao().db()
-//         .newQuery("SELECT id, link FROM cards WHERE link IS NOT NULL AND link != '';")
-//         .all(result)
+            const collection = $app.dao().findCollectionByNameOrId("tags")
 
-//         console.log(result)
+            const record = new Record(collection)
 
-//         const foo = await Promise.all(result.map(async (singlePage) => {
-//             console.log(singlePage)
-//             console.log(singlePage.link)
-//             const request = $http.send({
-//                 url:     singlePage.link,
-//                 method:  "GET",
-//                 body:    "", // eg. JSON.stringify({"test": 123})
-//                 headers: {"content-type": "application/json"},
-//                 timeout: 120, // in seconds
-//             })
+            const form = new RecordUpsertForm($app, record)
 
-//                     return {
-//                         model:singlePage,
-//                         resopnse:request
-//                     }
+            const newtagdata = {
+                "name": tag.name,
+                "color": tag.color,
+                "usergroup": tag.usergroup,
+            }
 
-//         }))
 
-//     return c.json(200, foo)
-// })
+
+            form.loadData(newtagdata)
+
+            form.submit()
+
+            const tagrecord = $app.dao().findFirstRecordByFilter(
+                "tags", `name = "${tag.name}" && usergroup = "${tag.usergroup}"`)
+            console.log(JSON.stringify(tagrecord))
+            returnTags.push(tagrecord)
+
+        }
+
+
+    })
+
+    return c.json(200, returnTags)
+})
+
+
+onRecordAfterCreateRequest((e) => {
+
+    //board bind
+    const boardtoappend = $app.dao().findRecordById("boards", e.record.get("board"))
+
+    if (boardtoappend) {
+
+        const boardtoappendForm = new RecordUpsertForm($app, boardtoappend)
+        boardtoappendForm.loadData({
+            "cards": [e.record.get("id"), ...boardtoappend.get("cards")],
+        })
+        boardtoappendForm.submit();
+
+    } else {
+        throw new BadRequestError("board must exist")
+    }
+
+
+}, "cards")
+
 
 onRecordBeforeUpdateRequest((e) => {
 
-    // console.log(JSON.stringify(e))
 
     const tags = e.record.get("tags")
-    const currentCards = $app.dao().findRecordById("cards", e.record.get("id"))
+    const currentCard = $app.dao().findRecordById("cards", e.record.get("id"))
 
+    //card tag validation (no leftover tags)
+    if (currentCard.get("tags")?.join(",") != tags?.join(",")) {
 
-    if (currentCards.get("tags")?.join(",") != tags?.join(",")) {
-
-        const excludedTags = currentCards.get("tags").filter(element => !tags.includes(element));
+        const excludedTags = currentCard.get("tags").filter(element => !tags.includes(element));
 
         excludedTags?.forEach(excludedtag => {
 
             const result = $app.dao().findRecordsByFilter(
                 "cards", `tags ~ "${excludedtag}"`
             )
-            console.log(result)
+
 
 
             if (result.length === 1) {
@@ -144,11 +154,43 @@ onRecordBeforeUpdateRequest((e) => {
     }
 
 
+    //current board validation
+    if (currentCard.get("board") != e.record.get("board")) {
+
+        const oldboard = $app.dao().findRecordById("boards", currentCard.get("board"))
+        const newboard = $app.dao().findRecordById("boards", e.record.get("board"))
+
+
+
+
+
+        const oldboardrecord = $app.dao().findRecordById("boards", oldboard.get("id"))
+        const oldboardform = new RecordUpsertForm($app, oldboardrecord)
+        oldboardform.loadData({
+            "cards": oldboardrecord.get("cards").filter(a => a != e.record.get("id")),
+        })
+        oldboardform.submit();
+
+
+
+        if (!newboard.get("cards").find(a => { a === e.record.get("id") })) {
+
+            const record = $app.dao().findRecordById("boards", newboard.get("id"))
+            const form = new RecordUpsertForm($app, record)
+            form.loadData({
+                "cards": [e.record.get("id"), ...record.get("cards")],
+            })
+            form.submit();
+        }
+    }
+
+
 }, "cards")
 
 
+//card delete tag validation (no leftover tags)
 onRecordBeforeDeleteRequest((e) => {
-    console.log(e.record)
+
 
     const tags = e.record.get("tags")
 
@@ -170,3 +212,83 @@ onRecordBeforeDeleteRequest((e) => {
     })
 
 }, "cards")
+
+//tags (no leftovers)
+onRecordBeforeDeleteRequest((e) => {
+    try {
+
+        $app.dao().expandRecord(e.record, ["cards"], null)
+
+
+        e.record.expandedAll("cards").forEach(card => {
+
+            card.get("tags").forEach(tag => {
+                const result = $app.dao().findRecordsByFilter(
+                    "cards", `tags ~ "${tag}"`
+                )
+
+                console.log(result)
+
+                result.forEach(cardWithTag => {
+                    console.log(JSON.stringify(cardWithTag))
+                })
+
+                if (!result.some(a => a.get("board") != e.record.get("id"))) {
+
+                    const tagtodelete = $app.dao().findRecordById("tags", tag)
+                    if (tagtodelete) {
+
+                        const res = $app.dao().deleteRecord(tagtodelete)
+
+                    }
+
+
+                }
+
+            })
+
+
+        })
+
+    } catch (err) {
+        console.log(err)
+    }
+
+}, "boards")
+
+
+onRecordAfterUpdateRequest((e) => {
+
+    // const record = $app.dao().findRecordById("boards", e.record.get("id"))
+    $app.dao().expandRecord(e.record, ["cards"], null)
+
+
+    e.record.expandedAll("cards").forEach(card => {
+
+
+        if (card.get("board") != e.record.get("id")) {
+
+            const oldboard = $app.dao().findRecordById("boards", card.get("board"))
+
+
+            const cardform = new RecordUpsertForm($app, card)
+            cardform.loadData({
+                "board": e.record.get("id"),
+            })
+            cardform.submit();
+
+            if (oldboard) {
+                const oldboardform = new RecordUpsertForm($app, oldboard)
+                oldboardform.loadData({
+                    "cards": oldboard.get("cards").filter(e => e != card.get("id")),
+                })
+                oldboardform.submit();
+            }
+
+
+
+
+        }
+    })
+
+}, "boards")
