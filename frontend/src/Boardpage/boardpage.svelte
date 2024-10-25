@@ -13,6 +13,7 @@
     import { onDestroy } from "svelte";
     import { createEventDispatcher } from "svelte";
     import { localToken } from "../stores.js";
+    import Contextmenu from "../contextmenu.svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -124,7 +125,7 @@
                         .getOne(params.id, {
                             expand: "cards.tags,usergroup",
                             fields:
-                                `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,` +
+                                `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                                 `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,` +
@@ -200,7 +201,7 @@
                     {
                         expand: "cards.tags,usergroup,authors",
                         fields:
-                            `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,` +
+                            `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                             `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                             `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                             `expand.cards.link,expand.cards.text,` +
@@ -335,12 +336,20 @@
         {#await promise then views}
             <div class:locked={!canedit} class="container">
                 <!-- {board.id} -->
+
                 <Boardcard {board} />
+
                 {#if boardpage}
+                    <a
+                        class="board-usergroupbread"
+                        href="/#/usergroup/{board.usergroup}"
+                        >← {board.expand.usergroup.name}
+                    </a>
+
                     <div class="controls">
                         {#if canedit}
                             <button on:click={() => (showModal = true)}>
-                                Edit board
+                                Edit
                             </button>
                         {/if}
 
@@ -482,5 +491,16 @@
         .listviewtoggle {
             display: none;
         }
+    }
+
+    .board-usergroupbread {
+        display: block;
+        margin-bottom: 20px;
+        display: inline-block;
+        background: var(--button-bg);
+        color: var(--button-color);
+        width: auto;
+        padding: 3px 11px;
+        border-radius: 10px;
     }
 </style>

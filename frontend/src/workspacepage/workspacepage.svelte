@@ -80,7 +80,7 @@
         const record = await pb.collection("workspaces").getOne(workspace.id, {
             expand: "usergroup,boards.cards.tags",
             fields:
-                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,` +
+                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                 `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -114,7 +114,7 @@
         const record = await pb.collection("workspaces").getOne(id, {
             expand: "usergroup,boards.cards.tags",
             fields:
-                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,` +
+                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                 `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -156,7 +156,7 @@
             {
                 expand: "usergroup,boards.cards.tags",
                 fields:
-                    `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,` +
+                    `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                     `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                     `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                     `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -193,8 +193,17 @@
         {#await promise then res}
             {#if canedit}
                 <Contextmenu>
-                    <!-- {workspace.name} -->
+                    <div class="breadcrumb">
+                        <div class="contextmenu-link">
+                            <a href="/#/usergroup/{workspace.usergroup}"
+                                >{workspace.expand.usergroup.name}
+                            </a>
+                            ➜
+                        </div>
+                        <div>{workspace.name}</div>
+                    </div>
                     <button
+                        class="contextmenu-btn"
                         on:click={() => {
                             showModal = true;
                             modalcontent = "edit";
@@ -203,12 +212,13 @@
                         edit
                     </button>
                     <button
+                        class="contextmenu-btn"
                         on:click={() => {
                             showModal = true;
                             modalcontent = "create";
                         }}
                     >
-                        create
+                        +
                     </button>
                 </Contextmenu>
 
@@ -439,9 +449,26 @@
     }
 
     .grid {
-        /* background:tomato; */
         position: absolute;
         left: 0;
         width: 100%;
+    }
+
+    @media (min-width: 991px) {
+        .contextmenu-btn {
+            padding: 1px 13px;
+        }
+    }
+    .contextmenu-link {
+        color: var(--header-color);
+        opacity: 0.7;
+    }
+    .contextmenu-link a {
+        color: var(--header-color);
+    }
+    .breadcrumb {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 </style>
