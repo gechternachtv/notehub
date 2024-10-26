@@ -1,5 +1,9 @@
 //get meta from link
+
 routerAdd("POST", "/meta", (c) => {
+
+    const apikeymodule = require(`${__hooks}/apikey.js`)
+    const apikey = process.env.LINKPREVIEW ? process.env.LINKPREVIEW : apikeymodule.get()
 
     const data = $apis.requestInfo(c).data
 
@@ -14,7 +18,7 @@ routerAdd("POST", "/meta", (c) => {
             method: "GET",
             body: "",
             headers: {
-                'X-Linkpreview-Api-Key': "cc30c453f69296da0c6dff082856c83e",
+                'X-Linkpreview-Api-Key': `${apikey}`,
             },
             timeout: 120, // in seconds
         })
