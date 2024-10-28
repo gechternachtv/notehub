@@ -29,10 +29,11 @@
     // let searchtag = "";
     let hasparam;
     let usergroupid = false;
+    let tagsORAND = "&&";
 
     $: {
         console.log(
-            `${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""} ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
+            `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
         );
     }
 
@@ -61,7 +62,7 @@
             // console.log(text);
 
             const resultList = await pb.collection("cards").getList(1, 60, {
-                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags.name ?~ "${e}" ${i === searchtags.length - 1 ? "" : "||"}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
+                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
                 sort: `${sortby === "oldest" ? "" : "-"}created`,
                 expand: "tags",
             });
@@ -132,25 +133,27 @@
         <!-- promise is pending -->
     {:then tags}
         {#each allTagsUsergroups as usergroup}
-            {usergroup.name}
+            <div class="usergroup-name">
+                {usergroup.name}
+            </div>
             <!-- content here -->
             <div class="tags">
                 {#each tags.filter((a) => a.expand.usergroup.id === usergroup.id) as tag}
                     <button
-                        class:active={searchtags.includes(tag.name) &&
+                        class:active={searchtags.includes(tag.id) &&
                             usergroupid === tag.expand.usergroup.id}
                         on:click={() => {
-                            if (searchtags.includes(tag.name)) {
+                            if (searchtags.includes(tag.id)) {
                                 searchtags = searchtags.filter(
-                                    (e) => e != tag.name,
+                                    (e) => e != tag.id,
                                 );
                             } else {
-                                searchtags = [...searchtags, tag.name];
+                                searchtags = [...searchtags, tag.id];
                             }
 
                             if (tag.expand.usergroup.id != usergroupid) {
                                 usergroupid = tag.expand.usergroup.id;
-                                searchtags = [tag.name];
+                                searchtags = [tag.id];
                             }
 
                             // promise = getRecords();
@@ -164,6 +167,14 @@
     {:catch error}
         <!-- promise was rejected -->
     {/await}
+    <div class="flex">
+        TAGS search mode:
+        <button
+            on:click={() => {
+                tagsORAND = tagsORAND === "&&" ? "||" : "&&";
+            }}>{tagsORAND === "&&" ? "AND" : "OR"}</button
+        >
+    </div>
     <div>
         <input type="checkbox" name="haslink" bind:checked={needslink} /> has link
     </div>
@@ -178,7 +189,7 @@
         inner text (may bring innacurate results)
     </div>
     <div class="flex">
-        sort by: <button
+        Sort by: <button
             on:click={() => {
                 sortby = sortby === "oldest" ? "newest" : "oldest";
             }}>{sortby}</button
@@ -324,5 +335,13 @@
         align-content: center;
         align-items: center;
         gap: 10px;
+    }
+
+    .usergroup-name {
+        margin-bottom: 12px;
+    }
+    .flex {
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 </style>

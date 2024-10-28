@@ -33,23 +33,10 @@
         console.log(filter);
     }
 
-    async function handleDndFinalize(e) {
-        // console.log("%c drop details: <<<<<<-----", "color:teal");
-        // console.log(counter, cards);
-        // console.log(board.name);
-        // console.log("%c  ----->>>>>", "color:red");
-        // console.log(e.detail.tochildren);
-        // dragDisabled = true
-    }
-
     //
 
     async function getRecords() {
         try {
-            // let params = new URLSearchParams(document.location.search);
-            // let text = params.get("text"); // is the string "Jonathan"
-            // console.log(text);
-
             const resultList = await pb.collection("cards").getList(1, 60, {
                 filter: filter,
                 sort: `${sortby === "oldest" ? "" : "-"}created`,
@@ -64,17 +51,6 @@
     }
 
     let promise;
-
-    const getTags = async () => {
-        // fetch a paginated records list
-        const records = await pb.collection("tags").getFullList({
-            sort: "-created",
-        });
-
-        return records;
-    };
-
-    const promisetags = getTags();
 
     if (listView === undefined) {
         listView = !!window.localStorage.getItem("listView");
@@ -119,10 +95,7 @@
                 }
                 } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
-                        <Sortgrid
-                            class="card-grid list"
-                            on:change={handleDndFinalize}
-                        >
+                        <Sortgrid class="card-grid list">
                             {#each searchresult.items as card (card.id)}
                                 <Card listView="true" {card}></Card>
                             {/each}

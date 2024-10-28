@@ -158,7 +158,7 @@
                     {#each card.expand?.tags as tag}
                         {#if tag.name != undefined}
                             <a
-                                href="/#/search?tag={tag.name}&usergroup={tag.usergroup}"
+                                href="/#/search?tag={tag.id}&usergroup={tag.usergroup}"
                                 class="tag"
                                 style="background:{tag.color};">{tag.name}</a
                             >
@@ -174,7 +174,7 @@
                     {#each card.tags as tag}
                         {#if tag.name != undefined}
                             <a
-                                href="/#/search?tag={tag.name}&usergroup={tag.usergroup}"
+                                href="/#/search?tag={tag.id}&usergroup={tag.usergroup}"
                                 class="tag"
                                 style="background:{tag.color};">{tag.name}</a
                             >

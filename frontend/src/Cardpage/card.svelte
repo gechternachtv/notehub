@@ -221,7 +221,7 @@
                         {#if tag.name != undefined}
                             <div class="tagcolor-container">
                                 <a
-                                    href="/#/search?tag={tag.name}&usergroup={card
+                                    href="/#/search?tag={tag.id}&usergroup={card
                                         .expand.board.usergroup}"
                                     class="tag"
                                     style="background:{tag.color};"

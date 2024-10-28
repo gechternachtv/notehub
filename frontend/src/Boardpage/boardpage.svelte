@@ -103,7 +103,7 @@
                                 `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,` +
-                                `expand.cards.expand.tags.name,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
+                                `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
                         });
 
                     console.log(record);
@@ -141,6 +141,12 @@
                             board = e.record;
 
                             if (e.record?.expand) {
+                                console.log("update:");
+                                console.log(
+                                    e.record?.expand.cards.map((e) => e.id),
+                                );
+                                console.log(cards.map((a) => a.id));
+
                                 if (e.record?.expand.cards) {
                                     cards = cardFilter([
                                         ...e.record.expand.cards,
@@ -179,7 +185,7 @@
                             `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                             `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                             `expand.cards.link,expand.cards.text,` +
-                            `expand.cards.expand.tags.name,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
+                            `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
                     },
                 );
 

@@ -43,8 +43,10 @@
 </script>
 
 <main>
-    <h1>Today</h1>
-    <Calendar></Calendar>
+    {#if $localToken}
+        <h1>Today</h1>
+        <Calendar></Calendar>
+    {/if}
     {#await recordusergroup}
         ...
     {:then usergroups}
