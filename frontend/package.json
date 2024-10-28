@@ -15,18 +15,15 @@
   },
   "dependencies": {
     "@milkdown/core": "^7.5.0",
-    "@milkdown/crepe": "^7.5.7",
     "@milkdown/ctx": "^7.5.0",
     "@milkdown/kit": "^7.5.5",
     "@milkdown/plugin-listener": "^7.5.0",
     "@milkdown/preset-commonmark": "^7.5.0",
     "@milkdown/prose": "^7.5.0",
-    "@milkdown/transformer": "^7.5.0",
     "calendar-base": "^2.0.1",
-    "pocketbase": "^0.21.1",
-    "sortablejs": "^1.15.2",
+    "pocketbase": "^0.21.5",
+    "sortablejs": "^1.15.3",
     "svelte-body": "^1.4.0",
-    "svelte-dnd-action": "^0.9.40",
     "svelte-spa-router": "^4.0.1"
   }
 }

@@ -580,7 +580,3 @@ button {
 milkdown-list-item-block .label-wrapper {
   pointer-events: all;
 }
-
-.locked .tags .tag {
-  pointer-events: none;
-}

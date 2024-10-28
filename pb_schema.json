@@ -134,7 +134,7 @@
       {
         "system": false,
         "id": "c3wxsmcu",
-        "name": "instance",
+        "name": "usergroup",
         "type": "relation",
         "required": true,
         "presentable": false,
@@ -149,11 +149,11 @@
       }
     ],
     "indexes": [],
-    "listRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"global-view\" || instance.public = \"view\")",
-    "viewRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"view\" || instance.public = \"global-view\")",
-    "createRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
-    "updateRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\") ",
-    "deleteRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
+    "listRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\" || usergroup.public = \"global-view\" || usergroup.public = \"view\")",
+    "viewRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\" || usergroup.public = \"view\" || usergroup.public = \"global-view\")",
+    "createRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\")",
+    "updateRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\") ",
+    "deleteRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\")",
     "options": {}
   },
   {
@@ -276,34 +276,6 @@
       },
       {
         "system": false,
-        "id": "3mcmejg6",
-        "name": "check",
-        "type": "select",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "maxSelect": 1,
-          "values": [
-            "islist",
-            "done"
-          ]
-        }
-      },
-      {
-        "system": false,
-        "id": "rcimqucy",
-        "name": "logs",
-        "type": "json",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "maxSize": 2000000
-        }
-      },
-      {
-        "system": false,
         "id": "okkxg306",
         "name": "file",
         "type": "file",
@@ -322,18 +294,6 @@
       },
       {
         "system": false,
-        "id": "afudoiu6",
-        "name": "data",
-        "type": "json",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "maxSize": 2000000
-        }
-      },
-      {
-        "system": false,
         "id": "bcuk94zd",
         "name": "board",
         "type": "relation",
@@ -347,26 +307,11 @@
           "maxSelect": 1,
           "displayFields": null
         }
-      }
-    ],
-    "indexes": [],
-    "listRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" || board.instance.public = \"global-view\" || board.instance.public = \"view\")",
-    "viewRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" || board.instance.public = \"view\" || board.instance.public = \"global-view\")",
-    "createRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\")",
-    "updateRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" ) ",
-    "deleteRule": "(board.instance.users ~ @request.auth.id || board.instance.public = \"edit\" )",
-    "options": {}
-  },
-  {
-    "id": "2jgk9iohihx9k82",
-    "name": "instance",
-    "type": "base",
-    "system": false,
-    "schema": [
+      },
       {
         "system": false,
-        "id": "dzu1idxt",
-        "name": "users",
+        "id": "ysaqxgtf",
+        "name": "authors",
         "type": "relation",
         "required": false,
         "presentable": false,
@@ -378,46 +323,14 @@
           "maxSelect": null,
           "displayFields": null
         }
-      },
-      {
-        "system": false,
-        "id": "ykbtid5n",
-        "name": "name",
-        "type": "text",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": null,
-          "max": null,
-          "pattern": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "zqrwknho",
-        "name": "public",
-        "type": "select",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "maxSelect": 1,
-          "values": [
-            "view",
-            "edit",
-            "private",
-            "global-view"
-          ]
-        }
       }
     ],
     "indexes": [],
-    "listRule": "(users ~ @request.auth.id || public = \"global-view\" || public = \"view\")",
-    "viewRule": "(users ~ @request.auth.id || public = \"edit\" || public = \"view\" || public = \"global-view\")",
-    "createRule": "@request.auth.id != \"\" && public != \"global-view\"",
-    "updateRule": "(users ~ @request.auth.id || public = \"edit\")",
-    "deleteRule": "(users ~ @request.auth.id)",
+    "listRule": "(board.usergroup.users ~ @request.auth.id || board.usergroup.public = \"edit\" || board.usergroup.public = \"global-view\" || board.usergroup.public = \"view\")",
+    "viewRule": "(board.usergroup.users ~ @request.auth.id || board.usergroup.public = \"edit\" || board.usergroup.public = \"view\" || board.usergroup.public = \"global-view\")",
+    "createRule": "(board.usergroup.users ~ @request.auth.id || board.usergroup.public = \"edit\")",
+    "updateRule": "(board.usergroup.users ~ @request.auth.id || board.usergroup.public = \"edit\" ) ",
+    "deleteRule": "(board.usergroup.users ~ @request.auth.id || board.usergroup.public = \"edit\" )",
     "options": {}
   },
   {
@@ -457,7 +370,7 @@
       {
         "system": false,
         "id": "6gszh6vq",
-        "name": "instance",
+        "name": "usergroup",
         "type": "relation",
         "required": false,
         "presentable": false,
@@ -472,16 +385,95 @@
       }
     ],
     "indexes": [],
-    "listRule": "instance.users ~ @request.auth.id",
+    "listRule": "usergroup.users ~ @request.auth.id || usergroup.public = \"global-view\"",
     "viewRule": "",
-    "createRule": "instance.users ~ @request.auth.id",
-    "updateRule": "instance.users ~ @request.auth.id",
-    "deleteRule": "instance.users ~ @request.auth.id",
+    "createRule": "usergroup.users ~ @request.auth.id",
+    "updateRule": "usergroup.users ~ @request.auth.id",
+    "deleteRule": "usergroup.users ~ @request.auth.id",
+    "options": {}
+  },
+  {
+    "id": "2jgk9iohihx9k82",
+    "name": "usergroups",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "dzu1idxt",
+        "name": "users",
+        "type": "relation",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": 1,
+          "maxSelect": null,
+          "displayFields": null
+        }
+      },
+      {
+        "system": false,
+        "id": "ykbtid5n",
+        "name": "name",
+        "type": "text",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "zqrwknho",
+        "name": "public",
+        "type": "select",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "view",
+            "edit",
+            "private",
+            "global-view"
+          ]
+        }
+      },
+      {
+        "system": false,
+        "id": "zctxt91d",
+        "name": "owner",
+        "type": "relation",
+        "required": true,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "collectionId": "_pb_users_auth_",
+          "cascadeDelete": false,
+          "minSelect": null,
+          "maxSelect": 1,
+          "displayFields": null
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "(users ~ @request.auth.id || public = \"global-view\" || public = \"view\")",
+    "viewRule": "(users ~ @request.auth.id || public = \"edit\" || public = \"view\" || public = \"global-view\")",
+    "createRule": "@request.auth.id != \"\" && public != \"global-view\"",
+    "updateRule": "(users ~ @request.auth.id || public = \"edit\") && (@request.data.users ~ owner) && (@request.data.owner = null)",
+    "deleteRule": "@request.auth.id = owner.id",
     "options": {}
   },
   {
     "id": "4nysqnwxp6r7xa2",
-    "name": "views",
+    "name": "workspaces",
     "type": "base",
     "system": false,
     "schema": [
@@ -550,7 +542,7 @@
       {
         "system": false,
         "id": "sxiuyz9k",
-        "name": "position",
+        "name": "imgposition",
         "type": "number",
         "required": false,
         "presentable": false,
@@ -564,7 +556,7 @@
       {
         "system": false,
         "id": "xo0vfwor",
-        "name": "instance",
+        "name": "usergroup",
         "type": "relation",
         "required": true,
         "presentable": false,
@@ -579,11 +571,11 @@
       }
     ],
     "indexes": [],
-    "listRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"global-view\" || instance.public = \"view\")",
-    "viewRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\" || instance.public = \"view\" || instance.public = \"global-view\")",
-    "createRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
-    "updateRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\")",
-    "deleteRule": "(instance.users ~ @request.auth.id || instance.public = \"edit\") ",
+    "listRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\" || usergroup.public = \"global-view\" || usergroup.public = \"view\")",
+    "viewRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\" || usergroup.public = \"view\" || usergroup.public = \"global-view\")",
+    "createRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\")",
+    "updateRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\")",
+    "deleteRule": "(usergroup.users ~ @request.auth.id || usergroup.public = \"edit\") ",
     "options": {}
   }
 ]

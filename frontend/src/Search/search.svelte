@@ -33,7 +33,7 @@
 
     $: {
         console.log(
-            `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
+            `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}`,
         );
     }
 
@@ -62,7 +62,7 @@
             // console.log(text);
 
             const resultList = await pb.collection("cards").getList(1, 60, {
-                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) && board.usergroup.users ~ "${$localToken.model.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}`,
+                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}`,
                 sort: `${sortby === "oldest" ? "" : "-"}created`,
                 expand: "tags",
             });

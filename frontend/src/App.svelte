@@ -43,8 +43,8 @@
         <span class="servername">{$server.name}</span>
       {/if}
     </a>
+    <a class="search" href="/#/search">Search</a>
     {#if $localToken}
-      <a class="search" href="/#/search">Search</a>
       <a class="navatar-container" href="/#/account">
         <div class="navavatar">
           <img
