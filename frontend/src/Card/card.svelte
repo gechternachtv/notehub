@@ -99,6 +99,7 @@
                     fill="var(--button-bg)"
                 /></svg
             >
+            <span class="debug-id">{card.id}</span>
         </div>
         <a class="img-c thumblink" href="/#/card/{card.id}">
             <div class="thumb">
@@ -243,6 +244,7 @@
         grid-template-rows: subgrid;
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
+        transition: all 0.5s;
     }
 
     .card.listview {

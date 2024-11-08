@@ -580,3 +580,10 @@ button {
 milkdown-list-item-block .label-wrapper {
   pointer-events: all;
 }
+
+.debug-id {
+  background: teal;
+  color: white;
+  border-radius: 10px;
+  padding: 0 10px;
+}

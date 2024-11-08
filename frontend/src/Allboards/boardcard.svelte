@@ -7,6 +7,7 @@
   };
 
   export let workspacecard = false;
+  export let counter;
 </script>
 
 <a
@@ -31,8 +32,8 @@
   <div>
     <h1 class="board-name">{board.name}</h1>
     {#if !workspacecard}
-      {#if board.cards}
-        <div class="cards-length">cards: {board.cards.length}</div>
+      {#if counter}
+        <div class="cards-length">cards: {counter}</div>
       {/if}
     {/if}
   </div>

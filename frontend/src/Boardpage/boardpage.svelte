@@ -20,9 +20,10 @@
     let showModal = false;
     let boardisactive = true;
 
+    let canmove = true;
+
     //flip
 
-    // import {dndzone} from "svelte-dnd-action";
     import Sortgrid from "./sortcardsgrid.svelte";
 
     export let boardpage = true;
@@ -39,13 +40,9 @@
     );
     let usergroup = { ...board.expand?.usergroup, id: board.usergroup };
 
-    console.log(usergroup);
     export let listView = undefined;
 
     export let params = { id: board.id };
-
-    // console.log("%c =-=====", "font-size:30px;color:teal");
-    // console.log(board);
 
     let dragDisabled = false;
     let fileelement;
@@ -56,35 +53,38 @@
 
     let cards = board.expand?.cards ? board.expand.cards : board.cards;
 
-    console.log(board);
-
     let counter = cards.length;
+    let currentCardsList = board.cards;
 
     async function handleDndFinalize(e) {
-        console.log(e);
-        // console.log("%c drop details: <<<<<<-----", "color:teal");
-        // console.log(counter, cards);
-        // console.log(board.name);
-        // console.log("%c  ----->>>>>", "color:red");
-        // console.log(e.detail.tochildren);
-        console.log(board.cards.length, e.detail.tochildren.length);
-        if (e.detail.tochildren.length >= board.cards.length) {
-            console.log(
-                "%c  ----->>>>> e to children:",
-                "color:teal;font-size:50px",
-            );
-            console.log(e.detail.tochildren);
-            const record = await pb
-                .collection("boards")
-                .update(params.id, { cards: e.detail.tochildren });
+        console.log(e.detail);
 
-            console.log(record);
+        canmove = false;
+        currentCardsList = e.detail.tochildren;
+        counter = currentCardsList.length;
+        console.log("%c ---", "color:teal");
+        console.log(
+            `%c ${board.id}`,
+            "background:teal;color:white;font-size:15px;",
+        );
+        console.log(e.detail.tochildren);
+        console.log(board.cards);
+
+        if (e.detail.type === "add" || e.detail.type === "update") {
+            console.log("%c updatedd", "color:red");
+            try {
+                const record = await pb
+                    .collection("boards")
+                    .update(params.id, { cards: e.detail.tochildren });
+
+                canmove = true;
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            canmove = true;
         }
-
-        counter = e.detail.tochildren.length;
     }
-
-    //
 
     const cardFilter = (cards) => {
         return cards;
@@ -106,7 +106,7 @@
                                 `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
                         });
 
-                    console.log(record);
+                    //  // console.log(record);
                     usergroup = {
                         ...record.expand?.usergroup,
                         id: record.usergroup,
@@ -117,45 +117,85 @@
                     );
                     board = record;
                     dispatch("boardupdate", board);
-                    console.log(board);
+                    //  // console.log(board);
                     if (record?.expand) {
                         if (record?.expand.cards) {
                             cards = cardFilter([...record.expand.cards]);
                             counter = cards.length;
                         }
                     }
-                    // console.log(records)
+                    //  // console.log(records)
                 }
 
                 pb.collection("boards").subscribe(
                     params.id,
                     (e) => {
-                        console.log("here?");
-                        console.log(
-                            `%c ${e.action} event on ${board.id}`,
-                            "background:turquoise;color:red;font-size:20px",
-                        );
-                        console.log(e.record);
+                        // console.log("here?");
+                        // console.log(
+                        //     `%c ${e.action} event on ${board.id}`,
+                        //     "background:turquoise;color:red;font-size:20px",
+                        // );
+                        // console.log(e.record);
 
                         if (e.action === "update") {
-                            board = e.record;
+                            // console.log(currentCardsList);
+                            // console.log(e.record.cards);
 
-                            if (e.record?.expand) {
-                                console.log("update:");
-                                console.log(
-                                    e.record?.expand.cards.map((e) => e.id),
-                                );
-                                console.log(cards.map((a) => a.id));
+                            // console.log("same cards?");
 
-                                if (e.record?.expand.cards) {
-                                    cards = cardFilter([
-                                        ...e.record.expand.cards,
-                                    ]);
-                                    counter = cards.length;
-                                    dispatch("boardupdate", {
-                                        ...board,
-                                        cards: cards,
-                                    });
+                            // console.log(
+                            //     currentCardsList.join(",") ===
+                            //         e.record.cards.join(","),
+                            // );
+                            // console.log("updated!!!!!");
+
+                            // console.log("color:");
+                            // console.log(board.color != e.record.color);
+
+                            // console.log("name:");
+                            // console.log(board.name === e.record.name);
+
+                            // console.log("img:");
+                            // console.log(board.img === e.record.img);
+                            // console.log(
+                            //     currentCardsList.join(","),
+                            //     e.record.cards.join(","),
+                            // );
+
+                            // currentCardsList.join(",") !=
+                            //         e.record.cards.join(",")
+                            if (
+                                true ||
+                                board.color != e.record.color ||
+                                board.name != e.record.name ||
+                                board.img != e.record.img
+                            ) {
+                                // console.log("re-reder needed!");
+                                board = e.record;
+                                currentCardsList = e.record.cards;
+                                counter = currentCardsList.length;
+
+                                if (e.record?.expand) {
+                                    // console.log("update:");
+
+                                    // console.log(cards.map((a) => a.id));
+
+                                    if (e.record?.expand.cards) {
+                                        cards = cardFilter([
+                                            ...e.record.expand.cards,
+                                        ]);
+
+                                        dispatch("boardupdate", {
+                                            ...board,
+                                            cards: cards,
+                                        });
+                                    } else {
+                                        cards = [];
+                                        dispatch("boardupdate", {
+                                            ...board,
+                                            cards: [],
+                                        });
+                                    }
                                 } else {
                                     cards = [];
                                     dispatch("boardupdate", {
@@ -163,19 +203,13 @@
                                         cards: [],
                                     });
                                 }
-                            } else {
-                                cards = [];
-                                dispatch("boardupdate", {
-                                    ...board,
-                                    cards: [],
-                                });
                             }
                         } else if (e.action === "delete") {
                             boardisactive = false;
                             pb.collection("boards").unsubscribe(params.id);
-                            console.log("deleted!");
+                            // console.log("deleted!");
                         }
-                        console.log("%c ------", "color:teal");
+                        // console.log("%c ------", "color:teal");
                         // views = e.record
                     },
                     {
@@ -254,8 +288,9 @@
     };
 
     const handleUpdate = async (e) => {
-        console.log("DETAIL:");
-        console.log(e.detail);
+        // console.log("DETAIL:");
+        // console.log(e.detail);
+
         if (e.detail.img === undefined || e.detail.img === "") {
             delete e.detail.img;
         }
@@ -266,21 +301,21 @@
             delete e.detail.color;
         }
 
-        console.log({ ...board, ...e.detail });
+        // console.log({ ...board, ...e.detail });
         const record = await pb.collection("boards").update(board.id, {
             color: e.detail.color,
             img: e.detail.img,
             name: e.detail.name,
             // cards: cards.map((e) => e.id),
         });
-        console.log(record);
-        board = record;
+        // console.log(record);
+        board = { ...record, expand: board.expand };
         dispatch("boardupdate", board);
         showModal = false;
     };
 
     const cardUpdateFront = (e) => {
-        console.log(e);
+        // console.log(e);
         const cardNewInfo = e.detail;
         const oldinfoCard =
             cards[cards.findIndex((e) => e.id === cardNewInfo.id)];
@@ -291,7 +326,7 @@
         board.cards = cards;
         board = board;
         dispatch("boardupdate", board);
-        console.log(board.cards);
+        // console.log(board.cards);
     };
 
     if (listView === undefined) {
@@ -314,9 +349,12 @@
 
         {#await promise then views}
             <div class:locked={!canedit} class="container">
-                <!-- {board.id} -->
-
-                <Boardcard {board} />
+                <span
+                    class="debug-id"
+                    style="background:{canmove ? 'teal' : 'tomato'}"
+                    >{board.id}</span
+                >
+                <Boardcard {board} {counter} />
 
                 {#if boardpage}
                     <a

@@ -15,8 +15,6 @@
     };
     export let usergroup;
 
-    console.log(board);
-
     let color = board.color;
     let name = board.name;
     let showImage = board.img != "";
@@ -46,6 +44,7 @@
             showImage = false;
             input.value = "";
         }
+
         handleChange();
 
         dispatch("newcontent", data);

@@ -33,26 +33,27 @@
         chosenClass: "sortable-chosen", // Class name for the chosen item
         dragClass: "sortable-drag",
         onStart: (e) => {
-            console.log(e.item);
+            //console.log(e.item);
             // e.item.draggable = false
             document
                 .querySelector("body")
                 .classList.add("elementisbeingdragged");
         },
         onEnd: (e) => {
-            // console.log("in the end")
-
             document
                 .querySelector("body")
                 .classList.remove("elementisbeingdragged");
         },
         onUpdate: (e) => {
-            // console.log(e)
             const tochildren = Array.prototype.slice
                 .call(e.target.children)
                 .map((e) => e.id);
-            console.log("updated!");
-            dispatch("change", { tochildren: tochildren });
+            //console.log("updated!");
+            dispatch("change", {
+                tochildren: tochildren,
+                type: "update",
+                item: e.item,
+            });
         },
         onAdd: (e) => {
             // console.log(e)
@@ -62,7 +63,11 @@
             // console.log("im the added one")
             // console.log(fromchildren,tochildren)
 
-            dispatch("change", { tochildren: tochildren });
+            dispatch("change", {
+                tochildren: tochildren,
+                type: "add",
+                item: e.item,
+            });
         },
         onRemove: (e) => {
             // same properties as onEnd
@@ -73,7 +78,11 @@
             // console.log("im the removed one")
             // console.log(fromchildren,tochildren)
 
-            dispatch("change", { tochildren: tochildren });
+            dispatch("change", {
+                tochildren: tochildren,
+                type: "remove",
+                item: e.item,
+            });
         },
         ...options,
     };
