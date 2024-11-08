@@ -29,7 +29,7 @@
     const gridDefaults = (len) => {
         defaults = ["1fr", "2fr 1fr", `repeat(${len + 1}, minmax(322px, 1fr))`];
 
-        //console.log(len,defaults[len])
+        ////console.log(len,defaults[len])
         if (!!defaults[len]) {
             return defaults[len];
         } else {
@@ -45,7 +45,7 @@
                 .collection("boards")
                 .create({ ...data, usergroup: workspace.usergroup });
 
-            console.log(data);
+            //console.log(data);
             const res = await pb.collection("workspaces").update(workspace.id, {
                 ...workspace,
                 boards: [...workspace.boards, boardrecord.id],
@@ -54,7 +54,7 @@
             //     expand: 'boards.cards.tags',
             // });
 
-            // console.log(record)
+            // //console.log(record)
             // view = record
             // boards = view.expand?.boards
             showModal = false;
@@ -64,7 +64,7 @@
     };
 
     const handleEditWorkspace = async (e) => {
-        console.log(e.detail, workspace);
+        //console.log(e.detail, workspace);
 
         const data = {
             boards: e.detail.boards,
@@ -73,7 +73,7 @@
             img: e.detail.img ? e.detail.img : workspace.img,
         };
 
-        console.log(data);
+        //console.log(data);
         const res = await pb
             .collection("workspaces")
             .update(workspace.id, data);
@@ -87,7 +87,7 @@
                 `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.id,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text,expand.boards.expand.cards.expand.tags.usergroup`,
         });
 
-        console.log(record);
+        //console.log(record);
         workspace = record;
         boards = workspace.expand?.boards;
         showModal = false;
@@ -97,16 +97,16 @@
     let boards = [];
 
     async function handleDndFinalize(e) {
-        // console.log(e.detail.items.map(e => e.id))
+        // //console.log(e.detail.items.map(e => e.id))
         // boards = e.detail.items;
-        console.log("->>>>");
-        console.log(e.detail);
+        //console.log("->>>>");
+        //console.log(e.detail);
 
         const record = await pb
             .collection("workspaces")
             .update(id, { boards: e.detail.tochildren });
 
-        console.log(record);
+        //console.log(record);
         //  dragDisabled = true
     }
 
@@ -120,8 +120,8 @@
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                 `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.usergroup,expand.boards.expand.cards.expand.tags.id,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text,expand.boards.expand.cards.expand.tags.usergroup`,
         });
-        console.log("%c ====>", "color:teal;font-size:40px");
-        console.log(record);
+        //console.log("%c ====>", "color:teal;font-size:40px");
+        //console.log(record);
         usergroup = record.expand?.usergroup;
         canedit = !!usergroup.users?.includes(
             $localToken ? $localToken?.model.id : "???",
@@ -135,9 +135,9 @@
         pb.collection("workspaces").subscribe(
             params.id,
             (e) => {
-                console.log("%c subscribe!", "color:teal");
-                console.log(e.action);
-                console.log(e.record);
+                //console.log("%c subscribe!", "color:teal");
+                //console.log(e.action);
+                //console.log(e.record);
 
                 if (e.action === "update") {
                     workspace = e.record;
@@ -148,9 +148,9 @@
                 } else if (e.action === "delete") {
                     boardisactive = false;
                     pb.collection("workspaces").unsubscribe(params.id);
-                    console.log("deleted!");
+                    //console.log("deleted!");
                 }
-                console.log("%c ------", "color:teal");
+                //console.log("%c ------", "color:teal");
                 // views = e.record
             },
             {
@@ -166,15 +166,18 @@
 
         return record;
     };
-    const promise = getWorkspace();
+    let promise = getWorkspace();
 
     const boardUpdate = (data) => {
-        console.log(`%c ${data.detail.id}!!!!`, "color:skyblue;font-size:20px");
         boards = boards.map((e) => (e.id === data.detail.id ? data.detail : e));
-        console.log(data.detail);
-        console.log(boards);
         boards = boards;
-        console.log("%c -=-", "color:red;font-size:20px");
+        console.log("boardupdate:");
+        console.log(boards);
+
+        console.log(boards);
+        promise = new Promise((resolve, reject) => {
+            resolve(workspace);
+        });
     };
 
     onDestroy(() => {

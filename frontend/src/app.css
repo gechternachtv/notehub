@@ -581,6 +581,11 @@ milkdown-list-item-block .label-wrapper {
   pointer-events: all;
 }
 
+.debug {
+  display: none !important;
+  color: white;
+}
+
 .debug-id {
   background: teal;
   color: white;

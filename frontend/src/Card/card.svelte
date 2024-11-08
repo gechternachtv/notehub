@@ -13,7 +13,7 @@
 
     export let listView = false;
 
-    console.log(card);
+    //console.log(card);
 
     let date;
 
@@ -52,7 +52,7 @@
 
     // let checked = card.check === "done";
     // const handleCheckbox = async () => {
-    //     console.log("checkboxed");
+    //     //console.log("checkboxed");
     //     // const record = await pb
     //     //     .collection("cards")
     //     //     .update(card.id, {
@@ -67,11 +67,11 @@
     //     // setInfo(card);
     //     // dispatch("updatefront", card);
     // };
-    // const handlemovetoBoard = async ()=>{ console.log("hey")}
+    // const handlemovetoBoard = async ()=>{ //console.log("hey")}
 
     setInfo(card);
 
-    // console.log(getFile(card))
+    // //console.log(getFile(card))
 </script>
 
 <div
@@ -99,7 +99,7 @@
                     fill="var(--button-bg)"
                 /></svg
             >
-            <span class="debug-id">{card.id}</span>
+            <span class="debug debug-id">{card.id}</span>
         </div>
         <a class="img-c thumblink" href="/#/card/{card.id}">
             <div class="thumb">

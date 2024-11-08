@@ -51,24 +51,19 @@
     let editorOpen = false;
     //flip
 
-    let cards = board.expand?.cards ? board.expand.cards : board.cards;
+    let cardsFull = board.expand?.cards ? board.expand?.cards : [];
 
-    let counter = cards.length;
+    let counter = cardsFull.length;
     let currentCardsList = board.cards;
 
+    // console.log(currentCardsList);
     async function handleDndFinalize(e) {
         console.log(e.detail);
 
         canmove = false;
         currentCardsList = e.detail.tochildren;
+        //board.cards = currentCardsList;
         counter = currentCardsList.length;
-        console.log("%c ---", "color:teal");
-        console.log(
-            `%c ${board.id}`,
-            "background:teal;color:white;font-size:15px;",
-        );
-        console.log(e.detail.tochildren);
-        console.log(board.cards);
 
         if (e.detail.type === "add" || e.detail.type === "update") {
             console.log("%c updatedd", "color:red");
@@ -85,10 +80,6 @@
             canmove = true;
         }
     }
-
-    const cardFilter = (cards) => {
-        return cards;
-    };
 
     async function getRecords() {
         if (params.id && !params.id.includes("dnd-shadow-placeholder")) {
@@ -116,88 +107,63 @@
                         $localToken ? $localToken?.model.id : "???",
                     );
                     board = record;
+                    currentCardsList = board.cards;
                     dispatch("boardupdate", board);
                     //  // console.log(board);
                     if (record?.expand) {
                         if (record?.expand.cards) {
-                            cards = cardFilter([...record.expand.cards]);
-                            counter = cards.length;
+                            cardsFull = [...record.expand.cards];
+                            counter = cardsFull.length;
                         }
                     }
+
+                    canmove = true;
                     //  // console.log(records)
                 }
 
                 pb.collection("boards").subscribe(
                     params.id,
                     (e) => {
-                        // console.log("here?");
-                        // console.log(
-                        //     `%c ${e.action} event on ${board.id}`,
-                        //     "background:turquoise;color:red;font-size:20px",
-                        // );
-                        // console.log(e.record);
+                        //console.log(e);
 
                         if (e.action === "update") {
-                            // console.log(currentCardsList);
-                            // console.log(e.record.cards);
+                            //console.log(e);
 
-                            // console.log("same cards?");
+                            console.log(e);
 
-                            // console.log(
-                            //     currentCardsList.join(",") ===
-                            //         e.record.cards.join(","),
-                            // );
-                            // console.log("updated!!!!!");
-
-                            // console.log("color:");
-                            // console.log(board.color != e.record.color);
-
-                            // console.log("name:");
-                            // console.log(board.name === e.record.name);
-
-                            // console.log("img:");
-                            // console.log(board.img === e.record.img);
-                            // console.log(
-                            //     currentCardsList.join(","),
-                            //     e.record.cards.join(","),
-                            // );
-
+                            console.log(currentCardsList.join(","));
+                            console.log(e.record.cards.join(","));
                             // currentCardsList.join(",") !=
                             //         e.record.cards.join(",")
                             if (
-                                true ||
+                                currentCardsList.join(",") !=
+                                    e.record.cards.join(",") ||
                                 board.color != e.record.color ||
                                 board.name != e.record.name ||
                                 board.img != e.record.img
                             ) {
-                                // console.log("re-reder needed!");
-                                board = e.record;
+                                board.color = e.record.color;
+                                board.name = e.record.name;
+                                board.img = e.record.img;
+                                board.expand = e.record.expand;
                                 currentCardsList = e.record.cards;
+
+                                console.log(
+                                    "%c re-reder needed!",
+                                    "color:orange",
+                                );
+                                console.log(board);
+
+                                //board = e.record;
+
                                 counter = currentCardsList.length;
 
-                                if (e.record?.expand) {
-                                    // console.log("update:");
+                                if (board.expand?.cards) {
+                                    cardsFull = [...board.expand.cards];
 
-                                    // console.log(cards.map((a) => a.id));
-
-                                    if (e.record?.expand.cards) {
-                                        cards = cardFilter([
-                                            ...e.record.expand.cards,
-                                        ]);
-
-                                        dispatch("boardupdate", {
-                                            ...board,
-                                            cards: cards,
-                                        });
-                                    } else {
-                                        cards = [];
-                                        dispatch("boardupdate", {
-                                            ...board,
-                                            cards: [],
-                                        });
-                                    }
+                                    dispatch("boardupdate", board);
                                 } else {
-                                    cards = [];
+                                    cardsFull = [];
                                     dispatch("boardupdate", {
                                         ...board,
                                         cards: [],
@@ -209,8 +175,6 @@
                             pb.collection("boards").unsubscribe(params.id);
                             // console.log("deleted!");
                         }
-                        // console.log("%c ------", "color:teal");
-                        // views = e.record
                     },
                     {
                         expand: "cards.tags,usergroup,authors",
@@ -249,6 +213,7 @@
             usergroup?.id,
             e.detail,
             [$localToken?.model.id],
+            board.id,
             fileelement,
         );
 
@@ -266,7 +231,7 @@
 
         const cardrecord = await pb.collection("cards").create(data);
 
-        const newcardlist = [cardrecord.id, ...cards.map((e) => e.id)];
+        const newcardlist = [cardrecord.id, ...cardsFull.map((e) => e.id)];
         const boarddata = {
             cards: newcardlist,
         };
@@ -314,20 +279,20 @@
         showModal = false;
     };
 
-    const cardUpdateFront = (e) => {
-        // console.log(e);
-        const cardNewInfo = e.detail;
-        const oldinfoCard =
-            cards[cards.findIndex((e) => e.id === cardNewInfo.id)];
-        cards[cards.findIndex((e) => e.id === cardNewInfo.id)] = {
-            ...cardNewInfo,
-            expand: oldinfoCard.expand,
-        };
-        board.cards = cards;
-        board = board;
-        dispatch("boardupdate", board);
-        // console.log(board.cards);
-    };
+    // const cardUpdateFront = (e) => {
+    //     // console.log(e);
+    //     const cardNewInfo = e.detail;
+    //     const oldinfoCard =
+    //         cards[cards.findIndex((e) => e.id === cardNewInfo.id)];
+    //     cards[cards.findIndex((e) => e.id === cardNewInfo.id)] = {
+    //         ...cardNewInfo,
+    //         expand: oldinfoCard.expand,
+    //     };
+    //     board.cards = cards;
+    //     board = board;
+    //     dispatch("boardupdate", board);
+    //     // console.log(board.cards);
+    // };
 
     if (listView === undefined) {
         listView = !!window.localStorage.getItem("listView");
@@ -347,13 +312,17 @@
     {#if boardisactive}
         <!-- content here -->
 
-        {#await promise then views}
+        {#await promise then board}
             <div class:locked={!canedit} class="container">
                 <span
-                    class="debug-id"
+                    class="debug debug-id"
                     style="background:{canmove ? 'teal' : 'tomato'}"
                     >{board.id}</span
                 >
+                <div class="debug" style="background:orange">
+                    {JSON.stringify(currentCardsList)}
+                </div>
+
                 <Boardcard {board} {counter} />
 
                 {#if boardpage}
@@ -400,12 +369,8 @@
                         class="card-grid {listView ? 'list' : ''}"
                         on:change={handleDndFinalize}
                     >
-                        {#each cards as card (card.id)}
-                            <Card
-                                {listView}
-                                {card}
-                                on:updatefront={cardUpdateFront}
-                            ></Card>
+                        {#each cardsFull as card (card.id)}
+                            <Card {listView} {card}></Card>
                         {/each}
                     </Sortgrid>
 

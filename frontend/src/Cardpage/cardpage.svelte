@@ -72,6 +72,7 @@
             showcard.authors
                 ? [...showcard.authors, $localToken?.model.id]
                 : [$localToken?.model.id],
+            showcard.board,
             fileelement,
             currentfile,
         );

@@ -6,7 +6,7 @@ import { server } from "./stores"
 import { get } from "svelte/store"
 import colorhex from "./colorsnames"
 
-export default async (usergroup, markdownobj, authors, fileInputelement = null, currentfile = null) => {
+export default async (usergroup, markdownobj, authors, board, fileInputelement = null, currentfile = null) => {
 
 
     const filecontent = fileInputelement?.files ? fileInputelement?.files[0] : null
@@ -74,7 +74,7 @@ export default async (usergroup, markdownobj, authors, fileInputelement = null, 
         created: new Date(),
         file: filecontent ? filecontent : currentfile ? currentfile : null,
         authors: authors,
-        board: ""
+        board: board
     }
 
 
