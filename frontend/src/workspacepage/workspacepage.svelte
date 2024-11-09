@@ -45,18 +45,11 @@
                 .collection("boards")
                 .create({ ...data, usergroup: workspace.usergroup });
 
-            //console.log(data);
             const res = await pb.collection("workspaces").update(workspace.id, {
                 ...workspace,
                 boards: [...workspace.boards, boardrecord.id],
             });
-            // const record = await pb.collection('views').getOne(view.id, {
-            //     expand: 'boards.cards.tags',
-            // });
 
-            // //console.log(record)
-            // view = record
-            // boards = view.expand?.boards
             showModal = false;
         } catch (error) {
             console.warn(error);

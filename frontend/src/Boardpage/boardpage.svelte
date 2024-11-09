@@ -94,7 +94,7 @@
                                 `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,` +
-                                `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
+                                `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup,description`,
                         });
 
                     //  // console.log(record);
@@ -271,12 +271,14 @@
             color: e.detail.color,
             img: e.detail.img,
             name: e.detail.name,
-            // cards: cards.map((e) => e.id),
+            description: e.detail.description,
         });
-        // console.log(record);
-        board = { ...record, expand: board.expand };
-        dispatch("boardupdate", board);
+        console.log(record);
+
         showModal = false;
+        promise = new Promise((resolve, reject) => {
+            resolve({ ...record, expand: board.expand });
+        });
     };
 
     // const cardUpdateFront = (e) => {
@@ -313,7 +315,11 @@
         <!-- content here -->
 
         {#await promise then board}
-            <div class:locked={!canedit} class="container">
+            <div
+                class:locked={!canedit}
+                class:canmove={!canmove}
+                class="container"
+            >
                 <span
                     class="debug debug-id"
                     style="background:{canmove ? 'teal' : 'tomato'}"
@@ -326,6 +332,11 @@
                 <Boardcard {board} {counter} />
 
                 {#if boardpage}
+                    {#if board.description}
+                        <div class="board-description">
+                            {board.description}
+                        </div>
+                    {/if}
                     <a
                         class="board-usergroupbread"
                         href="/#/usergroup/{board.usergroup}"
@@ -484,5 +495,12 @@
         width: auto;
         padding: 3px 11px;
         border-radius: 10px;
+    }
+
+    .board-description {
+        font-size: 1.3rem;
+        padding: 20px 0;
+        padding-top: 0px;
+        color: var(--board-title-color);
     }
 </style>

@@ -12,12 +12,14 @@
         color: "var(--main-font-1)",
         name: "",
         id: "",
+        description: "",
     };
     export let usergroup;
 
     let color = board.color;
     let name = board.name;
     let showImage = board.img != "";
+    let description = board.description ? board.description : "";
 
     let input;
     let image;
@@ -28,6 +30,7 @@
         color: "",
         name: "",
         img: null,
+        description: "",
     };
 
     const handleSend = () => {
@@ -37,12 +40,14 @@
             img: input.files[0],
             cards: [],
             usergroup: usergroup,
+            description: description,
         };
         if (board.id === "") {
             color = "var(--main-font-1)";
             name = "";
             showImage = false;
             input.value = "";
+            description = "";
         }
 
         handleChange();
@@ -76,6 +81,7 @@
             color: color,
             name: name,
             img: input.files[0],
+            description: description,
         };
         console.log(boardPreview);
 
@@ -89,6 +95,7 @@
                     color: color,
                     name: name,
                     img: reader.result,
+                    description: description,
                 };
                 console.log(reader.result);
             });
@@ -134,7 +141,21 @@
     {/if}
 
     <div class="grid">
-        <input class="name" on:change={handleChange} bind:value={name} />
+        <label for="editboardname">name:</label>
+        <input
+            id="editboardname"
+            class="name"
+            on:change={handleChange}
+            bind:value={name}
+        />
+
+        <label for="editboarddesc">description:</label>
+        <input
+            id="editboarddesc"
+            class="name"
+            on:change={handleChange}
+            bind:value={description}
+        />
         <input
             class="color"
             on:change={handleChange}
