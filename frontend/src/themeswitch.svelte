@@ -15,6 +15,7 @@
 		"goldSrc",
 		"blood",
 		"uboa",
+		"fvwm",
 		"pxtone",
 	];
 
@@ -269,7 +270,23 @@
 		background-attachment: fixed;
 		background-color: var(--gradient-col-1);
 	}
-
+	:global(.fvwm) {
+		--alert: #fb0000;
+		--news: #fb0000;
+		--header-bg: #828776;
+		--main-font-1: #262050;
+		--main-font-2: #262050;
+		--button-bg: #313179;
+		--button-color: #dedede;
+		--header-color: #353535;
+		--card-bg: #8a9393;
+		--container-bg: #babbae;
+		--gradient-col-1: #47545d;
+		--gradient-col-2: #47545d;
+		--body-background: #ffead3;
+		--board-title-color: #47545d;
+		--browser-color: #47545d;
+	}
 	:global(.dfwm98) {
 		--alert: #df223b;
 		--news: #cb4e16;

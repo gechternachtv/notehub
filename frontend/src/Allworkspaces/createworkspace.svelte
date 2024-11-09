@@ -30,6 +30,7 @@
     const getallBoards = async () => {
         return await pb.collection("boards").getFullList({
             filter: `usergroup = "${usergroup}"`,
+            fields: "color,name,id,img,collectionId",
         });
     };
     let promise;

@@ -146,10 +146,11 @@
 		gap: 5px;
 		flex-wrap: wrap;
 		max-width: 103px;
+		max-height: 94px;
 	}
 	main {
 		background: var(--card-bg);
-		gap: 10px;
+		gap: 1px;
 
 		/* display: flex; */
 		gap: 7px;
@@ -166,11 +167,13 @@
 	}
 	.editor-controls {
 		display: flex;
+		align-items: flex-end;
+		padding: 5px;
 	}
 	.editor-container {
 		width: 100%;
 		display: flex;
-		gap: 10px;
+		gap: 1px;
 	}
 	.filename {
 		padding: 16px 0;
