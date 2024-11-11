@@ -13,6 +13,8 @@
     import Sortgrid from "../Boardpage/sortcardsgrid.svelte";
     import { localToken, server } from "../stores.js";
 
+    let boards = [];
+    let currentlySubscribedBoards = boards;
     let showModal = false;
     let boardisactive = true;
     let canedit = false;
@@ -57,10 +59,10 @@
     };
 
     const handleEditWorkspace = async (e) => {
-        //console.log(e.detail, workspace);
+        console.log(e.detail, workspace);
 
         const data = {
-            boards: e.detail.boards,
+            boards: e.detail.boards ? e.detail.boards : [],
             name: e.detail.name,
             imgposition: e.detail.imgposition,
             img: e.detail.img ? e.detail.img : workspace.img,
@@ -87,7 +89,53 @@
         grid = gridDefaults(workspace.boards.length - 1);
     };
 
-    let boards = [];
+    $: {
+        if (boards) {
+            const boardIds = boards.map((e) => e.id);
+            console.log(boardIds);
+            if (currentlySubscribedBoards != boardIds) {
+                currentlySubscribedBoards = boardIds;
+
+                pb.collection("boards").unsubscribe("*");
+                if (boards.length > 1) {
+                    console.log("boards:");
+                    console.log(boardIds.map((e) => `id="${e}"`).join(" || "));
+                    pb.collection("boards").subscribe(
+                        "*",
+                        (e) => {
+                            console.log(
+                                `%c ${e.action}`,
+                                "background:teal;color:white;font-size:20px",
+                            );
+                            console.log(e.record);
+
+                            boards = boards.map((a) =>
+                                a.id === e.record.id ? e.record : a,
+                            );
+
+                            promise = new Promise((resolve, reject) => {
+                                resolve(workspace);
+                            });
+                            // boards = boards.map((x) => {
+                            //     if (x.id === e.record) {
+                            //         return e.record;
+                            //     } else {
+                            //         return x;
+                            //     }
+                            // });
+                        },
+                        {
+                            filter: `${boardIds.map((e) => `id="${e}"`).join(" || ")}`,
+                            expand: "cards.tags,usergroup,authors",
+                            /* other options like expand, custom headers, etc. */
+                        },
+                    );
+                } else {
+                    console.log("no boards");
+                }
+            }
+        }
+    }
 
     async function handleDndFinalize(e) {
         // //console.log(e.detail.items.map(e => e.id))
@@ -128,9 +176,9 @@
         pb.collection("workspaces").subscribe(
             params.id,
             (e) => {
-                //console.log("%c subscribe!", "color:teal");
+                console.log("%c subscribe!", "color:teal");
                 //console.log(e.action);
-                //console.log(e.record);
+                console.log(e.record);
 
                 if (e.action === "update") {
                     workspace = e.record;
@@ -175,6 +223,7 @@
 
     onDestroy(() => {
         pb.collection("workspaces").unsubscribe(params.id);
+        pb.collection("boards").unsubscribe("*");
     });
 </script>
 

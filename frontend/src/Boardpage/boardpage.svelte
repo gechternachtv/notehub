@@ -108,7 +108,7 @@
                     );
                     board = record;
                     currentCardsList = board.cards;
-                    dispatch("boardupdate", board);
+                    // dispatch("boardupdate", board);
                     //  // console.log(board);
                     if (record?.expand) {
                         if (record?.expand.cards) {
@@ -120,73 +120,73 @@
                     canmove = true;
                     //  // console.log(records)
                 }
-
-                pb.collection("boards").subscribe(
-                    params.id,
-                    (e) => {
-                        //console.log(e);
-
-                        if (e.action === "update") {
+                if (boardpage) {
+                    pb.collection("boards").subscribe(
+                        params.id,
+                        (e) => {
                             //console.log(e);
 
-                            console.log(e);
+                            if (e.action === "update") {
+                                //console.log(e);
 
-                            console.log(currentCardsList.join(","));
-                            console.log(e.record.cards.join(","));
-                            // currentCardsList.join(",") !=
-                            //         e.record.cards.join(",")
-                            if (
-                                currentCardsList.join(",") !=
-                                    e.record.cards.join(",") ||
-                                board.color != e.record.color ||
-                                board.name != e.record.name ||
-                                board.img != e.record.img
-                            ) {
-                                board.color = e.record.color;
-                                board.name = e.record.name;
-                                board.img = e.record.img;
-                                board.expand = e.record.expand;
-                                currentCardsList = e.record.cards;
+                                console.log(e);
 
-                                console.log(
-                                    "%c re-reder needed!",
-                                    "color:orange",
-                                );
-                                console.log(board);
+                                console.log(currentCardsList.join(","));
+                                console.log(e.record.cards.join(","));
+                                // currentCardsList.join(",") !=
+                                //         e.record.cards.join(",")
+                                if (
+                                    currentCardsList.join(",") !=
+                                        e.record.cards.join(",") ||
+                                    board.color != e.record.color ||
+                                    board.name != e.record.name ||
+                                    board.img != e.record.img
+                                ) {
+                                    board.color = e.record.color;
+                                    board.name = e.record.name;
+                                    board.img = e.record.img;
+                                    board.expand = e.record.expand;
+                                    currentCardsList = e.record.cards;
 
-                                //board = e.record;
+                                    console.log(
+                                        "%c re-reder needed!",
+                                        "color:orange",
+                                    );
+                                    console.log(board);
 
-                                counter = currentCardsList.length;
+                                    board = e.record;
 
-                                if (board.expand?.cards) {
-                                    cardsFull = [...board.expand.cards];
+                                    counter = currentCardsList.length;
 
-                                    dispatch("boardupdate", board);
-                                } else {
-                                    cardsFull = [];
-                                    dispatch("boardupdate", {
-                                        ...board,
-                                        cards: [],
-                                    });
+                                    if (board.expand?.cards) {
+                                        cardsFull = [...board.expand.cards];
+
+                                        // dispatch("boardupdate", board);
+                                    } else {
+                                        cardsFull = [];
+                                        // dispatch("boardupdate", {
+                                        //     ...board,
+                                        //     cards: [],
+                                        // });
+                                    }
                                 }
+                            } else if (e.action === "delete") {
+                                boardisactive = false;
+                                pb.collection("boards").unsubscribe(params.id);
+                                // console.log("deleted!");
                             }
-                        } else if (e.action === "delete") {
-                            boardisactive = false;
-                            pb.collection("boards").unsubscribe(params.id);
-                            // console.log("deleted!");
-                        }
-                    },
-                    {
-                        expand: "cards.tags,usergroup,authors",
-                        fields:
-                            `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.id,` +
-                            `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
-                            `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
-                            `expand.cards.link,expand.cards.text,` +
-                            `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
-                    },
-                );
-
+                        },
+                        {
+                            expand: "cards.tags,usergroup,authors",
+                            fields:
+                                `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.id,` +
+                                `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
+                                `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
+                                `expand.cards.link,expand.cards.text,` +
+                                `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,
+                        },
+                    );
+                }
                 return board;
             } catch (error) {
                 console.warn(error);
@@ -245,9 +245,13 @@
         // cards = cardFilter([{...cardrecord,tags:card.tags},...cards])
 
         // board = boardrecord
+        if (fileelement) {
+            fileelement.value = "";
+        }
+        if (files && fileelement) {
+            files = fileelement.files;
+        }
 
-        fileelement.value = "";
-        files = fileelement.files;
         window.scrollTo(0, 0);
         editorBlocked = false;
     };

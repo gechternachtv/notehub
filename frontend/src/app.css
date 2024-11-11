@@ -494,6 +494,10 @@ button {
   opacity: 0.9;
 }
 
+.canmove .card {
+  opacity: 0.6;
+  pointer-events: none;
+}
 
 .locked .milkdown .editor {
   padding: 0px;
