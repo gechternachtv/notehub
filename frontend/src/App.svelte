@@ -2,21 +2,8 @@
   import Themeswitch from "./themeswitch.svelte";
   import { location } from "svelte-spa-router";
   import Router from "svelte-spa-router";
-  // import Board from './Boardpage/boardpage.svelte';
-  // import Workspaceview from './workspacepage/workspacepage.svelte';
-  // import Card from './Cardpage/cardpage.svelte';
-  // import Allboards from './Allboards/allboards.svelte';
-  // import Allworkspaces from './Allworkspaces/allworkspaces.svelte';
-  // import Login from './login.svelte';
-  // import Account from './account.svelte';
-  // import Allinstances from './instances/allinstance.svelte';
   import { localToken, server } from "./stores.js";
-  // import Instancepage from './instances/instancepage.svelte';
-  // import Allinstance from './instances/allinstance.svelte';
-  // import Register from './register.svelte';
-  // import Sortgrid from './Boardpage/sortcardsgrid.svelte';
   import { wrap } from "svelte-spa-router/wrap";
-
   import { pb } from "./pb.js";
 
   if (!pb.authStore.isValid) {

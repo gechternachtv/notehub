@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher } from "svelte";
     import { server } from "./stores";
+    import Picmobutton from "./Picmo/picmobutton.svelte";
     // import { pb } from './pb';
 
     import { localToken } from "./stores.js";
@@ -67,6 +68,11 @@
             });
         }
     }
+
+    const handleEmojiselect = (e) => {
+        console.log(e.detail.emoji);
+        name = `${e.detail.emoji} ${name}`;
+    };
 </script>
 
 <main>
@@ -79,7 +85,8 @@
     </h1>
 
     <div class="grid">
-        name : <input bind:value={name} />
+        name : <Picmobutton on:emojiselect={handleEmojiselect} />
+        <input bind:value={name} />
         permissions :
         <select bind:value={publicperm}>
             {#each publicopt as option, i}

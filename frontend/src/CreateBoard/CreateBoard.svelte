@@ -4,6 +4,9 @@
     import { pop } from "svelte-spa-router";
     import { server } from "../stores";
     import Confirmaction from "../confirmaction.svelte";
+    import Picmobutton from "../Picmo/picmobutton.svelte";
+    import extractFirstEmoji from "../extractFirstEmoji";
+
     let showconfirmbox = false;
     const dispatch = createEventDispatcher();
 
@@ -33,6 +36,10 @@
         description: "",
     };
 
+    const handleEmojiselect = (e) => {
+        console.log(e.detail.emoji);
+        name = `${e.detail.emoji} ${name}`;
+    };
     const handleSend = () => {
         const data = {
             color: color,
@@ -60,16 +67,6 @@
         if (board.id != "") {
             console.log(board.cards);
 
-            // const promiseList = [...board.cards.map(async (e) => {
-            //     console.log(e)
-            //     try {
-            //     await pb.collection('cards').delete(e)
-            //     console.log(`${e} deleted.`);
-            //     } catch (error) {
-            //     console.warn(`Error deleting ${e}:`, error);
-            //     }
-            // }), await pb.collection('boards').delete(board.id)]
-            // await Promise.all(promiseList)
             await pb.collection("boards").delete(board.id);
             console.log("all deleted");
             pop();
@@ -116,32 +113,37 @@
 </script>
 
 <main>
-    {#if name != "" || input?.files?.length || board.img != ""}
-        <div style="border-left: 4px solid {color}" class="board-header">
-            {#if showImage}
-                <div class="img-c">
-                    <img
-                        bind:this={image}
-                        src="{$server.url}/api/files/{board.collectionId}/{board.id}/{board.img}"
-                        alt=""
-                    />
-                </div>
-            {/if}
-
-            <div>
-                <h1 class="board-name">{name}</h1>
-
-                {#if board.id != ""}
-                    <div class="cards-length">id: {board.id}</div>
-                {/if}
+    <div style="border-left: 4px solid {color}" class="board-header">
+        {#if showImage}
+            <div class="img-c">
+                <img
+                    bind:this={image}
+                    src="{$server.url}/api/files/{board.collectionId}/{board.id}/{board.img}"
+                    alt=""
+                />
             </div>
+        {:else if extractFirstEmoji(name).emoji}
+            <div class="boardemoji">{extractFirstEmoji(name).emoji}</div>
+        {:else}
+            <div class="boardemoji">📓</div>
+        {/if}
+
+        <div>
+            <h1 class="board-name">
+                {extractFirstEmoji(name).text === ""
+                    ? "Create board"
+                    : extractFirstEmoji(name).text}
+            </h1>
+
+            {#if board.id != ""}
+                <div class="cards-length">id: {board.id}</div>
+            {/if}
         </div>
-    {:else}
-        <h1 class="board-name">Create board</h1>
-    {/if}
+    </div>
 
     <div class="grid">
         <label for="editboardname">name:</label>
+        <Picmobutton on:emojiselect={handleEmojiselect} />
         <input
             id="editboardname"
             class="name"
@@ -276,5 +278,8 @@
     .cards-length {
         font-size: 1.2rem;
         opacity: 0.6;
+    }
+    .boardemoji {
+        font-size: 54px;
     }
 </style>

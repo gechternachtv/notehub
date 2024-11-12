@@ -11,6 +11,7 @@
 	import { createEventDispatcher } from "svelte";
 	import { gfm } from "@milkdown/kit/preset/gfm";
 	import { listItemBlockComponent } from "@milkdown/kit/component/list-item-block";
+	import Picmobutton from "./picmobutton.svelte";
 
 	let editorel;
 	let sendBtn = (e) => {
@@ -45,7 +46,16 @@
 	export let fileelement;
 	export let files;
 	export let editorBlocked = false;
-
+	const handleEmojiselect = (e) => {
+		console.log(editorel.innerHTML);
+		if (editorel.querySelector("p")) {
+			const lastP =
+				editorel.querySelectorAll("p")[
+					editorel.querySelectorAll("p").length - 1
+				];
+			lastP.innerHTML = lastP.innerHTML + " " + e.detail.emoji;
+		}
+	};
 	function editor(dom) {
 		const MakeEditor = Editor.make()
 			.config((ctx) => {
@@ -110,7 +120,11 @@
 		</div>
 	{/if}
 	<div class="editor-container">
-		<div bind:this={editorel} class="editor" use:editor />
+		<div class="editor-incontainer">
+			<Picmobutton on:emojiselect={handleEmojiselect} />
+
+			<div bind:this={editorel} class="editor" use:editor />
+		</div>
 		<div class="editor-controls">
 			<div class="send-controls">
 				<button class="sendbtn" on:click={sendBtn}>send</button>
@@ -155,6 +169,10 @@
 		/* display: flex; */
 		gap: 7px;
 		width: 100%;
+	}
+	.editor-incontainer {
+		width: 100%;
+		position: relative;
 	}
 	.editor {
 		width: 100%;

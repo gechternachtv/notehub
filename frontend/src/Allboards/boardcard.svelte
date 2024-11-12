@@ -1,5 +1,6 @@
 <script>
   import { server } from "../stores";
+  import extractFirstEmoji from "../extractFirstEmoji";
   export let board = {
     color: "",
     name: "",
@@ -27,10 +28,14 @@
         alt=""
       />
     </div>
+  {:else if extractFirstEmoji(board.name).emoji}
+    <div class="boardemoji">{extractFirstEmoji(board.name).emoji}</div>
+  {:else}
+    <div class="boardemoji">📓</div>
   {/if}
 
   <div>
-    <h1 class="board-name">{board.name}</h1>
+    <h1 class="board-name">{extractFirstEmoji(board.name).text}</h1>
     {#if !workspacecard}
       {#if counter}
         {#if counter > 0}
@@ -87,6 +92,10 @@
     transform: scale(1.09);
   }
 
+  .board-header:hover .boardemoji {
+    transform: scale(1.09);
+  }
+
   .board-header.workspacecard {
     gap: 11px;
     margin-bottom: 0px;
@@ -95,5 +104,10 @@
   .workspacecard h1 {
     font-size: 1.2rem;
     font-weight: normal;
+  }
+
+  .boardemoji {
+    font-size: 72px;
+    transition: all 0.2s;
   }
 </style>
