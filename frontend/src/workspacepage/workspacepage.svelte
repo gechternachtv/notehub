@@ -97,7 +97,7 @@
                 currentlySubscribedBoards = boardIds;
 
                 pb.collection("boards").unsubscribe("*");
-                if (boards.length > 1) {
+                if (boards.length > 0) {
                     console.log("boards:");
                     console.log(boardIds.map((e) => `id="${e}"`).join(" || "));
                     pb.collection("boards").subscribe(
