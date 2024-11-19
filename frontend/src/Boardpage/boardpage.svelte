@@ -12,7 +12,7 @@
     // import { push } from "svelte-spa-router";
     import { onDestroy } from "svelte";
     import { createEventDispatcher } from "svelte";
-    import { localToken } from "../stores.js";
+    import { localToken, editorblocked } from "../stores.js";
     import Contextmenu from "../contextmenu.svelte";
 
     const dispatch = createEventDispatcher();
@@ -47,7 +47,7 @@
     let dragDisabled = false;
     let fileelement;
     let files;
-    let editorBlocked = false;
+
     let editorOpen = false;
     //flip
 
@@ -203,7 +203,7 @@
     //array.sort((a, b) => a.id - b.id);
 
     const handleNewCard = async (e) => {
-        editorBlocked = true;
+        editorblocked.set(true);
         window.scrollTo(0, 0);
         document
             .querySelector(".card-grid")
@@ -253,7 +253,7 @@
         }
 
         window.scrollTo(0, 0);
-        editorBlocked = false;
+        editorblocked.set(false);
     };
 
     const handleUpdate = async (e) => {
@@ -391,9 +391,11 @@
 
                     {#if editorOpen && canedit}
                         <div class="con conworkspace">
-                            <div class:editorBlocked class="editor">
+                            <div
+                                class:editorBlocked={$editorblocked}
+                                class="editor"
+                            >
                                 <Editor
-                                    bind:editorBlocked
                                     bind:files
                                     bind:fileelement
                                     on:newcontent={handleNewCard}
@@ -405,9 +407,11 @@
 
                 {#if boardpage && canedit}
                     <div class="con condesktop">
-                        <div class:editorBlocked class="editor">
+                        <div
+                            class:editorBlocked={$editorblocked}
+                            class="editor"
+                        >
                             <Editor
-                                bind:editorBlocked
                                 bind:files
                                 bind:fileelement
                                 on:newcontent={handleNewCard}

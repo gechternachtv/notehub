@@ -11,7 +11,16 @@
 	import { createEventDispatcher } from "svelte";
 	import { gfm } from "@milkdown/kit/preset/gfm";
 	import { listItemBlockComponent } from "@milkdown/kit/component/list-item-block";
+	import { history } from "@milkdown/kit/plugin/history";
+	import { cursor } from "@milkdown/kit/plugin/cursor";
+	import { editorblocked } from "../stores.js";
 	import Picmobutton from "./picmobutton.svelte";
+
+	import { editorViewOptionsCtx } from "@milkdown/kit/core";
+	export let fileelement;
+	export let files;
+
+	const editable = () => !$editorblocked;
 
 	let editorel;
 	let sendBtn = (e) => {
@@ -43,9 +52,7 @@
 			],
 		},
 	};
-	export let fileelement;
-	export let files;
-	export let editorBlocked = false;
+
 	const handleEmojiselect = (e) => {
 		console.log(editorel.innerHTML);
 		if (editorel.querySelector("p")) {
@@ -59,6 +66,10 @@
 	function editor(dom) {
 		const MakeEditor = Editor.make()
 			.config((ctx) => {
+				ctx.update(editorViewOptionsCtx, (prev) => ({
+					...prev,
+					editable,
+				}));
 				// ctx.get(listenerCtx).updated((ctx, doc, prevDoc) => {
 				//     output = doc.toJSON();
 				//     console.log(output)
@@ -72,6 +83,9 @@
 			.use(commonmark)
 			.use(gfm)
 			.use(listItemBlockComponent)
+			.use(history)
+			.use(cursor)
+
 			// .use(listener)
 			.create();
 
@@ -94,6 +108,13 @@
 			};
 
 			const enterHandler = (event) => {
+				if ($editorblocked) {
+					event.preventDefault();
+				}
+				if (event.key === "Tab") {
+					console.log(event.key);
+					event.preventDefault();
+				}
 				if (
 					(event.ctrlKey && event.key === "Enter") ||
 					event.type === "send"
@@ -113,7 +134,7 @@
 	}
 </script>
 
-<main class:editorBlocked>
+<main>
 	{#if files?.length > 0}
 		<div class="filename">
 			📎 {files[0].name}
@@ -151,9 +172,8 @@
 		container-type: inline-size;
 		container-name: card-container;
 	}
-	.editorBlocked {
+	.editorblocked {
 		opacity: 0.7;
-		pointer-events: none;
 	}
 	.send-controls {
 		display: flex;
@@ -206,9 +226,8 @@
 		text-align: center;
 		justify-content: center;
 	}
-	.editorBlocked {
+	.editorblocked {
 		opacity: 0.7;
-		pointer-events: none;
 	}
 
 	@container card-container (max-width: 991px) {

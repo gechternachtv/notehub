@@ -520,7 +520,7 @@ button {
 
 .locked .milkdown .editor {
   border: 1px solid transparent;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .locked .filename {
@@ -664,4 +664,13 @@ milkdown-list-item-block .label-wrapper {
 .locked .emojibtn {
   opacity: 0;
   pointer-events: none;
+}
+
+.milkdown code {
+  opacity: 0.5;
+  font-family: "Consolas", "terminus"
+}
+
+.locked code {
+  display: none;
 }

@@ -6,7 +6,7 @@
     import Editor from "../Boardpage/editor.svelte";
     import Card from "./card.svelte";
     import createNewCard from "../createNewCard.js";
-    import { localToken } from "../stores.js";
+    import { localToken, editorblocked } from "../stores.js";
 
     export let params = {};
 
@@ -19,7 +19,8 @@
     let fileelement;
     let files;
     let currentfile;
-    let editorBlocked = true;
+
+    editorblocked.set(true);
 
     const cardget = async () => {
         if (id) {
@@ -40,7 +41,7 @@
                 cardid = res.id;
                 // console.log(res)
                 currentfile = res.file;
-                editorBlocked = false;
+                editorblocked.set(false);
 
                 // console.log(showcard.expand?.board?.expand?.usergroup?.users.includes($localToken ? $localToken?.model.id : "???"))
 
@@ -63,7 +64,7 @@
     let promise = cardget();
 
     const handleNewCard = async (e) => {
-        editorBlocked = true;
+        editorblocked.set(true);
         // console.log(showcard)
 
         const card = await createNewCard(
@@ -96,7 +97,7 @@
         if (record.file) {
             files = [{ name: record.file }];
         }
-        editorBlocked = false;
+        editorblocked.set(false);
     };
 
     const oneditorready = () => {
@@ -135,7 +136,6 @@
                 <div class="grid-ch">
                     <Card fullView={true} card={showcard}>
                         <Editor
-                            bind:editorBlocked
                             bind:files
                             bind:fileelement
                             {defaultValue}

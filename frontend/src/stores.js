@@ -9,4 +9,6 @@ export let server = writable(currentserver ? JSON.parse(currentserver) : default
 
 export let localToken = writable(window.localStorage.getItem('pocketbase_auth') ? JSON.parse(window.localStorage.getItem('pocketbase_auth')) : false)
 
+export let editorblocked = writable(false)
+
 
