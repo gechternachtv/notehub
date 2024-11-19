@@ -47,7 +47,7 @@
 
 * {
   box-sizing: border-box;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
 
 html {
