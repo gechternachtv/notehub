@@ -20,6 +20,25 @@
 	export let fileelement;
 	export let files;
 
+	function editorBlockerCheck() {
+		if ($editorblocked) {
+			document
+				.querySelector(".ProseMirror.editor")
+				?.setAttribute("contenteditable", "false");
+		} else {
+			document
+				.querySelector(".ProseMirror.editor")
+				?.setAttribute("contenteditable", "true");
+		}
+	}
+
+	$: {
+		console.log("locked:");
+		console.log($editorblocked);
+		console.log(editable());
+		editorBlockerCheck();
+	}
+
 	const editable = () => !$editorblocked;
 
 	let editorel;
@@ -66,10 +85,10 @@
 	function editor(dom) {
 		const MakeEditor = Editor.make()
 			.config((ctx) => {
-				ctx.update(editorViewOptionsCtx, (prev) => ({
-					...prev,
-					editable,
-				}));
+				// ctx.update(editorViewOptionsCtx, (prev) => ({
+				// 	...prev,
+				// 	editable,
+				// }));
 				// ctx.get(listenerCtx).updated((ctx, doc, prevDoc) => {
 				//     output = doc.toJSON();
 				//     console.log(output)
@@ -108,6 +127,8 @@
 			};
 
 			const enterHandler = (event) => {
+				console.log(event);
+
 				if ($editorblocked) {
 					event.preventDefault();
 				}
@@ -130,6 +151,7 @@
 			editorel.addEventListener("send", enterHandler);
 
 			dispatch("editorready", true);
+			editorBlockerCheck();
 		});
 	}
 </script>

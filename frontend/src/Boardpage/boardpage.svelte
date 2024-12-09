@@ -15,6 +15,8 @@
     import { localToken, editorblocked } from "../stores.js";
     import Contextmenu from "../contextmenu.svelte";
 
+    editorblocked.set(false);
+
     const dispatch = createEventDispatcher();
 
     let showModal = false;
