@@ -393,6 +393,13 @@
                 on:click={() => {
                     readmode = !readmode;
                     editorblocked.set(readmode);
+                    if (!readmode) {
+                        setTimeout(() => {
+                            document
+                                .querySelector(".ProseMirror.editor")
+                                ?.focus();
+                        }, 200);
+                    }
                 }}
             >
                 {#if readmode}

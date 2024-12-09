@@ -256,6 +256,9 @@
 
         window.scrollTo(0, 0);
         editorblocked.set(false);
+        setTimeout(() => {
+            document.querySelector(".ProseMirror.editor")?.focus();
+        }, 200);
     };
 
     const handleUpdate = async (e) => {

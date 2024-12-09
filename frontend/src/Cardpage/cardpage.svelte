@@ -20,6 +20,8 @@
     let files;
     let currentfile;
 
+    let notification = "";
+
     editorblocked.set(true);
 
     const cardget = async () => {
@@ -64,40 +66,51 @@
     let promise = cardget();
 
     const handleNewCard = async (e) => {
-        editorblocked.set(true);
-        // console.log(showcard)
+        try {
+            editorblocked.set(true);
+            // console.log(showcard)
 
-        const card = await createNewCard(
-            showcard.expand.board.expand.usergroup.id,
-            e.detail,
-            showcard.authors
-                ? [...showcard.authors, $localToken?.model.id]
-                : [$localToken?.model.id],
-            showcard.board,
-            fileelement,
-            currentfile,
-        );
-        const data = {
-            ...card,
-            tags: card.tags.map((e) => e.id),
-            // logs: [
-            //     // ...showcard.logs,
-            //     `card content updated ${dateFormat(new Date())}`,
-            // ],
-            board: showcard.board,
-        };
+            const card = await createNewCard(
+                showcard.expand.board.expand.usergroup.id,
+                e.detail,
+                showcard.authors
+                    ? [...showcard.authors, $localToken?.model.id]
+                    : [$localToken?.model.id],
+                showcard.board,
+                fileelement,
+                currentfile,
+            );
+            const data = {
+                ...card,
+                tags: card.tags.map((e) => e.id),
+                // logs: [
+                //     // ...showcard.logs,
+                //     `card content updated ${dateFormat(new Date())}`,
+                // ],
+                board: showcard.board,
+            };
 
-        // console.log(data)
-        const oldexpand = { ...showcard.expand, tags: card.tags };
-        const record = await pb.collection("cards").update(cardid, data);
-        // console.log("%c record:","color:turquoise")
-        // console.log(record)
-        showcard = { ...record, tags: card.tags, expand: oldexpand };
-        // files = fileelement.files
-        if (record.file) {
-            files = [{ name: record.file }];
+            // console.log(data)
+            const oldexpand = { ...showcard.expand, tags: card.tags };
+            const record = await pb.collection("cards").update(cardid, data);
+            // console.log("%c record:","color:turquoise")
+            // console.log(record)
+            showcard = { ...record, tags: card.tags, expand: oldexpand };
+            // files = fileelement.files
+            if (record.file) {
+                files = [{ name: record.file }];
+            }
+            document.querySelector(".readmodetoggle")?.click();
+            notification = "Card was updated successfully";
+            setTimeout(() => {
+                notification = "";
+            }, 3000);
+        } catch (error) {
+            notification = "An error occurred while updating the card";
+            setTimeout(() => {
+                notification = "";
+            }, 30000);
         }
-        editorblocked.set(false);
     };
 
     const oneditorready = () => {
@@ -135,6 +148,11 @@
             >
                 <div class="grid-ch">
                     <Card fullView={true} card={showcard}>
+                        {#if notification != ""}
+                            <div class="notification">
+                                {notification}
+                            </div>
+                        {/if}
                         <Editor
                             bind:files
                             bind:fileelement
@@ -182,5 +200,17 @@
         max-width: 700px;
         margin: auto;
         width: 100%;
+    }
+
+    .notification {
+        background: var(--container-bg);
+
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        border-radius: 9px;
+        padding: 7px;
+        width: fit-content;
     }
 </style>

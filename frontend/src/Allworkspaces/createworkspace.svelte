@@ -196,6 +196,7 @@
             bind:this={input}
             on:change={handleChange}
             type="file"
+            accept="image/*"
         />
 
         <div class="flex">

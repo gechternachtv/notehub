@@ -170,7 +170,7 @@
 		</div>
 		<div class="editor-controls">
 			<div class="send-controls">
-				<button class="sendbtn" on:click={sendBtn}>send</button>
+				<button class="sendbtn" on:click={sendBtn}>save</button>
 				<button
 					class="filebtn"
 					on:click={() => {

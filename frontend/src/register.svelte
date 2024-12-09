@@ -194,6 +194,7 @@
           class="avatar"
           type="file"
           name=""
+          accept="image/*"
         />
       </div>
     </div>
