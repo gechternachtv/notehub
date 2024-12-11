@@ -120,6 +120,52 @@ onRecordAfterCreateRequest((e) => {
     }
 
 
+    //image validation:
+
+
+
+    function replaceBase64Src(jsonStr) {
+        try {
+
+            console.log(e.record.get("file"))
+            const data = JSON.parse(jsonStr);
+
+            let replacedFirst = false
+
+            function replaceSrc(node) {
+
+                if (replacedFirst === false && Array.isArray(node)) {
+                    node.forEach(item => replaceSrc(item));
+                } else if (node && typeof node === 'object') {
+                    Object.keys(node).forEach(key => {
+                        if (replacedFirst === false && key === 'src' && typeof node[key] === 'string' && node[key].startsWith('data:image/')) {
+                            node[key] = `/api/files/${e.baseCollectionEvent.collection.id}/${e.record.get("id")}/${e.record.get("file")}`;
+                            replacedFirst = true
+                        } else {
+                            replaceSrc(node[key]);
+                        }
+                    });
+                }
+            }
+
+            replaceSrc(data);
+
+            return data
+        } catch (error) {
+            return "Invalid JSON input";
+        }
+    }
+
+
+    e.record.set("raw", replaceBase64Src(e.record.get("raw")))
+
+
+    $app.dao().saveRecord(e.record)
+
+
+
+
+
 }, "cards")
 
 

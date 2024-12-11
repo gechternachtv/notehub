@@ -322,6 +322,8 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
             card.file = newfile
             card.imglink = ""
 
+            console.log(newfile)
+
             //imgtest
         } catch (error) {
             console.log(error)

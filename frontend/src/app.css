@@ -654,7 +654,7 @@ milkdown-list-item-block .label-wrapper {
 .picmo__auto {
 
   --accent-color: var(--button-bg) !important;
-  background-color: var(--body-background) !important;
+  /* background-color: var(--body-background) !important; */
 }
 
 .emojibtn {
@@ -673,4 +673,8 @@ milkdown-list-item-block .label-wrapper {
 
 .locked code {
   display: none;
+}
+
+.locked .label-wrapper {
+  pointer-events: none !important;
 }

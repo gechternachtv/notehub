@@ -20,14 +20,15 @@
         "November",
         "December",
     ];
-    const weekdays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+    const weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-    const cal = new Calendar({ siblingMonths: false, weekStart: true });
+    const cal = new Calendar({ siblingMonths: false, weekStart: 0 });
 
     const today = new Date();
     let year = today.getUTCFullYear();
     let month = today.getUTCMonth();
     let calrows = cal.getCalendar(year, month);
+    let currentday = today.getDate();
 
     $: {
         calrows = cal.getCalendar(year, month);
@@ -82,6 +83,7 @@
         </div>
         <div class="year">{year}</div>
         <div class="month">{months[month]}</div>
+        <div class="current-day">{currentday}</div>
     </div>
 
     <div class="calendar">
@@ -99,6 +101,7 @@
                                 year === new Date().getUTCFullYear()}
                             on:click={(e) => {
                                 console.log(e);
+                                currentday = day.day;
                                 dispatch("dayclick", {
                                     day: fn(day.day),
                                     month: fn(month + 1),
