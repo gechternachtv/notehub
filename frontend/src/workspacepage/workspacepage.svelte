@@ -77,7 +77,7 @@
             fields:
                 `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
-                `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.created,` +
+                `expand.boards.expand.cards.title,expand.boards.expand.cards.done,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                 `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.id,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text,expand.boards.expand.cards.expand.tags.usergroup`,
         });
@@ -157,7 +157,7 @@
             fields:
                 `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                 `expand.boards.id,expand.boards.usergroup,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
-                `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
+                `expand.boards.expand.cards.title,expand.boards.expand.cards.done,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                 `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.usergroup,expand.boards.expand.cards.expand.tags.id,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text,expand.boards.expand.cards.expand.tags.usergroup`,
         });
@@ -199,7 +199,7 @@
                 fields:
                     `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
                     `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
-                    `expand.boards.expand.cards.title,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
+                    `expand.boards.expand.cards.title,expand.boards.expand.cards.done,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                     `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
                     `expand.boards.expand.cards.link,expand.boards.expand.cards.expand.tags.name,expand.boards.expand.cards.expand.tags.id,expand.boards.expand.cards.expand.tags.color,expand.boards.expand.cards.text,expand.boards.expand.cards.expand.tags.usergroup`,
             },

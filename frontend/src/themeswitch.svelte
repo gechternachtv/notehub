@@ -78,6 +78,7 @@
 	:global(.yotsuba) {
 		--alert: #fb0000;
 		--news: #fb0000;
+		--complete: #468333;
 		--header-bg: #e04001;
 		--main-font-1: #800000;
 		--main-font-2: #800000;
@@ -96,6 +97,7 @@
 	:global(.yotsuba-b) {
 		--alert: #af0a0f;
 		--news: #af0a0f;
+		--complete: #468333;
 		--header-bg: #98e;
 		--main-font-1: #0f0c5d;
 		--main-font-2: #0f0c5d;
@@ -118,6 +120,7 @@
 	:global(.yotsuba-c) {
 		--alert: #df223b;
 		--news: #cb4e16;
+		--complete: #58b63b;
 		--header-bg: #5c9a45;
 		--main-font-2: #000;
 		--button-color: #fff;
@@ -136,6 +139,7 @@
 	:global(.futaba) {
 		--alert: #fb0000;
 		--news: #fb0000;
+		--complete: #4f923a;
 		--header-bg: #800000;
 		--main-font-1: #800000;
 		--main-font-2: #800000;
@@ -154,6 +158,7 @@
 	:global(.bluesky) {
 		--alert: #d3152e;
 		--news: #cb4e16;
+		--complete: #468333;
 		--header-bg: #42a0bd;
 		--main-font-2: black;
 		--button-bg: #356574;
@@ -176,6 +181,7 @@
 	:global(.luckygreen) {
 		--alert: #df223b;
 		--news: #cb4e16;
+		--complete: #468333;
 		--header-bg: #36a68c;
 		--main-font-2: #000;
 		--button-bg: #235e56;
@@ -194,6 +200,7 @@
 	:global(.uboa) {
 		--alert: #d33;
 		--news: #d33;
+		--complete: #468333;
 		--header-bg: #603030;
 		--main-font-2: #aaa;
 		--button-bg: #168a4f;
@@ -214,6 +221,7 @@
 	:global(.plankton) {
 		--alert: #6bad00;
 		--news: #ff2164;
+		--complete: #468333;
 		--main-font-1: black;
 		--main-font-2: black;
 		--button-color: #ffe;
@@ -232,6 +240,7 @@
 	:global(.pxtone) {
 		--alert: #01f080;
 		--news: var(--alert);
+		--complete: #468333;
 		--main-font-1: #d2ca9c;
 		--main-font-2: var(--main-font-1);
 		--button-color: #0e0e2d;
@@ -250,6 +259,7 @@
 	:global(.blood) {
 		--alert: #c50000;
 		--news: #f10000;
+		--complete: #468333;
 		--header-bg: #3a0707;
 		--main-font-1: #0a0a0a;
 		--main-font-2: #0a0a0a;
@@ -273,6 +283,7 @@
 	:global(.fvwm) {
 		--alert: #fb0000;
 		--news: #fb0000;
+		--complete: #468333;
 		--header-bg: #828776;
 		--main-font-1: #262050;
 		--main-font-2: #262050;
@@ -290,6 +301,7 @@
 	:global(.dfwm98) {
 		--alert: #df223b;
 		--news: #cb4e16;
+		--complete: #468333;
 		--header-color: #fff;
 		--card-bg: #efefef;
 		--gradient-col-2: #f0f0f0;
@@ -315,6 +327,7 @@
 	:global(.goldSrc) {
 		--alert: #96872f;
 		--news: #f10000;
+		--complete: #61912a;
 		--header-bg: #4c5945;
 		--main-font-1: #fff;
 		--main-font-2: #96872f;

@@ -35,6 +35,10 @@
 
     //
 
+    function formatNumber(num) {
+        return Number(num) < 10 ? "0" + Number(num) : Number(num).toString();
+    }
+
     async function getRecords() {
         try {
             const resultList = await pb.collection("cards").getList(1, 60, {
@@ -67,7 +71,10 @@
 
     const handledayclick = (e) => {
         console.log(e.detail);
-        filter = `((created >= "${e.detail.year}-${e.detail.month}-${e.detail.day} 00:00:00" && created <= "${e.detail.year}-${e.detail.month}-${e.detail.day} 23:59:59") || title ~ "${e.detail.day}-${e.detail.month}-${e.detail.year}") && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
+        filter =
+            `((created >= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 00:00:00" && created <= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 23:59:59")` +
+            ` || title ~ "${formatNumber(e.detail.day)}-${formatNumber(e.detail.month)}-${e.detail.year}")` +
+            ` && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
         promise = getRecords();
     };
 </script>

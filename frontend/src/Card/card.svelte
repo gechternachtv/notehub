@@ -185,7 +185,14 @@
             {/if}
         {/if}
     </div>
-
+    {#if card.done}
+        <div class="progress-bar">
+            <div
+                style="width:{card.done}%"
+                class="progress {card.done == 100 ? `complete` : ``}"
+            ></div>
+        </div>
+    {/if}
     <div class="card-container card-container---controls">
         <div class="controls editor-panel">
             {#if card.link != "" || card.imglink != "" || card.file != ""}
@@ -218,6 +225,23 @@
 </div>
 
 <style>
+    .progress-bar {
+        max-width: 100%;
+        background: var(--container-bg);
+        height: 4px;
+        border-radius: 7px;
+        width: 100%;
+        overflow: hidden;
+    }
+    .progress {
+        height: 100%;
+        width: 0%;
+        background: var(--button-bg);
+    }
+    .complete {
+        background: var(--complete);
+    }
+
     .nodeco {
         text-decoration: none;
     }

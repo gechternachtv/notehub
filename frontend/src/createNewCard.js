@@ -17,10 +17,10 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
     function stringReplacer(originalString, stringsToRemove = []) {
 
-        const foo = ["[]", "[x]", ...stringsToRemove].filter(e => e != "")
+        const foo = [...stringsToRemove].filter(e => e != "")
         let resultString = originalString
         // console.log("😴")
-        console.log(foo)
+
 
         foo.forEach(element => {
             resultString = resultString.replaceAll(element, "")
@@ -36,7 +36,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
     const validateUrl = (url, mainpath = "") => {
         try {
-            console.log(mainpath)
+
             if (mainpath != "") {
                 if (url.startsWith('/')) {
 
@@ -78,7 +78,44 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
     }
 
 
+    //done percentage
+    var totalBoxNumber = 0
+    var totalCheckedNumber = 0
 
+    const allBulletLists = content.filter(e => e.type === "bullet_list")
+
+    if (allBulletLists.length) {
+        allBulletLists.forEach(bulletList => {
+            bulletList.content?.forEach(checkbox => {
+                if (checkbox.type === "list_item") {
+                    totalBoxNumber += 1
+
+                    if (checkbox.attrs.checked) {
+                        totalCheckedNumber += 1
+                    }
+
+                }
+            })
+        })
+
+        console.log("media")
+        console.log(totalBoxNumber, totalCheckedNumber)
+
+        if (totalBoxNumber > 0) {
+
+            const donePercentage = (totalCheckedNumber / totalBoxNumber) * 100;
+
+            card.done = Math.floor(donePercentage)
+
+
+        }
+
+
+    }
+
+
+
+    //paragraph
     const paragraph = content.filter(e => e.type === "paragraph").filter(e => e.content)
 
     //title
