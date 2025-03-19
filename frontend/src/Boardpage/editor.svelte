@@ -129,6 +129,17 @@
 			const enterHandler = (event) => {
 				console.log(event);
 
+				document
+					.querySelectorAll("milkdown-list-item-block .label")
+					.forEach((label) => {
+						if (!label.classList.contains("monitor")) {
+							label.classList.add("monitor");
+							label.addEventListener("change", (e) => {
+								dispatch("newcontent", getMarkdown());
+							});
+						}
+					});
+
 				if ($editorblocked) {
 					event.preventDefault();
 				}
@@ -150,6 +161,16 @@
 			editorel.addEventListener("keydown", enterHandler);
 			editorel.addEventListener("send", enterHandler);
 
+			document
+				.querySelectorAll("milkdown-list-item-block .label")
+				.forEach((label) => {
+					if (!label.classList.contains("monitor")) {
+						label.classList.add("monitor");
+						label.addEventListener("change", (e) => {
+							dispatch("newcontent", getMarkdown());
+						});
+					}
+				});
 			dispatch("editorready", true);
 			editorBlockerCheck();
 		});
@@ -163,11 +184,6 @@
 		</div>
 	{/if}
 	<div class="editor-container">
-		<div class="editor-incontainer">
-			<Picmobutton on:emojiselect={handleEmojiselect} />
-
-			<div bind:this={editorel} class="editor" use:editor />
-		</div>
 		<div class="editor-controls">
 			<div class="send-controls">
 				<button class="sendbtn" on:click={sendBtn}>save</button>
@@ -185,6 +201,11 @@
 					type="file"
 				/>
 			</div>
+		</div>
+		<div class="editor-incontainer">
+			<Picmobutton on:emojiselect={handleEmojiselect} />
+
+			<div bind:this={editorel} class="editor" use:editor />
 		</div>
 	</div>
 </main>

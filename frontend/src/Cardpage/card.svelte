@@ -399,6 +399,7 @@
             >
             <button
                 class="readmodetoggle"
+                class:readmode
                 on:click={() => {
                     readmode = !readmode;
                     editorblocked.set(readmode);

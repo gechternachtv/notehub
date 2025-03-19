@@ -67,6 +67,7 @@
 
     const handleNewCard = async (e) => {
         try {
+            console.log(e);
             editorblocked.set(true);
             // console.log(showcard)
 
@@ -100,7 +101,17 @@
             if (record.file) {
                 files = [{ name: record.file }];
             }
-            document.querySelector(".readmodetoggle")?.click();
+
+            if (
+                !document
+                    .querySelector(".readmodetoggle")
+                    ?.classList.contains("readmode")
+            ) {
+                document.querySelector(".readmodetoggle")?.click();
+            }
+
+            // document.querySelector(".readmodetoggle")?.click();
+
             notification = "Card was updated successfully";
             setTimeout(() => {
                 notification = "";
@@ -142,6 +153,9 @@
         {#if showcard.id}
             <div
                 class:locked={!showcard.expand?.board?.expand?.usergroup?.users.includes(
+                    $localToken ? $localToken?.model.id : "???",
+                )}
+                class:readonly={!showcard.expand?.board?.expand?.usergroup?.users.includes(
                     $localToken ? $localToken?.model.id : "???",
                 )}
                 class="grid"
@@ -203,8 +217,8 @@
     }
 
     .notification {
-        background: var(--container-bg);
-
+        background: var(--complete);
+        color: var(--complete-col);
         display: flex;
         align-items: center;
         gap: 10px;
@@ -212,5 +226,17 @@
         border-radius: 9px;
         padding: 7px;
         width: fit-content;
+        z-index: 20;
+        pointer-events: none;
+        position: fixed;
+        bottom: 50px;
+
+        margin: auto;
+
+        left: 0;
+        right: 0;
+        text-align: center;
+        margin-right: auto;
+        margin-left: auto;
     }
 </style>

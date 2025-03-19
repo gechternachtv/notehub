@@ -79,6 +79,7 @@
 		--alert: #fb0000;
 		--news: #fb0000;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #e04001;
 		--main-font-1: #800000;
 		--main-font-2: #800000;
@@ -98,6 +99,7 @@
 		--alert: #af0a0f;
 		--news: #af0a0f;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #98e;
 		--main-font-1: #0f0c5d;
 		--main-font-2: #0f0c5d;
@@ -121,6 +123,7 @@
 		--alert: #df223b;
 		--news: #cb4e16;
 		--complete: #58b63b;
+		--complete-col: #ffeedb;
 		--header-bg: #5c9a45;
 		--main-font-2: #000;
 		--button-color: #fff;
@@ -140,6 +143,7 @@
 		--alert: #fb0000;
 		--news: #fb0000;
 		--complete: #4f923a;
+		--complete-col: #ffeedb;
 		--header-bg: #800000;
 		--main-font-1: #800000;
 		--main-font-2: #800000;
@@ -159,6 +163,7 @@
 		--alert: #d3152e;
 		--news: #cb4e16;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #42a0bd;
 		--main-font-2: black;
 		--button-bg: #356574;
@@ -182,6 +187,7 @@
 		--alert: #df223b;
 		--news: #cb4e16;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #36a68c;
 		--main-font-2: #000;
 		--button-bg: #235e56;
@@ -201,6 +207,7 @@
 		--alert: #d33;
 		--news: #d33;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #603030;
 		--main-font-2: #aaa;
 		--button-bg: #168a4f;
@@ -222,6 +229,7 @@
 		--alert: #6bad00;
 		--news: #ff2164;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--main-font-1: black;
 		--main-font-2: black;
 		--button-color: #ffe;
@@ -241,6 +249,7 @@
 		--alert: #01f080;
 		--news: var(--alert);
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--main-font-1: #d2ca9c;
 		--main-font-2: var(--main-font-1);
 		--button-color: #0e0e2d;
@@ -260,6 +269,7 @@
 		--alert: #c50000;
 		--news: #f10000;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #3a0707;
 		--main-font-1: #0a0a0a;
 		--main-font-2: #0a0a0a;
@@ -284,6 +294,7 @@
 		--alert: #fb0000;
 		--news: #fb0000;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-bg: #828776;
 		--main-font-1: #262050;
 		--main-font-2: #262050;
@@ -302,6 +313,7 @@
 		--alert: #df223b;
 		--news: #cb4e16;
 		--complete: #468333;
+		--complete-col: #ffeedb;
 		--header-color: #fff;
 		--card-bg: #efefef;
 		--gradient-col-2: #f0f0f0;
@@ -328,6 +340,7 @@
 		--alert: #96872f;
 		--news: #f10000;
 		--complete: #61912a;
+		--complete-col: #ffeedb;
 		--header-bg: #4c5945;
 		--main-font-1: #fff;
 		--main-font-2: #96872f;

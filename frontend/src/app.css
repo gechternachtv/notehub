@@ -675,6 +675,10 @@ milkdown-list-item-block .label-wrapper {
   display: none;
 }
 
-.locked .label-wrapper {
+.readonly .label-wrapper {
   pointer-events: none !important;
+}
+
+.label.monitor {
+  cursor: pointer;
 }
