@@ -354,15 +354,15 @@
         <div>Board:</div>
         <Boardcard board={card.expand?.board} workspacecard={true} />
     </div>
-    {#if card.done}
-        <!-- {card.done} -->
-        <div class="progress-bar">
-            <div
-                style="width:{card.done}%"
-                class="progress {card.done == 100 ? `complete` : ``}"
-            ></div>
-        </div>
-    {/if}
+
+    <!-- {card.done} -->
+    <div class:active={!!card.done} class="progress-bar">
+        <div
+            style="width:{card.done}%"
+            class="progress {card.done == 100 ? `complete` : ``}"
+        ></div>
+    </div>
+
     <div class="card-container card-container---controls">
         <div class="controls editor-panel">
             {#if card.link != "" || card.imglink != "" || card.file != ""}
@@ -375,16 +375,7 @@
                               ? card.imglink
                               : getFile(card).link}
                     >
-                        <svg
-                            fill="var(--button-color)"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 48 48"
-                            width="15px"
-                            height="15px"
-                            ><path
-                                d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"
-                            /></svg
-                        >
+                        📎
                     </a>
                 </div>
             {/if}
@@ -450,15 +441,22 @@
     .progress-bar {
         max-width: 300px;
         background: var(--container-bg);
-        height: 7px;
+        height: 0px;
         border-radius: 7px;
         width: 100%;
         overflow: hidden;
+        transition: all 0.5s;
+        opacity: 0;
+    }
+    .progress-bar.active {
+        height: 7px;
+        opacity: 1;
     }
     .progress {
         height: 100%;
         width: 0%;
         background: var(--button-bg);
+        transition: all 0.5s;
     }
     .complete {
         background: var(--complete);

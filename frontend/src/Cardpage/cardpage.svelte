@@ -12,7 +12,7 @@
 
     export let id = params.id;
 
-    // console.log(params.id)
+    console.log(params);
 
     let showcard = {};
     let cardid = "";
@@ -186,7 +186,7 @@
 
 <style>
     main {
-        padding: 20px 0;
+        /* padding: 20px 0; */
         box-sizing: border-box;
     }
 
