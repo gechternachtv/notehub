@@ -12,8 +12,6 @@
     export let usergroup = null;
     export let params = { usergroup: "" };
     import { localToken, server } from "../stores.js";
-
-    // import SidebarAllusergroups from "../sidebar-allusergroups.svelte";
     // console.log(usergroup)
 
     let showModal = false;

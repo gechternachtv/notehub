@@ -74,7 +74,9 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         created: new Date(),
         file: filecontent ? filecontent : currentfile ? currentfile : null,
         authors: authors,
-        board: board
+        board: board,
+        done: 0,
+        // datementions: ""
     }
 
 
@@ -101,16 +103,23 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         console.log("media")
         console.log(totalBoxNumber, totalCheckedNumber)
 
-        if (totalBoxNumber > 0) {
 
+        if (totalBoxNumber > 0) {
+            //is checklist
             const donePercentage = (totalCheckedNumber / totalBoxNumber) * 100;
 
-            card.done = Math.floor(donePercentage)
-
-
+            if (donePercentage > 0) {
+                card.done = Math.floor(donePercentage)
+            } else {
+                card.done = 1
+            }
+        } else {
+            card.done = 0
         }
 
 
+    } else {
+        card.done = 0
     }
 
 
@@ -228,6 +237,25 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         if (card.title === "" && meta.title /*link metadata*/) {
             card.title = meta.title
         }
+
+
+        //mentions
+
+
+        const datementionsWords = words.filter(e => e.startsWith("@"))
+        const datesearchMentions = []
+        for (let index = 0; index < datementionsWords.length; index++) {
+            const e = datementionsWords[index];
+            // search tag
+            const namewithouthash = datementionsWords[index].replace(/^@/, '')
+
+            datesearchMentions.push(namewithouthash)
+
+        }
+
+        card.datementions = datesearchMentions.toString()
+
+
 
 
         //tags

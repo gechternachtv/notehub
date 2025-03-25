@@ -1,4 +1,4 @@
-export default (created) => {
+export default (created, showHours = true) => {
   const months = [
     "Jan",
     "Feb",
@@ -22,5 +22,5 @@ export default (created) => {
     minute: created.getMinutes() < 9 ? `0${created.getMinutes()}` : created.getMinutes()
   }
 
-  return `${date.day} ${date.month} ${date.year} | ${date.hour}:${date.minute}`
+  return `${date.day} ${date.month} ${date.year}${showHours ? ` | ${date.hour}:${date.minute}` : ``}`
 }

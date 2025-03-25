@@ -20,7 +20,75 @@
 
     // let showModal = false;
 
+    function closestDate(dates) {
+        console.log(dates);
+        if (dates.length) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize time for accurate comparison
+
+            const futureDates = dates
+                .map((dateStr) => {
+                    const [day, month, year] = dateStr.split("-").map(Number);
+                    const dateObj = new Date(year, month - 1, day);
+                    return { dateStr, dateObj };
+                })
+                .filter(({ dateObj }) => dateObj >= today);
+
+            if (futureDates.length > 0) {
+                const closest = futureDates.sort(
+                    (a, b) => a.dateObj - b.dateObj,
+                )[0];
+                const timeDiff =
+                    (closest.dateObj - today) / (1000 * 60 * 60 * 24); // Convert ms to days
+
+                var status = "upcoming";
+
+                if (timeDiff < 1) {
+                    status = "today";
+                } else if (timeDiff < 3) {
+                    status = "warning";
+                }
+
+                return {
+                    date: futureDates.sort((a, b) => a.dateObj - b.dateObj)[0]
+                        .dateObj,
+                    status: status,
+                };
+            }
+
+            // If no future date exists, return the most recent past date
+            return {
+                date:
+                    dates
+                        .map((dateStr) => {
+                            const [day, month, year] = dateStr
+                                .split("-")
+                                .map(Number);
+                            const dateObj = new Date(year, month - 1, day);
+                            return { dateStr, dateObj };
+                        })
+                        .sort((a, b) => b.dateObj - a.dateObj)[0]?.dateObj ||
+                    null,
+                status: "passed",
+            };
+        }
+    }
+
     let date;
+
+    let duedate;
+
+    if (card.datementions) {
+        duedate = closestDate(card.datementions.split(","));
+    }
+
+    if (card.done) {
+        if (card.done == 100) {
+            if (duedate) {
+                duedate.status = "done";
+            }
+        }
+    }
 
     const dispatch = createEventDispatcher();
     const setInfo = (card) => {
@@ -162,7 +230,14 @@
         <a class="nodeco" href="/#/card/{card.id}">
             <div class="updates">{card.text}</div>
         </a>
-        <div class="date">📅 {date}</div>
+        <div class="date">🗓️ {date}</div>
+        {#if card.datementions}
+            {#if card.datementions.split(",").length > 0}
+                <div class="duedate {duedate.status}">
+                    📆 {dateFormat(duedate.date, false)}
+                </div>
+            {/if}
+        {/if}
 
         {#if card.expand?.tags}
             {#if card.expand?.tags.length > 0}
@@ -242,6 +317,33 @@
 </div>
 
 <style>
+    .duedate,
+    .date {
+        margin-top: 7px;
+        background: var(--board-title-color);
+        color: var(--button-color);
+        border-radius: 20px;
+        padding: 2px 4px;
+        width: fit-content;
+    }
+
+    .duedate.warning {
+        background: #d9b45b;
+        color: white;
+    }
+    .duedate.today {
+        background: #f20e0e;
+        color: white;
+    }
+    .duedate.done {
+        background: var(--complete);
+        color: var(--complete-col);
+    }
+
+    .duedate.passed {
+        opacity: 0.4;
+    }
+
     .progress-bar {
         max-width: 100%;
         background: var(--container-bg);
@@ -454,20 +556,13 @@
     }
 
     .date {
-        font-size: 1.2rem;
+        /* font-size: 1.2rem; */
         opacity: 0.7;
-        margin-top: 17px;
+        /* margin-top: 17px; */
     }
 
     .inputholder input {
         margin: 0px;
-    }
-
-    .card.listview .date {
-        position: absolute;
-
-        right: 12px;
-        bottom: 8px;
     }
 
     .card.listview .card-container---controls {
@@ -549,7 +644,7 @@
             display: none;
         }
     }
-    .listview .card-container---info {
+    /* .listview .card-container---info {
         padding-bottom: 25px;
-    }
+    } */
 </style>

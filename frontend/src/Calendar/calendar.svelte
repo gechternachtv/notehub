@@ -73,7 +73,7 @@
         console.log(e.detail);
         filter =
             `((created >= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 00:00:00" && created <= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 23:59:59")` +
-            ` || title ~ "${formatNumber(e.detail.day)}-${formatNumber(e.detail.month)}-${e.detail.year}")` +
+            ` || datementions ~ "${formatNumber(e.detail.day)}-${formatNumber(e.detail.month)}-${e.detail.year}")` +
             ` && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
         promise = getRecords();
     };

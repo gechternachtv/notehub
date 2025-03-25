@@ -39,7 +39,7 @@
     (async () => {
         cards = await pb.collection("cards").getFullList({
             sort: "-created",
-            fields: "created,title",
+            fields: "created,datementions",
             filter: `(board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`,
         });
         console.log(cards);
@@ -93,7 +93,7 @@
         {#each calrows as day}
             <div class="day">
                 {#if day}
-                    {#if !!cards.filter((e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`) || e.title.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`)).length}
+                    {#if !!cards.filter((e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`) || e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`)).length}
                         <button
                             class="cardday"
                             class:today={day.day === new Date().getDate() &&
