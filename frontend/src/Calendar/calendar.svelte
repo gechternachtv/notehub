@@ -119,6 +119,8 @@
 <style>
     .calendar-result {
         width: 100%;
+        max-height: 400px;
+        overflow: scroll;
     }
     .calendar-wrapper {
         min-width: 300px;
@@ -127,6 +129,8 @@
         position: relative;
         display: flex;
         gap: 30px;
+        max-width: 781px;
+        margin-left: 0;
     }
 
     @media (max-width: 991px) {
@@ -154,6 +158,7 @@
         background: var(--container-bg);
         color: var(--main-font-1);
         margin: auto;
+        margin-left: 0;
         /* max-width: var(--container); */
         width: 100%;
         /* padding-bottom: 20px; */

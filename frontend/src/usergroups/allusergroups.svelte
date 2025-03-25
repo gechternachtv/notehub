@@ -44,7 +44,6 @@
 
 <main>
     {#if $localToken}
-        <h1>Today</h1>
         <Calendar></Calendar>
     {/if}
     {#await recordusergroup}

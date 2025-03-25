@@ -484,6 +484,7 @@
         width: 100%;
         bottom: 0;
         border-top: 4px solid var(--container-bg);
+        z-index: 2;
     }
     .editorOpentoggle {
         position: absolute;

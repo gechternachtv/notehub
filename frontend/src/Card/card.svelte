@@ -151,6 +151,7 @@
     id={card.id}
     class="card"
     class:listview={listView}
+    class:noimage={!card.file && !card.imglink}
     style="border-left: 3px solid {card.color}"
 >
     <!-- {card.board}<br/>

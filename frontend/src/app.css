@@ -589,6 +589,16 @@ button {
   padding-bottom: 28px !important;
 }
 
+.workspace-board-container .progress-bar {
+  grid-column: span 2;
+  margin-top: 6px;
+}
+
+
+
+
+
+
 .locked .labelcolor {
   display: none !important;
 }
