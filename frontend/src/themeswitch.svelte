@@ -12,11 +12,12 @@
 		"yotsuba-c",
 		"futaba",
 		"dfwm98",
+		"fvwm",
 		"goldSrc",
 		"blood",
 		"uboa",
-		"fvwm",
 		"pxtone",
+		"dark",
 	];
 
 	const storedTheme = localStorage.getItem("storedTheme");
@@ -263,6 +264,26 @@
 		--header-color: var(--main-font-1);
 		--board-title-color: var(--main-font-1);
 		--browser-color: #343255;
+	}
+
+	:global(.dark) {
+		--alert: #01f080;
+		--news: var(--alert);
+		--complete: #468333;
+		--complete-col: #387e4d;
+		--main-font-1: #dfdfdf;
+		--main-font-2: #e4e4e4;
+		--button-color: #000;
+		--card-bg: #0d0d0d;
+		--container-bg: #202020;
+		--gradient-col-1: #0b0b0b;
+		--gradient-col-2: #737373;
+		--body-background: black;
+		--header-bg: #131313;
+		--button-bg: #646464;
+		--header-color: #d3d3d3;
+		--board-title-color: #7e7e7e;
+		--browser-color: #131313;
 	}
 
 	:global(.blood) {
