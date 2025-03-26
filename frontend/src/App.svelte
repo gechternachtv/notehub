@@ -107,7 +107,7 @@
     font-size: 1.2rem;
     position: sticky;
     top: 0;
-    z-index: 2;
+    z-index: 3;
     justify-content: flex-end;
     line-height: 21px;
     min-height: 40px;

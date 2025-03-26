@@ -7,12 +7,17 @@
     import Card from "./card.svelte";
     import createNewCard from "../createNewCard.js";
     import { localToken, editorblocked } from "../stores.js";
+    import { querystring } from "svelte-spa-router";
+
+    import Contextmenu from "../contextmenu.svelte";
 
     export let params = {};
 
     export let id = params.id;
 
-    console.log(params);
+    const urlparams = new URLSearchParams($querystring);
+    const workspacename = urlparams.get("workspacename");
+    const workspaceid = urlparams.get("workspaceid");
 
     let showcard = {};
     let cardid = "";
@@ -151,6 +156,36 @@
 <main>
     {#await promise then defaultValue}
         {#if showcard.id}
+            <Contextmenu>
+                <div class="breadcrumb">
+                    <div class="contextmenu-link">
+                        <a
+                            href="/#/usergroup/{showcard.expand?.board?.expand
+                                ?.usergroup.id}"
+                            >{showcard.expand?.board?.expand?.usergroup.name}
+                        </a>
+
+                        {#if workspacename && workspaceid}
+                            ➜
+                            <a href="/#/workspace/{workspaceid}"
+                                >{workspacename}
+                            </a>
+                        {/if}
+
+                        ➜
+
+                        <a
+                            href="/#/board/{showcard.expand?.board
+                                ?.id}{workspacename && workspaceid
+                                ? `?workspacename=${workspacename}&workspaceid=${workspaceid}`
+                                : ''}"
+                            >{showcard.expand?.board?.name}
+                        </a>
+                    </div>
+                    ➜
+                </div>
+            </Contextmenu>
+
             <div
                 class:locked={!showcard.expand?.board?.expand?.usergroup?.users.includes(
                     $localToken ? $localToken?.model.id : "???",

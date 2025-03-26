@@ -15,6 +15,8 @@
     import { localToken, editorblocked } from "../stores.js";
     import Contextmenu from "../contextmenu.svelte";
 
+    import { querystring } from "svelte-spa-router";
+
     editorblocked.set(false);
 
     const dispatch = createEventDispatcher();
@@ -36,6 +38,18 @@
         color: "",
         cards: [],
     };
+
+    export let workspace;
+
+    const urlparams = new URLSearchParams($querystring);
+    const workspacename = urlparams.get("workspacename");
+    const workspaceid = urlparams.get("workspaceid");
+    if (workspacename && workspaceid) {
+        workspace = {
+            id: workspaceid,
+            name: workspacename,
+        };
+    }
 
     let canedit = !!board.expand?.usergroup.users?.includes(
         $localToken ? $localToken?.model.id : "???",
@@ -319,11 +333,28 @@
     };
 </script>
 
-<main>
+<main class:paddingtop={boardpage}>
     {#if boardisactive}
         <!-- content here -->
 
         {#await promise then board}
+            <Contextmenu>
+                <div class="breadcrumb">
+                    <div class="contextmenu-link">
+                        <a href="/#/usergroup/{board?.expand?.usergroup.id}"
+                            >{board?.expand?.usergroup.name}
+                        </a>
+
+                        {#if workspacename && workspaceid}
+                            ➜
+                            <a href="/#/workspace/{workspaceid}"
+                                >{workspacename}
+                            </a>
+                        {/if}
+                    </div>
+                    ➜ {board.name}
+                </div>
+            </Contextmenu>
             <div
                 class:locked={!canedit}
                 class:canmove={!canmove}
@@ -338,7 +369,7 @@
                     {JSON.stringify(currentCardsList)}
                 </div>
 
-                <Boardcard {board} {counter} />
+                <Boardcard {workspace} {board} {counter} />
 
                 {#if boardpage}
                     {#if board.description}
@@ -346,11 +377,6 @@
                             {board.description}
                         </div>
                     {/if}
-                    <a
-                        class="board-usergroupbread"
-                        href="/#/usergroup/{board.usergroup}"
-                        >← {board.expand.usergroup.name}
-                    </a>
 
                     <div class="controls">
                         {#if canedit}
@@ -390,7 +416,7 @@
                         on:change={handleDndFinalize}
                     >
                         {#each cardsFull as card (card.id)}
-                            <Card {listView} {card}></Card>
+                            <Card {listView} {card} {workspace}></Card>
                         {/each}
                     </Sortgrid>
 
@@ -516,5 +542,9 @@
         padding: 20px 0;
         padding-top: 0px;
         color: var(--board-title-color);
+    }
+
+    .paddingtop {
+        padding-top: 20px;
     }
 </style>

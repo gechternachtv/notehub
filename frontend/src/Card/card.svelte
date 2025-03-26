@@ -16,6 +16,7 @@
 
     export let listView = false;
 
+    export let workspace;
     //console.log(card);
 
     // let showModal = false;
@@ -181,7 +182,12 @@
             >
             <span class="debug debug-id">{card.id}</span>
         </div>
-        <a class="img-c thumblink" href="/#/card/{card.id}">
+        <a
+            class="img-c thumblink"
+            href="/#/card/{card.id}{workspace?.name && workspace?.id
+                ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                : ''}"
+        >
             <div class="thumb">
                 <!-- {#if channel.thumb} -->
                 <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
@@ -201,7 +207,12 @@
     <div class="card-container card-container---info">
         <!-- <div class="title">{channel.name}</div> -->
         <!-- <div class="hostName">{channel.host}</div> -->
-        <a class="nodeco" href="/#/card/{card.id}">
+        <a
+            class="nodeco"
+            href="/#/card/{card.id}{workspace?.name && workspace?.id
+                ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                : ''}"
+        >
             <div class="title">
                 <img
                     style="max-width:16px"
@@ -228,7 +239,12 @@
             {/if}
         {/if} -->
 
-        <a class="nodeco" href="/#/card/{card.id}">
+        <a
+            class="nodeco"
+            href="/#/card/{card.id}{workspace?.name && workspace?.id
+                ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                : ''}"
+        >
             <div class="updates">{card.text}</div>
         </a>
         <div class="date">🗓️ {date}</div>
@@ -297,7 +313,11 @@
                 </div>
             {/if}
             <div class="feed-btn">
-                <a href="/#/card/{card.id}">
+                <a
+                    href="/#/card/{card.id}{workspace?.name && workspace?.id
+                        ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                        : ''}"
+                >
                     <svg
                         fill="var(--button-color)"
                         xmlns="http://www.w3.org/2000/svg"

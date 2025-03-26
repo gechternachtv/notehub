@@ -9,13 +9,19 @@
 
   export let workspacecard = false;
   export let counter = 0;
+  export let workspace = {};
+
+  console.log("boardcard orkspace:");
+  console.log(workspace);
 </script>
 
 <a
   class:workspacecard
   style="border-left: 4px solid {board.color}"
   class="board-header"
-  href="/#/board/{board.id}"
+  href="/#/board/{board.id}{workspace?.name && workspace?.id
+    ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+    : ''}"
 >
   {#if board.img}
     <!-- content here -->

@@ -344,6 +344,7 @@
                                 </div>
 
                                 <Board
+                                    {workspace}
                                     listView={false}
                                     board={{
                                         ...board,
@@ -497,23 +498,5 @@
         position: absolute;
         left: 0;
         width: 100%;
-    }
-
-    @media (min-width: 991px) {
-        .contextmenu-btn {
-            padding: 1px 13px;
-        }
-    }
-    .contextmenu-link {
-        color: var(--header-color);
-        opacity: 0.7;
-    }
-    .contextmenu-link a {
-        color: var(--header-color);
-    }
-    .breadcrumb {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
     }
 </style>

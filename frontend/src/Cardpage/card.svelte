@@ -129,14 +129,16 @@
 
     let duedate;
 
-    if (card.datementions) {
-        duedate = closestDate(card.datementions.split(","));
-    }
+    $: {
+        if (card.datementions) {
+            duedate = closestDate(card.datementions.split(","));
+        }
 
-    if (card.done) {
-        if (card.done == 100) {
-            if (duedate) {
-                duedate.status = "done";
+        if (card.done) {
+            if (card.done == 100) {
+                if (duedate) {
+                    duedate.status = "done";
+                }
             }
         }
     }
@@ -198,6 +200,66 @@
     const handlemovetoBoard = async () => {
         showModalMove = true;
         // movetoBoard("tw5augb2ospnnzx")
+    };
+
+    const handleDuplicate = async () => {
+        try {
+            const newCard = { ...card };
+            delete newCard["id"];
+            delete newCard["created"];
+            delete newCard["expand"];
+            delete newCard["file"];
+
+            if (newCard.imglink === "" || !newCard.imglink) {
+                if (typeof card.file == "string") {
+                    if (
+                        /\.(png|jpe?g|gif|bmp|webp|svg|tiff?)$/i.test(card.file)
+                    ) {
+                        console.log(typeof card.file);
+                        const newimagelink = `${$server.url}/api/files/${card.collectionId}/${card.id}/${card.file}`;
+                        console.log(newimagelink);
+                        newCard.imglink = newimagelink;
+
+                        console.log(typeof newCard.raw);
+                        if (typeof newCard.raw == "object") {
+                            if (newCard.raw.push) {
+                                const newimgobj = {
+                                    type: "paragraph",
+                                    content: [
+                                        {
+                                            type: "image",
+                                            attrs: {
+                                                src: newimagelink,
+                                                alt: "",
+                                                title: "",
+                                            },
+                                        },
+                                    ],
+                                };
+
+                                newCard.raw = [newimgobj, ...newCard.raw];
+                                console.log(newCard.raw);
+                            }
+                        }
+                    }
+                }
+            }
+
+            const jsonString = JSON.stringify(newCard.raw).replace(
+                /"checked":true/g,
+                '"checked":false',
+            );
+            if (jsonString.includes("checked")) {
+                newCard.done = 1;
+            }
+            newCard.raw = JSON.parse(jsonString);
+
+            console.log(newCard);
+            const record = await pb.collection("cards").create(newCard);
+            console.log(record);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const movetoBoard = async (boardtoinsert) => {
@@ -458,6 +520,9 @@
 
             <button class="cardcontrols-move" on:click={handlemovetoBoard}
                 >move ➜</button
+            >
+            <button class="cardcontrols-move" on:click={handleDuplicate}
+                >duplicate</button
             >
             <!-- <a href="/#/board/{card.board}">current board</a> -->
             <button

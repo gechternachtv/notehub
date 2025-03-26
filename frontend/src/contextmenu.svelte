@@ -44,7 +44,7 @@
             padding-left: 20px;
             top: 20px;
             font-size: 1.2rem;
-            z-index: 2;
+            z-index: 3;
         }
     }
 </style>

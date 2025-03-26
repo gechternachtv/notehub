@@ -7,7 +7,7 @@
     import Modal from "../modal/modal.svelte";
     import { push } from "svelte-spa-router";
     import { onDestroy } from "svelte";
-    import Contextmenu from "../contextmenu.svelte";
+    // import Contextmenu from "../contextmenu.svelte";
     import { localToken } from "../stores.js";
     let showModal = false;
 
