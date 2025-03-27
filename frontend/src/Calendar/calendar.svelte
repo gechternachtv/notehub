@@ -101,12 +101,13 @@
                 ,dropTargetClasses:["floating"]
                 }
                 } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
-
-                        <Sortgrid class="card-grid list">
-                            {#each searchresult.items as card (card.id)}
-                                <Card {card}></Card>
-                            {/each}
-                        </Sortgrid>
+                        {#if searchresult.items.length}
+                            <Sortgrid class="card-grid list">
+                                {#each searchresult.items as card (card.id)}
+                                    <Card {card}></Card>
+                                {/each}
+                            </Sortgrid>
+                        {/if}
                     </div>
                 </div>
             {/if}

@@ -161,6 +161,7 @@
 </script>
 
 <div
+    id={card.id}
     style={`grid-column: 1 / ${Object.values(showcard).filter((value) => value === true).length + 1}`}
     class="table-element"
 >
@@ -412,6 +413,7 @@
         border: 1px solid #00000038;
         border-bottom: 0px;
         padding-left: 0px;
+        scroll-margin-top: 49vh;
     }
     .column {
         height: 100%;

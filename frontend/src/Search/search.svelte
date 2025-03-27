@@ -34,6 +34,9 @@
     let isInProgress = false;
     let isComplete = false;
 
+    let totalPages = 1;
+    let currentpage = 1;
+
     let sortby = new LinkedList();
     sortby.append("newest");
     sortby.append("oldest");
@@ -69,21 +72,42 @@
 
     //
 
+    let cards = [];
+
     async function getRecords() {
         try {
             // let params = new URLSearchParams(document.location.search);
             // let text = params.get("text"); // is the string "Jonathan"
             // console.log(text);
 
-            const resultList = await pb.collection("cards").getList(1, 50, {
-                filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}  ${isInProgress ? `&& done > 0 && done < 100` : isComplete ? `&& done = 100` : ``}`,
-                sort: `${sortby.data === "oldest" ? "" : "-"}created`,
-                expand: "tags,board.usergroup",
-                fields: "collectionId,created,datementions,done,favico,file,id,imglink,link,text,title,expand.tags.name,expand.tags.id,expand.tags.color,expand.board.name,expand.board.id,expand.board.color,expand.board.expand.usergroup.id,expand.board.expand.usergroup.name",
-            });
+            const resultList = await pb
+                .collection("cards")
+                .getList(currentpage, 35, {
+                    filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}  ${isInProgress ? `&& done > 0 && done < 100` : isComplete ? `&& done = 100` : ``}`,
+                    sort: `${sortby.data === "oldest" ? "" : "-"}created`,
+                    expand: "tags,board.usergroup",
+                    fields: "collectionId,created,datementions,done,favico,file,id,imglink,link,text,title,expand.tags.name,expand.tags.id,expand.tags.color,expand.board.name,expand.board.id,expand.board.color,expand.board.expand.usergroup.id,expand.board.expand.usergroup.name",
+                });
             console.log(resultList);
+            totalPages = resultList.totalPages;
+            const middlecard = cards[cards.length - 1];
+            console.log(middlecard);
 
-            return resultList;
+            cards = [...cards, ...resultList.items];
+
+            console.log("MIDDLECARD");
+            console.log(middlecard?.id);
+            if (middlecard?.id) {
+                setTimeout(() => {
+                    document.getElementById(middlecard.id)?.scrollIntoView({
+                        behavior: "instant",
+                        block: "start",
+                    });
+                }, 200);
+            }
+
+            console.log(cards);
+            return cards;
         } catch (error) {
             console.warn(error);
         }
@@ -134,11 +158,16 @@
     //     }
     // };
 
-    onMount(() => {
+    onMount(async () => {
         if (hasparam) {
-            promise = getRecords();
+            await getRecords();
         }
     });
+
+    const showcardlocalstorage = localStorage.getItem("showcard"); // Retrieve data from localStorage
+    const parsedShowcardData = showcardlocalstorage
+        ? JSON.parse(showcardlocalstorage)
+        : null;
 
     let showcard = {
         shortcut: true,
@@ -154,9 +183,21 @@
         progress: true,
     };
 
+    if (parsedShowcardData && typeof parsedShowcardData === "object") {
+        Object.keys(showcard).forEach((key) => {
+            showcard[key] = parsedShowcardData[key];
+        });
+    }
+
     let currentview = new LinkedList();
-    currentview.append("Card mode");
-    currentview.append("Table mode");
+    ["Card mode", "Table mode"].forEach((mode) => {
+        if (localStorage.getItem("currentview") === mode) {
+            currentview.append(mode, true);
+        } else {
+            currentview.append(mode);
+        }
+    });
+
     currentview = currentview.head;
 </script>
 
@@ -253,8 +294,10 @@
     <div class="search-container">
         <input type="text" bind:value={textsearch} />
         <button
-            on:click={() => {
-                promise = getRecords();
+            on:click={async () => {
+                cards = [];
+                currentpage = 1;
+                await getRecords();
             }}>search</button
         >
 
@@ -262,42 +305,45 @@
             class="listviewtoggle"
             on:click={() => {
                 currentview = currentview.next;
+                localStorage.setItem("currentview", currentview.data);
             }}
         >
             {currentview.data}
         </button>
     </div>
 
-    {#await promise}
-        . . .
-    {:then searchresult}
-        {#if searchresult}
-            <div class="locked container">
-                <!-- {board.id} -->
-                {#if currentview.data == "Table mode"}
-                    <div class="tablegrid-controls">
-                        {#each Object.keys(showcard) as showcardval}
-                            {#if showcardval != "shortcut"}
-                                <div>
-                                    <button
-                                        class="tablegrid-controls-btn"
-                                        class:btnactive={showcard[showcardval]}
-                                        on:click={() => {
-                                            showcard[showcardval] =
-                                                !showcard[showcardval];
-                                        }}
-                                    >
-                                        <div>
-                                            {showcardval}
-                                        </div>
-                                    </button>
-                                </div>
-                            {/if}
-                        {/each}
-                    </div>
-                {/if}
-                <div class="grid-container">
-                    <!-- <div class="grid"
+    {#if cards.length}
+        <div class="locked container">
+            <!-- {board.id} -->
+            {#if currentview.data == "Table mode"}
+                <div class="tablegrid-controls">
+                    {#each Object.keys(showcard) as showcardval}
+                        {#if showcardval != "shortcut"}
+                            <div>
+                                <button
+                                    class="tablegrid-controls-btn"
+                                    class:btnactive={showcard[showcardval]}
+                                    on:click={() => {
+                                        showcard[showcardval] =
+                                            !showcard[showcardval];
+
+                                        localStorage.setItem(
+                                            "showcard",
+                                            JSON.stringify(showcard),
+                                        );
+                                    }}
+                                >
+                                    <div>
+                                        {showcardval}
+                                    </div>
+                                </button>
+                            </div>
+                        {/if}
+                    {/each}
+                </div>
+            {/if}
+            <div class="grid-container">
+                <!-- <div class="grid"
                 class:list={listView} use:dndzone={{items:cards,
                 morphDisabled:true,
                 dragDisabled:false,
@@ -307,36 +353,45 @@
                 }
                 } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
-                    {#if currentview.data == "Table mode"}
-                        <div class="table-grid">
-                            {#each Object.keys(showcard).filter((key) => showcard[key] === true) as showcardval}
-                                <div
-                                    style={`background-color:var(--header-bg);color:var(--header-color)`}
-                                    class="table-grid-key"
-                                >
-                                    {showcardval}
-                                </div>
-                            {/each}
-                            {#each searchresult.items as card (card.id)}
-                                <Tablecard {showcard} {card}></Tablecard>
-                            {/each}
-                        </div>
-                    {:else if currentview.data == "Card mode"}
-                        <Sortgrid
-                            class="card-grid"
-                            on:change={handleDndFinalize}
-                        >
-                            {#each searchresult.items as card (card.id)}
-                                <Card {card}></Card>
-                            {/each}
-                        </Sortgrid>
-                    {/if}
-                </div>
+                {#if currentview.data == "Table mode"}
+                    <div class="table-grid">
+                        {#each Object.keys(showcard).filter((key) => showcard[key] === true) as showcardval}
+                            <div
+                                style={`background-color:var(--header-bg);color:var(--header-color)`}
+                                class="table-grid-key"
+                            >
+                                {showcardval}
+                            </div>
+                        {/each}
+                        {#each cards as card (card.id)}
+                            <Tablecard {showcard} {card}></Tablecard>
+                        {/each}
+                    </div>
+                {:else if currentview.data == "Card mode"}
+                    <Sortgrid class="card-grid" on:change={handleDndFinalize}>
+                        {#each cards as card (card.id)}
+                            <Card {card}></Card>
+                        {/each}
+                    </Sortgrid>
+                {/if}
             </div>
+        </div>
+        {#if totalPages >= currentpage}
+            <button
+                class="loadmore"
+                on:click={async () => {
+                    if (totalPages >= currentpage) {
+                        console.log(totalPages);
+                        currentpage = currentpage + 1;
+                        console.log(currentpage);
+                        await getRecords();
+                    }
+                }}
+            >
+                load more ↓
+            </button>
         {/if}
-    {:catch error}
-        {error}
-    {/await}
+    {/if}
 </main>
 
 <style>
@@ -363,7 +418,7 @@
         margin: auto;
         /* max-width: var(--container); */
         width: 100%;
-        /* padding-bottom: 20px; */
+        padding-bottom: 20px;
     }
 
     .grid-container {
@@ -478,5 +533,13 @@
         font-weight: bold;
         padding: 4px;
         text-align: center;
+    }
+
+    button.loadmore {
+        margin: auto;
+        margin-top: 20px;
+        font-size: 10px;
+        border-radius: 20px;
+        padding: 4px 29px;
     }
 </style>

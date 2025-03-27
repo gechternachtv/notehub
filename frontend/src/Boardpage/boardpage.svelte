@@ -55,6 +55,11 @@
         };
     }
 
+    const showcardlocalstorage = localStorage.getItem("showcard"); // Retrieve data from localStorage
+    const parsedShowcardData = showcardlocalstorage
+        ? JSON.parse(showcardlocalstorage)
+        : null;
+
     let showcard = {
         shortcut: true,
         id: true,
@@ -66,6 +71,12 @@
         targetdate: true,
         progress: true,
     };
+
+    if (parsedShowcardData && typeof parsedShowcardData === "object") {
+        Object.keys(showcard).forEach((key) => {
+            showcard[key] = parsedShowcardData[key];
+        });
+    }
 
     let canedit = !!board.expand?.usergroup.users?.includes(
         $localToken ? $localToken?.model.id : "???",
@@ -89,8 +100,14 @@
     let currentCardsList = board.cards;
 
     let currentview = new LinkedList();
-    currentview.append("Card mode");
-    currentview.append("Table mode");
+    ["Card mode", "Table mode"].forEach((mode) => {
+        if (boardpage && localStorage.getItem("currentview") === mode) {
+            currentview.append(mode, true);
+        } else {
+            currentview.append(mode);
+        }
+    });
+
     currentview = currentview.head;
 
     // console.log(currentCardsList);
@@ -396,6 +413,10 @@
                             class="listviewtoggle"
                             on:click={() => {
                                 currentview = currentview.next;
+                                localStorage.setItem(
+                                    "currentview",
+                                    currentview.data,
+                                );
                             }}
                         >
                             {currentview.data}
@@ -420,6 +441,11 @@
                                         on:click={() => {
                                             showcard[showcardval] =
                                                 !showcard[showcardval];
+
+                                            localStorage.setItem(
+                                                "showcard",
+                                                JSON.stringify(showcard),
+                                            );
                                         }}
                                     >
                                         <div>

@@ -3,8 +3,9 @@ export default class LinkedList {
         this.head = null;
     }
 
-    append(data) {
+    append(data, setAsHead = false) {
         const newNode = { data, next: null };
+
         if (!this.head) {
             this.head = newNode;
             newNode.next = this.head;
@@ -13,18 +14,11 @@ export default class LinkedList {
             while (current.next !== this.head) current = current.next;
             current.next = newNode;
             newNode.next = this.head;
+            if (setAsHead) {
+                this.head = newNode
+            }
         }
     }
-
-
-    // printList() {
-    //     let current = this.head;
-    //     if (!current) return;  
-    //     do {
-    //         console.log(current.data);
-    //         current = current.next;
-    //     } while (current !== this.head);  
-    // }
 }
 
 // Example Usage
