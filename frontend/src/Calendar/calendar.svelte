@@ -12,7 +12,7 @@
     // import {dndzone} from "svelte-dnd-action";
     import Sortgrid from "../Boardpage/sortcardsgrid.svelte";
 
-    export let listView = undefined;
+    // export let listView = undefined;
 
     // console.log("%c =-=====", "font-size:30px;color:teal");
     // console.log(board);
@@ -56,18 +56,18 @@
 
     let promise;
 
-    if (listView === undefined) {
-        listView = !!window.localStorage.getItem("listView");
-    }
-    const handleListViewChange = () => {
-        if (!window.localStorage.getItem("listView")) {
-            window.localStorage.setItem("listView", true);
-            listView = true;
-        } else {
-            window.localStorage.removeItem("listView");
-            listView = false;
-        }
-    };
+    // if (listView === undefined) {
+    //     listView = !!window.localStorage.getItem("listView");
+    // }
+    // const handleListViewChange = () => {
+    //     if (!window.localStorage.getItem("listView")) {
+    //         window.localStorage.setItem("listView", true);
+    //         listView = true;
+    //     } else {
+    //         window.localStorage.removeItem("listView");
+    //         listView = false;
+    //     }
+    // };
 
     const handledayclick = (e) => {
         console.log(e.detail);
@@ -83,7 +83,7 @@
     <div class="calendar-wrapper">
         <Calendarselector on:dayclick={handledayclick}></Calendarselector>
     </div>
-    <div class="calendar-result">
+    <div class="calendar-result minicard-container calendarcard-container">
         {#await promise}
             . . .
         {:then searchresult}
@@ -104,7 +104,7 @@
 
                         <Sortgrid class="card-grid list">
                             {#each searchresult.items as card (card.id)}
-                                <Card listView="true" {card}></Card>
+                                <Card {card}></Card>
                             {/each}
                         </Sortgrid>
                     </div>
@@ -189,11 +189,11 @@
         border-radius: 6px;
     }
 
-    @media (max-width: 991px) {
+    /* @media (max-width: 991px) {
         .listviewtoggle {
             display: none;
         }
-    }
+    } */
 
     .tags {
         font-size: 1.2rem;

@@ -320,7 +320,7 @@
                         {#each boards as board (board.id)}
                             <div
                                 id={board.id}
-                                class="board-container workspace-board-container"
+                                class="board-container workspace-board-container minicard-container"
                             >
                                 <div
                                     class="grabber-board"
@@ -345,7 +345,6 @@
 
                                 <Board
                                     {workspace}
-                                    listView={false}
                                     board={{
                                         ...board,
                                         expand: {

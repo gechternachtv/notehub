@@ -19,7 +19,7 @@
         check: "",
     };
     export let fullView = false;
-    export let listView = false;
+    // export let listView = false;
 
     let cssel;
 
@@ -302,10 +302,10 @@
     id={card.id}
     class="card"
     class:fullview={fullView}
-    class:listview={listView}
     class:locked={readmode}
-    style="border-left: 3px solid {card.color}"
 >
+    <div style="border-left: 3px solid {card.color}" class="border-left"></div>
+
     <Modal bind:showModal={showModalMove}>
         <Moveoptions
             usergroup={card?.expand?.board?.usergroup}
@@ -579,6 +579,14 @@
 </div>
 
 <style>
+    .border-left {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        pointer-events: none;
+    }
+
     .progress-bar {
         max-width: 300px;
         background: var(--container-bg);
@@ -629,15 +637,16 @@
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
         font-size: 13px;
+        border: 1px solid #00000018;
     }
 
-    .card.listview {
+    /* .card.listview {
         grid-template-rows: auto;
         grid-template-columns: subgrid;
         gap: 14px;
         min-height: 83px;
         max-width: 100%;
-    }
+    } */
 
     @container card-container (max-width: 768px) {
     }
@@ -760,8 +769,7 @@
         max-height: 8ch;
     }
 
-    .fullview .updates,
-    .listview .updates {
+    .fullview .updates {
         max-height: unset;
     }
 
@@ -867,14 +875,14 @@
         margin: 0px;
     }
 
-    .card.listview .date {
+    /* .card.listview .date {
         position: absolute;
 
         right: 12px;
         bottom: 8px;
-    }
+    } */
 
-    .card.listview .card-container---controls {
+    /* .card.listview .card-container---controls {
         align-items: flex-end;
         justify-content: end;
         position: absolute;
@@ -885,7 +893,7 @@
 
     .listview .updates {
         max-width: 87%;
-    }
+    } */
 
     @media (max-width: 991px) {
         .feed-btn a,

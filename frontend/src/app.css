@@ -532,17 +532,17 @@ button {
 }
 
 
-
-.workspace-board-container .feed-btn a,
-.workspace-board-container .editor-panel a {
+/* MINICARD-CONTAINER */
+.minicard-container .feed-btn a,
+.minicard-container .editor-panel a {
   padding: 10px;
 }
 
-.workspace-board-container .thumb a {
+.minicard-container .thumb a {
   pointer-events: none;
 }
 
-.workspace-board-container .card:not(.fullview) {
+.minicard-container .card {
   grid-template-rows: auto;
   grid-template-columns: subgrid;
   gap: 14px;
@@ -558,53 +558,87 @@ button {
   padding: 5px;
 }
 
-.workspace-board-container .card:not(.fullview) .card-container---controls {
+.minicard-container .card .card-container---controls {
   grid-column: span 3;
 }
 
-.workspace-board-container .card:not(.fullview) .card-container---info {
+.minicard-container .card .card-container---info {
   grid-column: span 2;
 }
 
-.workspace-board-container .card:not(.fullview) .thumb {
+.minicard-container .card .thumb {
   max-height: 100px;
   overflow: hidden;
 }
 
-.workspace-board-container .card:not(.fullview) .updates {
+.minicard-container .card .updates {
   max-height: 29px;
 }
 
-.workspace-board-container .card:not(.fullview) .card-container---controls {
+.minicard-container .card .card-container---controls {
   position: absolute;
   bottom: 0;
   right: 10px;
 }
 
-.workspace-board-container .updates {
+.minicard-container .updates {
   color: var(--main-font-1);
 }
 
-.workspace-board-container .card:not(.fullview) {
+.minicard-container .card {
   padding-bottom: 28px !important;
 }
 
-.workspace-board-container .progress-bar {
+.minicard-container .progress-bar {
   grid-column: span 2;
   margin-top: 6px;
 }
 
 
+/* MINICARD-CONTAINER */
 
+/* CALENDAR CONTAINER */
 
+.calendarcard-container .card .date {
+  display: none;
+}
 
+.calendarcard-container .controls {
+  display: none;
+}
 
-.locked .labelcolor {
-  display: none !important;
+.calendarcard-container .link {
+  display: none;
+}
+
+.calendarcard-container .card-grid.list {
+  background: var(--container-bg);
+  border: 3px solid var(--container-bg);
 }
 
 
 
+
+
+.calendarcard-container .updates {
+  font-size: 1.1rem;
+}
+
+.calendarcard-container .img-c {
+  max-height: 160px;
+}
+
+
+.minicard-container.calendarcard-container .card {
+  padding-bottom: 9px !important;
+}
+
+
+
+/* CALENDAR CONTAINER */
+.locked .labelcolor {
+  display: none !important;
+}
 
 
 

@@ -14,8 +14,6 @@
         check: "",
     };
 
-    export let listView = false;
-
     export let workspace;
     //console.log(card);
 
@@ -148,13 +146,8 @@
     // //console.log(getFile(card))
 </script>
 
-<div
-    id={card.id}
-    class="card"
-    class:listview={listView}
-    class:noimage={!card.file && !card.imglink}
-    style="border-left: 3px solid {card.color}"
->
+<div id={card.id} class="card" class:noimage={!card.file && !card.imglink}>
+    <div style="border-left: 3px solid {card.color}" class="border-left"></div>
     <!-- {card.board}<br/>
         {card.expand?.board.name} -->
 
@@ -338,6 +331,14 @@
 </div>
 
 <style>
+    .border-left {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        pointer-events: none;
+    }
+
     .duedate,
     .date {
         margin-top: 7px;
@@ -411,14 +412,7 @@
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
         transition: all 0.5s;
-    }
-
-    .card.listview {
-        grid-template-rows: auto;
-        grid-template-columns: subgrid;
-        gap: 14px;
-        min-height: 83px;
-        max-width: 100%;
+        border: 1px solid #00000018;
     }
 
     @container card-container (max-width: 768px) {
@@ -586,18 +580,6 @@
         margin: 0px;
     }
 
-    .card.listview .card-container---controls {
-        align-items: flex-end;
-        justify-content: end;
-        position: absolute;
-        bottom: 10px;
-        right: 12px;
-    }
-
-    .listview .updates {
-        max-width: 87%;
-    }
-
     .grabber {
         position: absolute;
         right: 15px;
@@ -665,7 +647,4 @@
             display: none;
         }
     }
-    /* .listview .card-container---info {
-        padding-bottom: 25px;
-    } */
 </style>

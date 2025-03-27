@@ -29,6 +29,8 @@
     let month = today.getUTCMonth();
     let calrows = cal.getCalendar(year, month);
     let currentday = today.getDate();
+    let currentmonth = month;
+    let currentyear = year;
 
     $: {
         calrows = cal.getCalendar(year, month);
@@ -99,16 +101,44 @@
                             class:today={day.day === new Date().getDate() &&
                                 month === new Date().getUTCMonth() &&
                                 year === new Date().getUTCFullYear()}
+                            class:active={currentday == fn(day.day) &&
+                                currentmonth == fn(day.month) &&
+                                currentyear == fn(day.year)}
                             on:click={(e) => {
-                                console.log(e);
+                                console.log(fn(day.day));
                                 currentday = day.day;
+                                currentmonth = day.month;
+                                currentyear = day.year;
                                 dispatch("dayclick", {
                                     day: fn(day.day),
                                     month: fn(month + 1),
                                     year: year,
                                 });
-                            }}>{day.day}</button
+                            }}
                         >
+                            <div class="daytag-container">
+                                {#if cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), ).length > 1}
+                                    <div class="day-createdon"></div>
+                                    <div class="day-createdon"></div>
+                                {:else if cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), ).length > 0}
+                                    <div class="day-createdon"></div>
+                                {/if}
+
+                                {#if cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), ).length > 1}
+                                    <div class="day-mentions"></div>
+                                    <div class="day-mentions"></div>
+                                {:else if cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), ).length > 0}
+                                    <div class="day-mentions"></div>
+                                {/if}
+                            </div>
+                            <!-- {#if !!cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), )}
+                                c
+                            {/if}
+                            {#if !!cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), )}
+                                m
+                            {/if} -->
+                            {day.day}
+                        </button>
                     {:else}
                         <div
                             class:today={day.day === new Date().getDate() &&
@@ -151,6 +181,7 @@
         justify-content: center;
         align-items: center;
         border-bottom: 2px solid transparent;
+        border: 1px solid #0000000d;
     }
 
     .cardday,
@@ -162,6 +193,7 @@
         border-bottom: 2px solid transparent;
         height: 100%;
         align-items: center;
+        position: relative;
     }
 
     .year {
@@ -180,5 +212,47 @@
 
     .today {
         border-bottom: 2px solid var(--alert);
+    }
+
+    .daytag-container {
+        position: absolute;
+        display: flex;
+        gap: 3px;
+        bottom: 1px;
+    }
+    .day-mentions,
+    .day-createdon {
+        background: var(--button-bg);
+        width: 4px;
+        height: 4px;
+        border-radius: 10px;
+        bottom: 0px;
+    }
+
+    .day-createdon {
+        background: var(--main-font-2);
+    }
+
+    button {
+        background: transparent;
+        color: var(--main-font-1);
+        transition: all 0.2s;
+    }
+
+    button:hover,
+    button.active {
+        background: var(--button-bg);
+        color: var(--button-color);
+    }
+
+    button:hover .day-mentions,
+    button:hover .day-createdon,
+    button.active .day-mentions,
+    button.active .day-createdon {
+        background: var(--button-color);
+    }
+
+    .nocardday {
+        opacity: 0.5;
     }
 </style>

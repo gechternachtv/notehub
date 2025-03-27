@@ -3,6 +3,7 @@
     import CreateBoard from "../CreateBoard/CreateBoard.svelte";
     import dateFormat from "../dateFormat";
     import Card from "../Card/card.svelte";
+    import Tablecard from "../Card/tablecard.svelte";
     import Editor from "./editor.svelte";
 
     import createNewCard from "../createNewCard";
@@ -16,6 +17,9 @@
     import Contextmenu from "../contextmenu.svelte";
 
     import { querystring } from "svelte-spa-router";
+
+    import contrastcolor from "../contrastcolor";
+    import LinkedList from "../linkedlist";
 
     editorblocked.set(false);
 
@@ -51,12 +55,24 @@
         };
     }
 
+    let showcard = {
+        shortcut: true,
+        id: true,
+        img: true,
+        title: true,
+        text: true,
+        tags: true,
+        created: true,
+        targetdate: true,
+        progress: true,
+    };
+
     let canedit = !!board.expand?.usergroup.users?.includes(
         $localToken ? $localToken?.model.id : "???",
     );
     let usergroup = { ...board.expand?.usergroup, id: board.usergroup };
 
-    export let listView = undefined;
+    // export let listView = undefined;
 
     export let params = { id: board.id };
 
@@ -71,6 +87,11 @@
 
     let counter = cardsFull.length;
     let currentCardsList = board.cards;
+
+    let currentview = new LinkedList();
+    currentview.append("Card mode");
+    currentview.append("Table mode");
+    currentview = currentview.head;
 
     // console.log(currentCardsList);
     async function handleDndFinalize(e) {
@@ -223,7 +244,7 @@
         window.scrollTo(0, 0);
         document
             .querySelector(".card-grid")
-            .setAttribute("style", `max-height: 300px;opacity:0.6`);
+            ?.setAttribute("style", `max-height: 300px;opacity:0.6`);
 
         const card = await createNewCard(
             usergroup?.id,
@@ -233,7 +254,8 @@
             fileelement,
         );
 
-        document.querySelector(".card-grid").setAttribute("style", ``);
+        document.querySelector(".card-grid")?.setAttribute("style", ``);
+
         window.scrollTo(0, 0);
 
         const data = {
@@ -304,33 +326,18 @@
         });
     };
 
-    // const cardUpdateFront = (e) => {
-    //     // console.log(e);
-    //     const cardNewInfo = e.detail;
-    //     const oldinfoCard =
-    //         cards[cards.findIndex((e) => e.id === cardNewInfo.id)];
-    //     cards[cards.findIndex((e) => e.id === cardNewInfo.id)] = {
-    //         ...cardNewInfo,
-    //         expand: oldinfoCard.expand,
-    //     };
-    //     board.cards = cards;
-    //     board = board;
-    //     dispatch("boardupdate", board);
-    //     // console.log(board.cards);
+    // if (listView === undefined) {
+    //     listView = !!window.localStorage.getItem("listView");
+    // }
+    // const handleListViewChange = () => {
+    //     if (!window.localStorage.getItem("listView")) {
+    //         window.localStorage.setItem("listView", true);
+    //         listView = true;
+    //     } else {
+    //         window.localStorage.removeItem("listView");
+    //         listView = false;
+    //     }
     // };
-
-    if (listView === undefined) {
-        listView = !!window.localStorage.getItem("listView");
-    }
-    const handleListViewChange = () => {
-        if (!window.localStorage.getItem("listView")) {
-            window.localStorage.setItem("listView", true);
-            listView = true;
-        } else {
-            window.localStorage.removeItem("listView");
-            listView = false;
-        }
-    };
 </script>
 
 <main class:paddingtop={boardpage}>
@@ -387,9 +394,11 @@
 
                         <button
                             class="listviewtoggle"
-                            on:click={handleListViewChange}
+                            on:click={() => {
+                                currentview = currentview.next;
+                            }}
                         >
-                            {listView ? "Card mode" : "List mode"}
+                            {currentview.data}
                         </button>
                     </div>
                 {:else}
@@ -400,6 +409,28 @@
                     >
                 {/if}
 
+                {#if currentview.data == "Table mode"}
+                    <div class="tablegrid-controls">
+                        {#each Object.keys(showcard) as showcardval}
+                            {#if showcardval != "shortcut"}
+                                <div>
+                                    <button
+                                        class="tablegrid-controls-btn"
+                                        class:btnactive={showcard[showcardval]}
+                                        on:click={() => {
+                                            showcard[showcardval] =
+                                                !showcard[showcardval];
+                                        }}
+                                    >
+                                        <div>
+                                            {showcardval}
+                                        </div>
+                                    </button>
+                                </div>
+                            {/if}
+                        {/each}
+                    </div>
+                {/if}
                 <div class="grid-container">
                     <!-- <div class="grid"
                     class:list={listView} use:dndzone={{items:cards,
@@ -410,15 +441,31 @@
                     ,dropTargetClasses:["floating"]
                     }
                     } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
-
-                    <Sortgrid
-                        class="card-grid {listView ? 'list' : ''}"
-                        on:change={handleDndFinalize}
-                    >
-                        {#each cardsFull as card (card.id)}
-                            <Card {listView} {card} {workspace}></Card>
-                        {/each}
-                    </Sortgrid>
+                    {#if currentview.data == "Table mode"}
+                        <div class="table-grid">
+                            {#each Object.keys(showcard).filter((key) => showcard[key] === true) as showcardval}
+                                <div
+                                    style={`background-color:${board.color};color:${contrastcolor(board.color, "#131313", "#e1e1e1", "var(--card-bg)")}`}
+                                    class="table-grid-key"
+                                >
+                                    {showcardval}
+                                </div>
+                            {/each}
+                            {#each cardsFull as card (card.id)}
+                                <Tablecard {showcard} {card} {workspace}
+                                ></Tablecard>
+                            {/each}
+                        </div>
+                    {:else if currentview.data == "Card mode"}
+                        <Sortgrid
+                            class="card-grid"
+                            on:change={handleDndFinalize}
+                        >
+                            {#each cardsFull as card (card.id)}
+                                <Card {card} {workspace}></Card>
+                            {/each}
+                        </Sortgrid>
+                    {/if}
 
                     {#if editorOpen && canedit}
                         <div class="con conworkspace">
@@ -477,14 +524,6 @@
         grid-template-columns: 1fr;
     }
 
-    .card-placeholder {
-        display: block;
-        background: rgba(0, 0, 0, 0.021);
-        min-height: 110px;
-        width: 100%;
-        pointer-events: none;
-        grid-column: span 3;
-    }
     main {
         background: var(--container-bg);
         color: var(--main-font-1);
@@ -546,5 +585,40 @@
 
     .paddingtop {
         padding-top: 20px;
+    }
+
+    .table-grid {
+        display: grid;
+        grid-column: repeat(auto-fit, minmax(50px, auto));
+    }
+
+    .tablegrid-controls-btn {
+        opacity: 0.4;
+        padding: 2px 11px;
+        font-weight: 500;
+        font-size: 12px;
+        border-radius: 20px;
+    }
+
+    .tablegrid-controls-btn.btnactive {
+        opacity: 1;
+    }
+
+    .tablegrid-controls {
+        display: flex;
+        gap: 8px;
+        background: var(--header-bg);
+        padding: 10px;
+        border-radius: 4px;
+        flex-wrap: wrap;
+        margin-bottom: 15px;
+    }
+
+    .table-grid-key {
+        background: var(--header-bg);
+        color: var(--header-color);
+        font-weight: bold;
+        padding: 4px;
+        text-align: center;
     }
 </style>
