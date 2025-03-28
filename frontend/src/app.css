@@ -40,6 +40,17 @@
   font-weight: 700;
 }
 
+/* @font-face {
+  font-family: 'River Mono';
+  src: url('assets/fonts/RiverMono-VF.woff2') format('woff2');
+  font-weight: 400;
+}
+
+.card * {
+  font-family: "River Mono";
+  font-weight: 400;
+} */
+
 ::-webkit-scrollbar {
   width: 10px;
   /* Width of the scrollbar */
@@ -81,7 +92,7 @@ body {
 }
 
 * {
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
 
 a {
