@@ -86,7 +86,7 @@
                     filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}  ${isInProgress ? `&& done > 0 && done < 100` : isComplete ? `&& done = 100` : ``}`,
                     sort: `${sortby.data === "oldest" ? "" : "-"}created`,
                     expand: "tags,board.usergroup",
-                    fields: "collectionId,created,datementions,done,favico,file,id,imglink,link,text,title,expand.tags.name,expand.tags.id,expand.tags.color,expand.board.name,expand.board.id,expand.board.color,expand.board.expand.usergroup.id,expand.board.expand.usergroup.name",
+                    fields: "collectionId,color,created,datementions,done,favico,file,id,imglink,link,text,title,expand.tags.name,expand.tags.id,expand.tags.color,expand.board.name,expand.board.id,expand.board.color,expand.board.expand.usergroup.id,expand.board.expand.usergroup.name",
                 });
             console.log(resultList);
             totalPages = resultList.totalPages;

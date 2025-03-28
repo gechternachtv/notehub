@@ -195,6 +195,9 @@
             {#if card.id}
                 <div class="tablecard_id">
                     <a
+                        style={card.color && card.color != "var(--card-bg)"
+                            ? `background:${card.color};color:${contrastcolor(card.color, "#131313", "#e1e1e1", "var(--button-color)")}`
+                            : ""}
                         href="/#/card/{card.id}{workspace?.name && workspace?.id
                             ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
                             : ''}">{card.id}</a

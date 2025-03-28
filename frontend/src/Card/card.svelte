@@ -147,7 +147,12 @@
 </script>
 
 <div id={card.id} class="card" class:noimage={!card.file && !card.imglink}>
-    <div style="border-left: 3px solid {card.color}" class="border-left"></div>
+    <div
+        style="border-left: 3px solid {card.color
+            ? card.color
+            : 'var(--card-bg)'}"
+        class="border-left"
+    ></div>
     <!-- {card.board}<br/>
         {card.expand?.board.name} -->
 

@@ -63,7 +63,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
     const meta = {}
     const card = {
-        color: "var(--card-bg)",
+        // color: "var(--card-bg)",
         imglink: "",
         title: "",
         tags: [],
@@ -239,23 +239,6 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         }
 
 
-        //mentions
-
-
-        const datementionsWords = words.filter(e => e.startsWith("@"))
-        const datesearchMentions = []
-        for (let index = 0; index < datementionsWords.length; index++) {
-            const e = datementionsWords[index];
-            // search tag
-            const namewithouthash = datementionsWords[index].replace(/^@/, '')
-
-            datesearchMentions.push(namewithouthash)
-
-        }
-
-        card.datementions = datesearchMentions.toString()
-
-
 
 
         //tags
@@ -324,10 +307,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         //color
         if (meta.color) {
             card.color = meta.color
-        } else {
-            card.color = `var(--card-bg)`
         }
-
 
 
 
@@ -341,11 +321,17 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                 const data = dataWord.replace("$", '').split(":")[1]
                 console.log(name, data, card[name], name in card)
 
-                if (name in card && data != null) {
 
+                if (name == "done") {
                     card[name] = data;
                     card.text = card.text.replace(dataWord, "")
                 }
+                if (name == "color") {
+                    card[name] = data;
+                    card.text = card.text.replace(dataWord, "")
+                }
+
+
             } catch (error) {
                 console.warn(error)
             }
@@ -363,6 +349,21 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         } else if (meta.text) {
             card.text = meta.text.substring(0, 150)
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

@@ -304,7 +304,12 @@
     class:fullview={fullView}
     class:locked={readmode}
 >
-    <div style="border-left: 3px solid {card.color}" class="border-left"></div>
+    <div
+        style="border-left: 3px solid {card.color
+            ? card.color
+            : 'var(--card-bg)'}"
+        class="border-left"
+    ></div>
 
     <Modal bind:showModal={showModalMove}>
         <Moveoptions
