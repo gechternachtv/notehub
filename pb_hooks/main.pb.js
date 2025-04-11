@@ -127,28 +127,55 @@ onRecordAfterCreateRequest((e) => {
     function replaceBase64Src(jsonStr) {
         try {
 
+            function findMatchingEntries(obj, matchFn, results = [], parent = null, keyInParent = null) {
+                for (const key in obj) {
+                    const value = obj[key];
+
+                    if (matchFn(value)) {
+                        results.push({
+                            key,
+                            value,
+                            parent: obj,      // Reference to parent
+                            keyInParent: key  // Key to use for mutation
+                        });
+                    }
+
+                    if (value && typeof value === 'object') {
+                        findMatchingEntries(value, matchFn, results, obj, key);
+                    }
+                }
+                return results;
+            }
+
+
+
             console.log(e.record.get("file"))
             const data = JSON.parse(jsonStr);
 
             let replacedFirst = false
 
-            function replaceSrc(node) {
 
-                if (replacedFirst === false && Array.isArray(node)) {
-                    node.forEach(item => replaceSrc(item));
-                } else if (node && typeof node === 'object') {
-                    Object.keys(node).forEach(key => {
-                        if (replacedFirst === false && key === 'src' && typeof node[key] === 'string' && node[key].startsWith('data:image/')) {
-                            node[key] = `/api/files/${e.baseCollectionEvent.collection.id}/${e.record.get("id")}/${e.record.get("file")}`;
-                            replacedFirst = true
-                        } else {
-                            replaceSrc(node[key]);
-                        }
-                    });
+            const matches = findMatchingEntries(data, d => {
+                if (typeof d === 'string') {
+                    if (d.startsWith('imagedata[')) {
+                        return true
+                    }
                 }
+            });
+
+
+
+            for (let index = 0; index < matches.length; index++) {
+                const { parent, keyInParent } = matches[index];
+
+                const imgTitle = 'image';
+                const src = parent[keyInParent];
+
+                parent[keyInParent] = `/api/files/${e.baseCollectionEvent.collection.id}/${e.record.get("id")}/${e.record.get("file")[index]}`
             }
 
-            replaceSrc(data);
+
+
 
             return data
         } catch (error) {

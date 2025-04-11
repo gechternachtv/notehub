@@ -52,8 +52,10 @@
 
                 // console.log(showcard.expand?.board?.expand?.usergroup?.users.includes($localToken ? $localToken?.model.id : "???"))
 
-                if (res.file) {
-                    files = [{ name: res.file }];
+                if (res.file?.length) {
+                    files = res.file.map((e) => {
+                        return { name: e };
+                    });
                 }
 
                 return {
@@ -99,8 +101,8 @@
             // console.log(data)
             const oldexpand = { ...showcard.expand, tags: card.tags };
             const record = await pb.collection("cards").update(cardid, data);
-            // console.log("%c record:","color:turquoise")
-            // console.log(record)
+            console.log("%c record:", "color:turquoise");
+            console.log(record);
             showcard = { ...record, tags: card.tags, expand: oldexpand };
             // files = fileelement.files
             if (record.file) {

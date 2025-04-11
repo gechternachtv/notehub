@@ -1,15 +1,25 @@
 // import { bulletList } from "@milkdown/prose/schema-list"
 // import dateFormat from "./dateFormat"
 // import getFile from "./getFile"
-import { pb } from "./pb.js"
+// import { pb } from "./pb.js"
 import { server } from "./stores"
 import { get } from "svelte/store"
-import colorhex from "./colorsnames"
+// import colorhex from "./colorsnames"
 
 export default async (usergroup, markdownobj, authors, board, fileInputelement = null, currentfile = null) => {
 
 
-    const filecontent = fileInputelement?.files ? fileInputelement?.files[0] : null
+
+    const fileinputarray = Array.from(fileInputelement.files);
+
+
+
+
+
+
+
+
+    console.log(fileinputarray)
 
     const content = markdownobj.json.content
     const mdtext = markdownobj.string
@@ -62,6 +72,10 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
     //  console.log(content)
 
     const meta = {}
+
+
+    console.log(fileinputarray)
+
     const card = {
         // color: "var(--card-bg)",
         imglink: "",
@@ -71,12 +85,17 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         text: "",
         favico: "",
         raw: content,
-        created: new Date(),
-        file: filecontent ? filecontent : currentfile ? currentfile : null,
+        // file: fileinputarray,
         authors: authors,
         board: board,
         done: 0,
         // datementions: ""
+    }
+
+
+
+    if (fileinputarray.length) {
+        card.file = fileinputarray
     }
 
 
@@ -294,12 +313,107 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
         //img
-        const imgEl = paragraph.find(e => e.content?.find(e => e.type).type === "image")
-        if (imgEl) {
-            card.imglink = imgEl.content[0].attrs.src
-        } else if (meta.img) {
+        console.log("all")
+
+
+
+
+
+
+
+
+        function findMatchingEntries(obj, matchFn, results = [], parent = null, keyInParent = null) {
+            for (const key in obj) {
+                const value = obj[key];
+
+                if (matchFn(value)) {
+                    results.push({
+                        key,
+                        value,
+                        parent: obj,      // Reference to parent
+                        keyInParent: key  // Key to use for mutation
+                    });
+                }
+
+                if (value && typeof value === 'object') {
+                    findMatchingEntries(value, matchFn, results, obj, key);
+                }
+            }
+            return results;
+        }
+
+
+
+
+        const matches = findMatchingEntries(card.raw, d => {
+            console.log(d)
+            if (typeof d === 'string') {
+                if (d.startsWith('data:image/')) {
+                    return true
+                }
+            }
+        });
+
+
+        const imagedataarray = []
+
+        for (let index = 0; index < matches.length; index++) {
+            const { parent, keyInParent } = matches[index];
+
+            const imgTitle = 'image';
+            const src = parent[keyInParent];
+            const imgExtension = src.substring(src.lastIndexOf('.') + 1);
+
+            try {
+                const blob = await (await fetch(src)).blob();
+
+                const newfile = new File([blob], `${index + 1}${imgTitle}.${imgExtension}`, {
+                    type: blob.type,
+                });
+
+                console.log("🤯");
+                console.log(newfile);
+
+                parent[keyInParent] = `imagedata[${index}]`
+
+                imagedataarray[index] = newfile; //
+
+            } catch (error) {
+                console.error("Error fetching image:", error);
+            }
+        }
+
+
+        if (card.file) {
+            card.file = [...imagedataarray, ...card.file]
+        } else {
+            card.file = imagedataarray
+        }
+
+
+
+
+
+
+        if (meta.img) {
             card.imglink = meta.img
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //favico
         if (meta.favico) {
             card.favico = meta.favico
@@ -319,7 +433,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
                 const name = dataWord.replace("$", '').split(":")[0]
                 const data = dataWord.replace("$", '').split(":")[1]
-                console.log(name, data, card[name], name in card)
+                // console.log(name, data, card[name], name in card)
 
 
                 if (name == "done") {
@@ -372,30 +486,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
     //imgtest
 
-    if (card.imglink.includes("data")) {
 
-        try {
-
-
-            const imgTitle = 'image';
-            const imgExtension = card.imglink.substring(card.imglink.lastIndexOf('.') + 1);
-
-            const blob = await (await fetch(card.imglink)).blob()
-
-            const newfile = new File([blob], imgTitle + '.' + imgExtension, { type: blob.type });
-            console.log("🤯")
-            console.log(newfile)
-            card.file = newfile
-            card.imglink = ""
-
-            console.log(newfile)
-
-            //imgtest
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
     console.log("here:")
     console.log(card)
     return card

@@ -5,7 +5,7 @@
     // import Modal from "../modal/modal.svelte";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
-    import getFile from "../getFile.js";
+    import getFiles from "../getFiles.js";
     import { server } from "../stores.js";
     import contrastcolor from "../contrastcolor.js";
 
@@ -115,12 +115,12 @@
             ? "🔗 "
             : c.imglink
               ? "🔗 "
-              : c.file
-                ? getFile(c).type === "image/jpeg"
+              : c.file?.length
+                ? getFiles(c)[0].type === "image/jpeg"
                     ? "🖼️"
-                    : getFile(c).type === "Video"
+                    : getFiles(c)[0].type === "Video"
                       ? "🎞️"
-                      : getFile(c).type === "Audio"
+                      : getFiles(c)[0].type === "Audio"
                         ? "🔈"
                         : "📄"
                 : "";
@@ -211,14 +211,14 @@
         <div class="column">
             {#if card.file || card.imglink}
                 <div class="card-container card-container---image">
-                    {#if card.file}
-                        {#if getFile(card).type === "image/jpeg"}
-                            <a target="_blank" href={getFile(card).link}>
+                    {#if card.file?.length}
+                        {#if getFiles(card)[0].type === "image/jpeg"}
+                            <a target="_blank" href={getFiles(card)[0].link}>
                                 <img
                                     loading="lazy"
-                                    src="{getFile(card).link}{getFile(
+                                    src="{getFiles(card)[0].link}{getFiles(
                                         card,
-                                    ).link.includes($server.url)
+                                    )[0].link.includes($server.url)
                                         ? `?thumb=100x100`
                                         : ''}"
                                     alt=""

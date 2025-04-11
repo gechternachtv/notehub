@@ -5,7 +5,7 @@
     // import Modal from "../modal/modal.svelte";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
-    import getFile from "../getFile.js";
+    import getFiles from "../getFiles.js";
 
     // import Cardpage from "../Cardpage/cardpage.svelte";
 
@@ -15,7 +15,7 @@
     };
 
     export let workspace;
-    //console.log(card);
+    console.log(card);
 
     // let showModal = false;
 
@@ -101,12 +101,12 @@
             ? "🔗 "
             : c.imglink
               ? "🔗 "
-              : c.file
-                ? getFile(c).type === "image/jpeg"
+              : c.file?.length
+                ? getFiles(c)[0].type === "image/jpeg"
                     ? "🖼️"
-                    : getFile(c).type === "Video"
+                    : getFiles(c)[0].type === "Video"
                       ? "🎞️"
-                      : getFile(c).type === "Audio"
+                      : getFiles(c)[0].type === "Audio"
                         ? "🔈"
                         : "📄"
                 : "";
@@ -146,9 +146,13 @@
     // //console.log(getFile(card))
 </script>
 
-<div id={card.id} class="card" class:noimage={!card.file && !card.imglink}>
+<div
+    id={card.id}
+    class="card"
+    class:noimage={!card.file.length && !card.imglink}
+>
     <div
-        style="border-left: 3px solid {card.color
+        style="border-left: 5px solid {card.color
             ? card.color
             : 'var(--card-bg)'}"
         class="border-left"
@@ -190,9 +194,13 @@
                 <!-- {#if channel.thumb} -->
                 <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
 
-                {#if card.file}
-                    {#if getFile(card).type === "image/jpeg"}
-                        <img loading="lazy" src={getFile(card).link} alt="" />
+                {#if card.file?.length}
+                    {#if getFiles(card)[0].type === "image/jpeg"}
+                        <img
+                            loading="lazy"
+                            src={getFiles(card)[0].link}
+                            alt=""
+                        />
                     {/if}
                 {:else if card.imglink}
                     <img loading="lazy" src={card.imglink} alt="" />
@@ -296,7 +304,7 @@
     {/if}
     <div class="card-container card-container---controls">
         <div class="controls editor-panel">
-            {#if card.link != "" || card.imglink != "" || card.file != ""}
+            {#if card.link != "" || card.imglink != "" || card.file.length}
                 <div class="feed-btn">
                     <a
                         target="_blank"
@@ -304,7 +312,7 @@
                             ? card.link
                             : card.imglink
                               ? card.imglink
-                              : getFile(card).link}
+                              : getFiles(card)[0].link}
                     >
                         📎
                     </a>

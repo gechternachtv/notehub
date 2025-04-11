@@ -4,7 +4,7 @@
     import { pb } from "../pb.js";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
-    import getFile from "../getFile.js";
+    import getFiles from "../getFiles.js";
     import Confirmaction from "../confirmaction.svelte";
     import colorsames from "../colorsnames";
     import Modal from "../modal/modal.svelte";
@@ -161,12 +161,12 @@
             ? "🔗 "
             : c.imglink
               ? "🔗 "
-              : c.file
-                ? getFile(c).type === "image/jpeg"
+              : c.file?.length
+                ? getFiles(c)[0].type === "image/jpeg"
                     ? "🖼️"
-                    : getFile(c).type === "Video"
+                    : getFiles(c)[0].type === "Video"
                       ? "🎞️"
-                      : getFile(c).type === "Audio"
+                      : getFiles(c)[0].type === "Audio"
                         ? "🔈"
                         : "📄"
                 : "";
@@ -305,7 +305,7 @@
     class:locked={readmode}
 >
     <div
-        style="border-left: 3px solid {card.color
+        style="border-left: 5px solid {card.color
             ? card.color
             : 'var(--card-bg)'}"
         class="border-left"
@@ -345,15 +345,19 @@
             <!-- {#if channel.thumb} -->
             <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
             <a class="img-c thumblink" href="/#/card/{card.id}">
-                {#if card.file}
-                    {#if getFile(card).type === "image/jpeg"}
-                        <img loading="lazy" src={getFile(card).link} alt="" />
-                    {:else if getFile(card).type && fullView}
+                {#if card.file.length}
+                    {#if getFiles(card)[0].type === "image/jpeg"}
+                        <img
+                            loading="lazy"
+                            src={getFiles(card)[0].link}
+                            alt=""
+                        />
+                    {:else if getFiles(card)[0].type && fullView}
                         <object
                             loading="lazy"
                             title={card.id}
-                            data={getFile(card).link}
-                            ><a href={getFile(card).link} target="_blank"
+                            data={getFiles(card)[0].link}
+                            ><a href={getFiles(card)[0].link} target="_blank"
                                 >{card.file}</a
                             ></object
                         >
@@ -516,7 +520,7 @@
                             ? card.link
                             : card.imglink
                               ? card.imglink
-                              : getFile(card).link}
+                              : getFiles(card)[0].link}
                     >
                         📎
                     </a>

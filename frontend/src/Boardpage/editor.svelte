@@ -72,6 +72,10 @@
 		},
 	};
 
+	let handleDeleteFile = () => {
+		console.log("delete");
+	};
+
 	const handleEmojiselect = (e) => {
 		console.log(editorel.innerHTML);
 		if (editorel.querySelector("p")) {
@@ -115,6 +119,7 @@
 				return editor.action((ctx) => {
 					const editorView = ctx.get(editorViewCtx);
 					const doc = editorView.state.doc;
+					console.log(doc);
 					console.log({
 						string: doc.textBetween(0, doc.content.size, "\n"),
 						json: doc.toJSON(),
@@ -122,6 +127,7 @@
 					return {
 						string: doc.textBetween(0, doc.content.size, "\n"),
 						json: doc.toJSON(),
+						// html: editorel.querySelector(".editor").innerHTML,
 					};
 				});
 			};
@@ -179,9 +185,12 @@
 
 <main>
 	{#if files?.length > 0}
-		<div class="filename">
-			📎 {files[0].name}
-		</div>
+		{#each files as file}
+			<div class="filename">
+				<img src={file.name} alt="" />
+				<button on:click={handleDeleteFile}>delete</button>📎 {file.name}
+			</div>
+		{/each}
 	{/if}
 	<div class="editor-container">
 		<div class="editor-controls">
@@ -199,6 +208,7 @@
 					bind:this={fileelement}
 					bind:files
 					type="file"
+					multiple
 				/>
 			</div>
 		</div>
@@ -284,5 +294,13 @@
 		.send-controls {
 			max-width: auto;
 		}
+	}
+
+	/* Element | http://localhost:5173/#/card/af3nkrmv1feirba */
+
+	.filename > button {
+		font-size: 9px;
+		border-radius: 13px;
+		padding: 1px 9px;
 	}
 </style>
