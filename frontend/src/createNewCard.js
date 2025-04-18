@@ -4,9 +4,10 @@
 // import { pb } from "./pb.js"
 import { server } from "./stores"
 import { get } from "svelte/store"
+import findMatchingEntries from "./findMatchingEntriesJSON";
 // import colorhex from "./colorsnames"
 
-export default async (usergroup, markdownobj, authors, board, fileInputelement = null, currentfile = null) => {
+export default async (usergroup, markdownobj, authors, board, fileInputelement = null, currentfile = []) => {
 
 
 
@@ -19,7 +20,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
 
-    console.log(fileinputarray)
+
 
     const content = markdownobj.json.content
     const mdtext = markdownobj.string
@@ -42,7 +43,6 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
 
-    console.log(mdtext, content)
 
     const validateUrl = (url, mainpath = "") => {
         try {
@@ -74,7 +74,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
     const meta = {}
 
 
-    console.log(fileinputarray)
+
 
     const card = {
         // color: "var(--card-bg)",
@@ -85,7 +85,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         text: "",
         favico: "",
         raw: content,
-        // file: fileinputarray,
+        file: currentfile,
         authors: authors,
         board: board,
         done: 0,
@@ -95,7 +95,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
     if (fileinputarray.length) {
-        card.file = fileinputarray
+        card.file = [...fileinputarray, ...currentfile]
     }
 
 
@@ -119,8 +119,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
             })
         })
 
-        console.log("media")
-        console.log(totalBoxNumber, totalCheckedNumber)
+
 
 
         if (totalBoxNumber > 0) {
@@ -159,7 +158,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
     if (paragraph) {
 
         const words = mdtext.replaceAll("\n", " ").split(" ")
-        console.log(words);
+
 
 
 
@@ -182,7 +181,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                     url.endsWith('.bmp') ||
                     url.endsWith('.webp') ||
                     url.endsWith('.svg')) {
-                    console.log("IS IMAGE LINK!!!")
+
                     card.imglink = url
                 }
                 else {
@@ -205,10 +204,8 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                         const tempDocument = document.implementation.createHTMLDocument();
                         tempDocument.head.outerHTML = res
 
-                        console.log(res)
 
                         if (tempDocument.head) {
-                            console.log(validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link))
 
                             meta.color = tempDocument.head.querySelector('meta[name="theme-color"]')?.getAttribute("content")
                             meta.title = tempDocument.head.querySelector('title')?.innerHTML
@@ -232,7 +229,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                                 } else if (validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)) {
                                     meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
                                 }
-                                console.log(meta.img)
+
                             } catch (err) {
                                 console.warn(err)
                             }
@@ -279,8 +276,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
         //
         if (searchTags.length) {
-            console.log("sending...")
-            console.log(searchTags)
+
             const res = await (await fetch(`${get(server).url}/createtags`, {
                 method: "POST",
                 mode: "cors", // no-cors, *cors, same-origin
@@ -295,9 +291,9 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                 body: JSON.stringify({ tags: searchTags })
             })).json()
 
-            console.log(res)
+
             card.tags = res
-            console.log(card.tags)
+
 
 
 
@@ -313,40 +309,18 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
         //img
-        console.log("all")
 
 
 
 
 
 
-
-
-        function findMatchingEntries(obj, matchFn, results = [], parent = null, keyInParent = null) {
-            for (const key in obj) {
-                const value = obj[key];
-
-                if (matchFn(value)) {
-                    results.push({
-                        key,
-                        value,
-                        parent: obj,      // Reference to parent
-                        keyInParent: key  // Key to use for mutation
-                    });
-                }
-
-                if (value && typeof value === 'object') {
-                    findMatchingEntries(value, matchFn, results, obj, key);
-                }
-            }
-            return results;
-        }
 
 
 
 
         const matches = findMatchingEntries(card.raw, d => {
-            console.log(d)
+
             if (typeof d === 'string') {
                 if (d.startsWith('data:image/')) {
                     return true
@@ -367,14 +341,13 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
             try {
                 const blob = await (await fetch(src)).blob();
 
-                const newfile = new File([blob], `${index + 1}${imgTitle}.${imgExtension}`, {
+                const newfile = new File([blob], `${index}`, {
                     type: blob.type,
                 });
 
-                console.log("🤯");
-                console.log(newfile);
 
-                parent[keyInParent] = `imagedata[${index}]`
+
+                parent[keyInParent] = `imagedata[${card.file.length + index}]`
 
                 imagedataarray[index] = newfile; //
 
@@ -385,11 +358,12 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
         if (card.file) {
-            card.file = [...imagedataarray, ...card.file]
+            console.log("cardfile exists")
+            card.file = [...card.file, ...imagedataarray]
+            console.log(card.file)
         } else {
             card.file = imagedataarray
         }
-
 
 
 
@@ -429,11 +403,11 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         const dataWords = words.filter(e => e.startsWith("$"))
         dataWords.forEach(dataWord => {
             try {
-                console.log("🫥")
+
 
                 const name = dataWord.replace("$", '').split(":")[0]
                 const data = dataWord.replace("$", '').split(":")[1]
-                // console.log(name, data, card[name], name in card)
+
 
 
                 if (name == "done") {
@@ -458,7 +432,7 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
         const textWithoutStuff = stringReplacer(mdtext, [...dataWords, card.link, (card.link ? "" : card.title), ...card.tags.map(e => `#${e.name}`), ...card.tags.map(e => `-${e.color}`)])
         if (textWithoutStuff.replace(/[^a-zA-Z0-9]/g, '').length > 0) {
-            console.log("🫡")
+
             card.text = textWithoutStuff.substring(0, 150)
         } else if (meta.text) {
             card.text = meta.text.substring(0, 150)
@@ -487,7 +461,6 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
     //imgtest
 
 
-    console.log("here:")
     console.log(card)
     return card
 }

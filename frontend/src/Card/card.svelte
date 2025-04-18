@@ -219,16 +219,35 @@
                 ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
                 : ''}"
         >
-            <div class="title">
-                <img
-                    style="max-width:16px"
-                    loading="lazy"
-                    src={card.favico}
-                    alt=""
-                />
-                {card.title}
+            {#if card.title}
+                <div class="title">
+                    {#if card.favico}
+                        <img
+                            style="max-width:16px"
+                            loading="lazy"
+                            src={card.favico}
+                            alt=""
+                        />
+                    {/if}
+
+                    {card.title}
+                </div>
+            {/if}
+
+            <div class="link">
+                {#if !card.title}
+                    {#if card.favico}
+                        <img
+                            style="max-width:16px"
+                            loading="lazy"
+                            src={card.favico}
+                            alt=""
+                        />
+                    {/if}
+                {/if}
+
+                {linkPreview(card)}
             </div>
-            <div class="link">{linkPreview(card)}</div>
         </a>
         <!-- {#if card.check}
             {#if card.check === "done" || card.check === "islist"}
@@ -253,14 +272,6 @@
         >
             <div class="updates">{card.text}</div>
         </a>
-        <div class="date">🗓️ {date}</div>
-        {#if card.datementions}
-            {#if card.datementions.split(",").length > 0}
-                <div class="duedate {duedate.status}">
-                    📆 {dateFormat(duedate.date, false)}
-                </div>
-            {/if}
-        {/if}
 
         {#if card.expand?.tags}
             {#if card.expand?.tags.length > 0}
@@ -276,9 +287,7 @@
                     {/each}
                 </div>
             {/if}
-        {/if}
-
-        {#if card.tags}
+        {:else if card.tags}
             {#if card.tags.length > 0}
                 <div class="tags">
                     {#each card.tags as tag}
@@ -290,6 +299,15 @@
                             >
                         {/if}
                     {/each}
+                </div>
+            {/if}
+        {/if}
+
+        <div class="date">🗓️ {date}</div>
+        {#if card.datementions}
+            {#if card.datementions.split(",").length > 0}
+                <div class="duedate {duedate.status}">
+                    📆 {dateFormat(duedate.date, false)}
                 </div>
             {/if}
         {/if}
@@ -421,7 +439,7 @@
         display: grid;
         grid-row: span 3;
         grid-column: span 3;
-        grid-template-rows: subgrid;
+        /* grid-template-rows: subgrid; */
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
         transition: all 0.5s;
@@ -520,7 +538,7 @@
         margin-bottom: 5px;
     }
     .tags {
-        font-size: 1.2rem;
+        font-size: 1rem;
         opacity: 0.8;
     }
 
@@ -531,7 +549,7 @@
         font-weight: bold;
         background: var(--header-bg);
         margin-bottom: 4px;
-        padding: 3px 7px !important;
+        padding: 1px 7px !important;
         color: white !important;
     }
 
@@ -541,11 +559,16 @@
         margin-bottom: 1em;
         max-height: 36px;
         overflow: hidden;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
     }
 
     .updates {
         font-size: 1.2rem;
-        white-space: pre-wrap;
+        white-space: normal;
         overflow: hidden;
         max-height: 8ch;
     }
@@ -622,7 +645,7 @@
             min-height: 83px;
             max-width: 100%;
             grid-template-rows: auto;
-            grid-template-columns: subgrid;
+            /* grid-template-columns: subgrid; */
             gap: 14px;
             min-height: 83px;
             max-width: 100%;
@@ -659,5 +682,13 @@
         .editor-panel {
             display: none;
         }
+    }
+
+    .title {
+        display: flex;
+        align-content: center;
+        align-items: center;
+        gap: 5px;
+        justify-content: flex-start;
     }
 </style>

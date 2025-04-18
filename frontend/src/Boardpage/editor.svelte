@@ -16,7 +16,9 @@
 	import { editorblocked } from "../stores.js";
 	import Picmobutton from "./picmobutton.svelte";
 
-	import { editorViewOptionsCtx } from "@milkdown/kit/core";
+	// import { datePlugin } from "../milkdown-date-plugin";
+
+	// import { editorViewOptionsCtx } from "@milkdown/kit/core";
 	export let fileelement;
 	export let files;
 
@@ -72,10 +74,6 @@
 		},
 	};
 
-	let handleDeleteFile = () => {
-		console.log("delete");
-	};
-
 	const handleEmojiselect = (e) => {
 		console.log(editorel.innerHTML);
 		if (editorel.querySelector("p")) {
@@ -108,6 +106,7 @@
 			.use(listItemBlockComponent)
 			.use(history)
 			.use(cursor)
+			// .use(datePlugin)
 
 			// .use(listener)
 			.create();
@@ -184,14 +183,14 @@
 </script>
 
 <main>
-	{#if files?.length > 0}
+	<!-- {#if files?.length > 0}
 		{#each files as file}
 			<div class="filename">
 				<img src={file.name} alt="" />
 				<button on:click={handleDeleteFile}>delete</button>📎 {file.name}
 			</div>
 		{/each}
-	{/if}
+	{/if} -->
 	<div class="editor-container">
 		<div class="editor-controls">
 			<div class="send-controls">

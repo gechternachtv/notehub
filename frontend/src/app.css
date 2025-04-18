@@ -169,7 +169,8 @@ button,
 .controls {
   display: flex;
   gap: 6px;
-  margin: 20px 0;
+  margin: 6px 0;
+  margin-bottom: 8px;
 }
 
 .alert {
@@ -566,7 +567,7 @@ button {
   max-width: 100%;
   gap: 8px;
   min-height: 54px;
-  padding: 5px;
+  padding: 5px !important;
 }
 
 .minicard-container .card .card-container---controls {
@@ -596,9 +597,6 @@ button {
   color: var(--main-font-1);
 }
 
-.minicard-container .card {
-  padding-bottom: 28px !important;
-}
 
 .minicard-container .progress-bar {
   grid-column: span 2;

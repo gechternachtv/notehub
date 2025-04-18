@@ -6,9 +6,9 @@
     import Editor from "../Boardpage/editor.svelte";
     import Card from "./card.svelte";
     import createNewCard from "../createNewCard.js";
-    import { localToken, editorblocked } from "../stores.js";
+    import { localToken, editorblocked, server } from "../stores.js";
     import { querystring } from "svelte-spa-router";
-
+    import findMatchingEntries from "../findMatchingEntriesJSON";
     import Contextmenu from "../contextmenu.svelte";
 
     export let params = {};
@@ -22,7 +22,7 @@
     let showcard = {};
     let cardid = "";
     let fileelement;
-    let files;
+    let files = [];
     let currentfile;
 
     let notification = "";
@@ -50,12 +50,26 @@
                 currentfile = res.file;
                 editorblocked.set(false);
 
-                // console.log(showcard.expand?.board?.expand?.usergroup?.users.includes($localToken ? $localToken?.model.id : "???"))
+                // if (res.file?.length) {
+                //     files = res.file.map((e) => {
+                //         return { name: e };
+                //     });
+                // }
 
-                if (res.file?.length) {
-                    files = res.file.map((e) => {
-                        return { name: e };
-                    });
+                const matches = findMatchingEntries(res.raw, (d) => {
+                    console.log(d);
+                    if (d.src) {
+                        if (d.src.startsWith("/api/files")) {
+                            return true;
+                        }
+                    }
+                });
+                console.log(matches);
+                for (let index = 0; index < matches.length; index++) {
+                    const { parent, keyInParent } = matches[index];
+
+                    parent[keyInParent].src =
+                        `${$server.url}` + parent[keyInParent].src;
                 }
 
                 return {
@@ -105,9 +119,9 @@
             console.log(record);
             showcard = { ...record, tags: card.tags, expand: oldexpand };
             // files = fileelement.files
-            if (record.file) {
-                files = [{ name: record.file }];
-            }
+            // if (record.file) {
+            //     files = [{ name: record.file }];
+            // }
 
             if (
                 !document
@@ -204,6 +218,48 @@
                                 {notification}
                             </div>
                         {/if}
+
+                        {#if currentfile?.length > 0}
+                            {#each currentfile as file}
+                                <div class="filename">
+                                    <button
+                                        on:click={() => {
+                                            currentfile = currentfile.filter(
+                                                (a) => a != file,
+                                            );
+                                            document
+                                                .querySelectorAll(
+                                                    ".milkdown img",
+                                                )
+                                                .forEach((e) => {
+                                                    if (e.src.includes(file)) {
+                                                        e.remove();
+                                                    }
+                                                });
+                                        }}>x</button
+                                    >
+                                    <a
+                                        href={`${$server.url}/api/files/${showcard.collectionId}/${showcard.id}/${file}`}
+                                    >
+                                        <img
+                                            src={`${$server.url}/api/files/${showcard.collectionId}/${showcard.id}/${file}?thumb=100x100`}
+                                            alt=""
+                                        /></a
+                                    >
+                                    📎 {file}
+                                </div>
+                            {/each}
+                        {/if}
+                        {#if files?.length > 0}
+                            <div>new:</div>
+                            {#each files as file}
+                                <div class="filename">
+                                    <!-- <img src={file.name} alt="" /> -->
+                                    📎 {file.name}
+                                </div>
+                            {/each}
+                        {/if}
+
                         <Editor
                             bind:files
                             bind:fileelement
@@ -275,5 +331,13 @@
         text-align: center;
         margin-right: auto;
         margin-left: auto;
+    }
+    .filename {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
+    .filename img {
+        max-width: 50px;
     }
 </style>

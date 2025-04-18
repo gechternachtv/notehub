@@ -170,12 +170,22 @@
             {#if card.id}
                 <div class="tablecard_link">
                     <a
+                        style={card.color && card.color != "var(--card-bg)"
+                            ? `background:${card.color}`
+                            : ""}
                         href="/#/card/{card.id}{workspace?.name && workspace?.id
                             ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
                             : ''}"
                     >
                         <svg
-                            fill="var(--button-color)"
+                            fill={card.color && card.color != "var(--card-bg)"
+                                ? contrastcolor(
+                                      card.color,
+                                      "#131313",
+                                      "#e1e1e1",
+                                      "var(--button-color)",
+                                  )
+                                : `var(--button-color)`}
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 48 48"
                             width="15px"

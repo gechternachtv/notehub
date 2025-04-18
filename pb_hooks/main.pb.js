@@ -65,7 +65,7 @@ routerAdd("POST", "/createtags", (c) => {
         try {
             const tagrecord = $app.dao().findFirstRecordByFilter(
                 "tags", `name = "${tag.name}" && usergroup = "${tag.usergroup}"`)
-            console.log(JSON.stringify(tagrecord))
+            // console.log(JSON.stringify(tagrecord))
             returnTags.push(tagrecord)
         }
         catch (error) {
@@ -90,7 +90,7 @@ routerAdd("POST", "/createtags", (c) => {
 
             const tagrecord = $app.dao().findFirstRecordByFilter(
                 "tags", `name = "${tag.name}" && usergroup = "${tag.usergroup}"`)
-            console.log(JSON.stringify(tagrecord))
+            // console.log(JSON.stringify(tagrecord))
             returnTags.push(tagrecord)
 
         }
@@ -149,7 +149,7 @@ onRecordAfterCreateRequest((e) => {
 
 
 
-            console.log(e.record.get("file"))
+            // console.log(e.record.get("file"))
             const data = JSON.parse(jsonStr);
 
             let replacedFirst = false
@@ -168,10 +168,10 @@ onRecordAfterCreateRequest((e) => {
             for (let index = 0; index < matches.length; index++) {
                 const { parent, keyInParent } = matches[index];
 
-                const imgTitle = 'image';
-                const src = parent[keyInParent];
+                // const imgTitle = 'image';
+                // const src = parent[keyInParent];
 
-                parent[keyInParent] = `/api/files/${e.baseCollectionEvent.collection.id}/${e.record.get("id")}/${e.record.get("file")[index]}`
+                parent[keyInParent] = `/api/files/${e.baseCollectionEvent.collection.id}/${e.record.get("id")}/${e.record.get("file")[(e.record.get("file").length - matches.length) + index]}`
             }
 
 
@@ -195,6 +195,83 @@ onRecordAfterCreateRequest((e) => {
 
 }, "cards")
 
+onRecordAfterUpdateRequest((e) => {
+
+
+    //image validation:
+
+
+
+    function replaceBase64Src(jsonStr) {
+        try {
+
+            function findMatchingEntries(obj, matchFn, results = [], parent = null, keyInParent = null) {
+                for (const key in obj) {
+                    const value = obj[key];
+
+                    if (matchFn(value)) {
+                        results.push({
+                            key,
+                            value,
+                            parent: obj,      // Reference to parent
+                            keyInParent: key  // Key to use for mutation
+                        });
+                    }
+
+                    if (value && typeof value === 'object') {
+                        findMatchingEntries(value, matchFn, results, obj, key);
+                    }
+                }
+                return results;
+            }
+
+
+
+            // console.log(e.record.get("file"))
+            const data = JSON.parse(jsonStr);
+
+            let replacedFirst = false
+
+
+            const matches = findMatchingEntries(data, d => {
+                if (typeof d === 'string') {
+                    if (d.startsWith('imagedata[')) {
+                        return true
+                    }
+                }
+            });
+
+
+
+            for (let index = 0; index < matches.length; index++) {
+                const { parent, keyInParent } = matches[index];
+
+                // const imgTitle = 'image';
+                // const src = parent[keyInParent];
+
+                parent[keyInParent] = `/api/files/${e.baseCollectionEvent.collection.id}/${e.record.get("id")}/${e.record.get("file")[(e.record.get("file").length - matches.length) + index]}`
+            }
+
+
+
+
+            return data
+        } catch (error) {
+            return "Invalid JSON input";
+        }
+    }
+
+
+    e.record.set("raw", replaceBase64Src(e.record.get("raw")))
+
+
+    $app.dao().saveRecord(e.record)
+
+
+
+
+
+}, "cards")
 
 onRecordBeforeUpdateRequest((e) => {
 
@@ -304,11 +381,11 @@ onRecordBeforeDeleteRequest((e) => {
                     "cards", `tags ~ "${tag}"`
                 )
 
-                console.log(result)
+                // console.log(result)
 
-                result.forEach(cardWithTag => {
-                    console.log(JSON.stringify(cardWithTag))
-                })
+                // result.forEach(cardWithTag => {
+                //     console.log(JSON.stringify(cardWithTag))
+                // })
 
                 if (!result.some(a => a.get("board") != e.record.get("id"))) {
 
