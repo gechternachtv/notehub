@@ -156,11 +156,14 @@ onRecordAfterCreateRequest((e) => {
 
 
             const matches = findMatchingEntries(data, d => {
-                if (typeof d === 'string') {
-                    if (d.startsWith('imagedata[')) {
-                        return true
+                if (d) {
+                    if (typeof d === 'string') {
+                        if (d.startsWith('imagedata[')) {
+                            return true
+                        }
                     }
                 }
+
             });
 
 
@@ -234,11 +237,14 @@ onRecordAfterUpdateRequest((e) => {
 
 
             const matches = findMatchingEntries(data, d => {
-                if (typeof d === 'string') {
-                    if (d.startsWith('imagedata[')) {
-                        return true
+                if (d) {
+                    if (typeof d === 'string') {
+                        if (d.startsWith('imagedata[')) {
+                            return true
+                        }
                     }
                 }
+
             });
 
 

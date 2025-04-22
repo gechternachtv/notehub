@@ -58,7 +58,7 @@
 
                 const matches = findMatchingEntries(res.raw, (d) => {
                     console.log(d);
-                    if (d.src) {
+                    if (d?.src) {
                         if (d.src.startsWith("/api/files")) {
                             return true;
                         }

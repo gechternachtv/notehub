@@ -320,12 +320,14 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
         const matches = findMatchingEntries(card.raw, d => {
-
-            if (typeof d === 'string') {
-                if (d.startsWith('data:image/')) {
-                    return true
+            if (d) {
+                if (typeof d === 'string') {
+                    if (d.startsWith('data:image/')) {
+                        return true
+                    }
                 }
             }
+
         });
 
 
