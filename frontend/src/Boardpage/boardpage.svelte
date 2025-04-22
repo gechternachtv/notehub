@@ -172,6 +172,10 @@
                     }
 
                     canmove = true;
+
+                    //title
+                    document.querySelector("title").innerHTML =
+                        record.expand?.usergroup.name + " ➜ " + board.name;
                     //  // console.log(records)
                 }
                 if (boardpage) {
@@ -353,6 +357,12 @@
     //     }
     // };
 </script>
+
+<!-- <svelte:head>
+    {#if workspacename}
+        <title>{workspacename}</title>
+    {/if}
+</svelte:head> -->
 
 <main class:paddingtop={boardpage}>
     {#if boardisactive}

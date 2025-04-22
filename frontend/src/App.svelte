@@ -16,10 +16,6 @@
   console.log($localToken);
 </script>
 
-<svelte:head>
-  <title>notehub</title>
-</svelte:head>
-
 <!-- <Login></Login> -->
 
 <div class="maincontainer">

@@ -205,6 +205,9 @@
             },
         );
 
+        document.querySelector("title").innerHTML =
+            record.expand.usergroup.name + " ➜ " + record.name;
+
         return record;
     };
     let promise = getWorkspace();

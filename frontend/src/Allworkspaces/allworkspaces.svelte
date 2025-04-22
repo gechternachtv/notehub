@@ -7,7 +7,7 @@
     // import {dndzone} from "svelte-dnd-action";
     import Modal from "../modal/modal.svelte";
     import { onDestroy } from "svelte";
-    import Contextmenu from "../contextmenu.svelte";
+    // import Contextmenu from "../contextmenu.svelte";
 
     export let usergroup = null;
     export let params = { usergroup: "" };
@@ -39,6 +39,9 @@
         });
         console.log(records);
         workspaces = records;
+
+        document.querySelector("title").innerHTML = usergroup.name;
+
         return records;
     };
     const promise = records();

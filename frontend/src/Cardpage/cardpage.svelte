@@ -72,6 +72,11 @@
                         `${$server.url}` + parent[keyInParent].src;
                 }
 
+                document.querySelector("title").innerHTML =
+                    showcard.expand.board.expand.usergroup.name +
+                    (showcard.title ? " ➜ " : " ➜ card") +
+                    showcard.title;
+
                 return {
                     type: "json",
                     value: {

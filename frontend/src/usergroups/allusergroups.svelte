@@ -40,6 +40,8 @@
         showModal = false;
         push(`/usergroup/${record.id}`);
     };
+
+    document.querySelector("title").innerHTML = "notehub!";
 </script>
 
 <main>
