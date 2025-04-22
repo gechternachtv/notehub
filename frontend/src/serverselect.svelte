@@ -9,6 +9,7 @@
     let allservers = window.localStorage.getItem("allservers")
         ? JSON.parse(window.localStorage.getItem("allservers"))
         : [{ name: import.meta.env.VITE_NAME, url: import.meta.env.VITE_URL }];
+    let errormsg = "";
 </script>
 
 <div class="current-server">
@@ -44,23 +45,64 @@
             <button
                 class="add"
                 on:click={() => {
-                    allservers = [
-                        ...allservers,
-                        { name: newname, url: newurl },
-                    ];
-                    window.localStorage.setItem(
-                        "allservers",
-                        JSON.stringify(allservers),
-                    );
-                    createnew = false;
+                    try {
+                        const url = new URL(newurl);
+                        const fullpath =
+                            url.origin +
+                            (url.pathname != "/" ? url.pathname : "");
+
+                        if (
+                            allservers.find(
+                                (a) => a.name === newname || a.url === fullpath,
+                            )
+                        ) {
+                            allservers = allservers.map((e) => {
+                                if (e.name === newname || e.url === fullpath) {
+                                    e.name = newname;
+                                    e.url = fullpath;
+                                    return e;
+                                } else {
+                                    return e;
+                                }
+                            });
+                        } else {
+                            allservers = [
+                                ...allservers,
+                                {
+                                    name: newname,
+                                    url: fullpath,
+                                },
+                            ];
+                        }
+
+                        window.localStorage.setItem(
+                            "allservers",
+                            JSON.stringify(allservers),
+                        );
+                        createnew = false;
+
+                        window.localStorage.setItem(
+                            "currentserver",
+                            JSON.stringify({
+                                name: newname,
+                                url: fullpath,
+                            }),
+                        );
+                        window.location.reload();
+                    } catch (error) {
+                        errormsg = error;
+                    }
                 }}>add server</button
             >
         </div>
+
+        {#if errormsg != ""}
+            <div>{errormsg}</div>
+        {/if}
     {:else}
         <div class="server">
             {#each allservers as server}
                 <div class="server-container">
-                    <!-- <button>x</button> -->
                     <button
                         on:click={() => {
                             pb.authStore.clear();
@@ -76,6 +118,18 @@
                     >
                         {server.name} | {server.url}
                         →</button
+                    >
+                    <button
+                        class="remove"
+                        on:click={() => {
+                            allservers = allservers.filter((e) => {
+                                return e.url != server.url;
+                            });
+                            window.localStorage.setItem(
+                                "allservers",
+                                JSON.stringify(allservers),
+                            );
+                        }}>🗑️</button
                     >
                 </div>
             {/each}
@@ -106,6 +160,15 @@
         justify-content: center;
     }
 
+    .server-container {
+        display: grid;
+        grid-template-columns: auto 24px;
+        gap: 7px;
+    }
+
+    .server-container .remove {
+        background: transparent;
+    }
     .server-container button {
         width: 100%;
         text-align: center;

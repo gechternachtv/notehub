@@ -770,3 +770,12 @@ milkdown-list-item-block .label-wrapper {
   flex-wrap: wrap;
   gap: 10px;
 }
+
+.locked .remove-file {
+  pointer-events: none;
+  display: none !important;
+}
+
+.fullview .filepreview-editor-inside {
+  display: none !important;
+}

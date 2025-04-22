@@ -303,9 +303,6 @@
         if (fileelement) {
             fileelement.value = "";
         }
-        if (files && fileelement) {
-            files = fileelement.files;
-        }
 
         window.scrollTo(0, 0);
         editorblocked.set(false);

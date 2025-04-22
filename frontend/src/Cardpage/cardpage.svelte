@@ -118,10 +118,11 @@
             console.log("%c record:", "color:turquoise");
             console.log(record);
             showcard = { ...record, tags: card.tags, expand: oldexpand };
-            // files = fileelement.files
-            // if (record.file) {
-            //     files = [{ name: record.file }];
-            // }
+            currentfile = showcard.file ? showcard.file : [];
+            files = [];
+            if (fileelement) {
+                fileelement.value = "";
+            }
 
             if (
                 !document
@@ -134,6 +135,7 @@
             // document.querySelector(".readmodetoggle")?.click();
 
             notification = "Card was updated successfully";
+
             setTimeout(() => {
                 notification = "";
             }, 3000);
@@ -223,6 +225,7 @@
                             {#each currentfile as file}
                                 <div class="filename">
                                     <button
+                                        class="remove-file"
                                         on:click={() => {
                                             currentfile = currentfile.filter(
                                                 (a) => a != file,
@@ -236,9 +239,10 @@
                                                         e.remove();
                                                     }
                                                 });
-                                        }}>x</button
+                                        }}>×</button
                                     >
                                     <a
+                                        target="_blank"
                                         href={`${$server.url}/api/files/${showcard.collectionId}/${showcard.id}/${file}`}
                                     >
                                         <img
@@ -336,8 +340,14 @@
         display: flex;
         gap: 5px;
         align-items: center;
+        font-size: 10px;
     }
     .filename img {
-        max-width: 50px;
+        max-width: 30px;
+    }
+
+    .remove-file {
+        padding: 0 11px;
+        background: var(--alert);
     }
 </style>

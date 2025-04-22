@@ -60,8 +60,8 @@
 	}
 
 	/* :global(.yotsuba) {
-			--alert:#fb0000;
-			--news:#fb0000;
+			--alert:#b30505;
+			--news:#b30505;
 			--header-bg: #e04001;
 			--main-font-1: #800000;
 			--main-font-2: #800000;
@@ -77,8 +77,8 @@
 		} */
 
 	:global(.yotsuba) {
-		--alert: #fb0000;
-		--news: #fb0000;
+		--alert: #b30505;
+		--news: #b30505;
 		--complete: #468333;
 		--complete-col: #ffeedb;
 		--header-bg: #e04001;
@@ -141,8 +141,8 @@
 	}
 
 	:global(.futaba) {
-		--alert: #fb0000;
-		--news: #fb0000;
+		--alert: #b30505;
+		--news: #b30505;
 		--complete: #4f923a;
 		--complete-col: #ffeedb;
 		--header-bg: #800000;
@@ -312,8 +312,8 @@
 		background-color: var(--gradient-col-1);
 	}
 	:global(.fvwm) {
-		--alert: #fb0000;
-		--news: #fb0000;
+		--alert: #b30505;
+		--news: #b30505;
 		--complete: #468333;
 		--complete-col: #ffeedb;
 		--header-bg: #828776;

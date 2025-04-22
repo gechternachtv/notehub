@@ -183,14 +183,16 @@
 </script>
 
 <main>
-	<!-- {#if files?.length > 0}
-		{#each files as file}
-			<div class="filename">
-				<img src={file.name} alt="" />
-				<button on:click={handleDeleteFile}>delete</button>📎 {file.name}
-			</div>
-		{/each}
-	{/if} -->
+	<div class="filepreview-editor-inside">
+		{#if files?.length > 0}
+			<div>📎</div>
+			{#each files as file}
+				<div class="filename">
+					{file.name}
+				</div>
+			{/each}
+		{/if}
+	</div>
 	<div class="editor-container">
 		<div class="editor-controls">
 			<div class="send-controls">

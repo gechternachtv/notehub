@@ -119,7 +119,7 @@
                             on:click={() => {
                                 users = users.filter((e) => e.id != user.id);
                                 console.log(users);
-                            }}>x</button
+                            }}>×</button
                         >
                     {/if}
                 </div>
