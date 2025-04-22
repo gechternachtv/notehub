@@ -443,7 +443,7 @@
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
         transition: all 0.5s;
-        border: 1px solid #00000018;
+        border: 1px solid var(--card-border);
     }
 
     @container card-container (max-width: 768px) {

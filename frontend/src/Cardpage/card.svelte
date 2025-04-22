@@ -646,7 +646,7 @@
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
         font-size: 13px;
-        border: 1px solid #00000018;
+        border: 1px solid var(--card-border);
     }
 
     /* .card.listview {

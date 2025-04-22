@@ -130,7 +130,6 @@
         position: relative;
         display: flex;
         gap: 30px;
-        max-width: 781px;
         margin-left: 0;
     }
 
@@ -238,7 +237,7 @@
 
     main {
         background: var(--card-bg);
-        padding: min(30px, 2vw);
+        padding: min(20px, 2vw);
         border-radius: 10px;
     }
 </style>

@@ -60,7 +60,8 @@
 	}
 
 	/* :global(.yotsuba) {
-			--alert:#b30505;
+			--card-border:#00000018;
+--alert:#b30505;
 			--news:#b30505;
 			--header-bg: #e04001;
 			--main-font-1: #800000;
@@ -77,6 +78,7 @@
 		} */
 
 	:global(.yotsuba) {
+		--card-border: #00000018;
 		--alert: #b30505;
 		--news: #b30505;
 		--complete: #468333;
@@ -97,6 +99,7 @@
 	}
 
 	:global(.yotsuba-b) {
+		--card-border: #00000018;
 		--alert: #af0a0f;
 		--news: #af0a0f;
 		--complete: #468333;
@@ -121,6 +124,7 @@
 	}
 
 	:global(.yotsuba-c) {
+		--card-border: #00000018;
 		--alert: #df223b;
 		--news: #cb4e16;
 		--complete: #58b63b;
@@ -141,6 +145,7 @@
 	}
 
 	:global(.futaba) {
+		--card-border: #00000018;
 		--alert: #b30505;
 		--news: #b30505;
 		--complete: #4f923a;
@@ -161,6 +166,7 @@
 	}
 
 	:global(.bluesky) {
+		--card-border: #00000018;
 		--alert: #d3152e;
 		--news: #cb4e16;
 		--complete: #468333;
@@ -185,6 +191,7 @@
 	}
 
 	:global(.luckygreen) {
+		--card-border: #00000018;
 		--alert: #df223b;
 		--news: #cb4e16;
 		--complete: #468333;
@@ -205,6 +212,7 @@
 	}
 
 	:global(.uboa) {
+		--card-border: #ffffff17;
 		--alert: #d33;
 		--news: #d33;
 		--complete: #468333;
@@ -227,6 +235,7 @@
 		color: var(--button-color);
 	}
 	:global(.plankton) {
+		--card-border: #00000018;
 		--alert: #6bad00;
 		--news: #ff2164;
 		--complete: #468333;
@@ -247,6 +256,7 @@
 	}
 
 	:global(.pxtone) {
+		--card-border: #ffffff30;
 		--alert: #01f080;
 		--news: var(--alert);
 		--complete: #468333;
@@ -267,6 +277,7 @@
 	}
 
 	:global(.dark) {
+		--card-border: #ffffff30;
 		--alert: #01f080;
 		--news: var(--alert);
 		--complete: #468333;
@@ -287,6 +298,7 @@
 	}
 
 	:global(.blood) {
+		--card-border: #00000018;
 		--alert: #c50000;
 		--news: #f10000;
 		--complete: #468333;
@@ -312,6 +324,7 @@
 		background-color: var(--gradient-col-1);
 	}
 	:global(.fvwm) {
+		--card-border: #00000018;
 		--alert: #b30505;
 		--news: #b30505;
 		--complete: #468333;
@@ -331,6 +344,7 @@
 		--browser-color: #47545d;
 	}
 	:global(.dfwm98) {
+		--card-border: #00000045;
 		--alert: #df223b;
 		--news: #cb4e16;
 		--complete: #468333;
@@ -358,6 +372,7 @@
 	}
 
 	:global(.goldSrc) {
+		--card-border: #00000018;
 		--alert: #96872f;
 		--news: #f10000;
 		--complete: #61912a;
@@ -381,7 +396,9 @@
 			.goldSrc .card,
 			.goldSrc .workspace-card,
 			.goldSrc .userbox,
-			.goldSrc .btn
+			.goldSrc .btn,
+			.goldSrc .calendar-user-grid > *,
+			.goldSrc .calendar-user-grid .profilepic
 		) {
 		border-top: 2px solid #67715d;
 		border-left: 2px solid #67715d;
