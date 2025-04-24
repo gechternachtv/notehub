@@ -410,11 +410,30 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                 const name = dataWord.replace("$", '').split(":")[0]
                 const data = dataWord.replace("$", '').split(":")[1]
 
+                function isNumber(str) {
+                    return !isNaN(str) && str.trim() !== '';
+                }
 
 
                 if (name == "done") {
-                    card[name] = data;
-                    card.text = card.text.replace(dataWord, "")
+                    if (isNumber(data)) {
+                        card[name] = Math.floor(Number(data));
+                        card.text = card.text.replace(dataWord, "")
+                    } else if (data.includes("/")) {
+                        let [before, after] = data.split("/");
+                        if (isNumber(before) && isNumber(after) && after != "0") {
+                            if (Number(after) > Number(before)) {
+                                const fraction = Number(before) / Number(after);
+                                const percentage = fraction * 100;
+                                card[name] = Math.floor(percentage);
+                            } else {
+                                card[name] = 100;
+                            }
+
+                            card.text = card.text.replace(dataWord, "")
+                        }
+                    }
+
                 }
                 if (name == "color") {
                     card[name] = data;

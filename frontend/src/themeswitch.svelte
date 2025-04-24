@@ -11,7 +11,7 @@
 		"yotsuba-b",
 		"yotsuba-c",
 		"futaba",
-		"dfwm98",
+		"dfwm",
 		"fvwm",
 		"goldSrc",
 		"blood",
@@ -94,8 +94,9 @@
 		--gradient-col-1: #ffe6cc;
 		--gradient-col-2: #fff3e6;
 		--body-background: #ffeedb;
-		--board-title-color: var(--header-bg);
+		--board-title-color: #ae3100;
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
 
 	:global(.yotsuba-b) {
@@ -121,6 +122,7 @@
 		);
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
 
 	:global(.yotsuba-c) {
@@ -142,6 +144,7 @@
 		--card-bg: #ebe4cb;
 		--container-bg: #f3f0e4;
 		--gradient-col-1: #f3f0e4;
+		--link-col: var(--button-bg);
 	}
 
 	:global(.futaba) {
@@ -163,6 +166,7 @@
 		--body-background: #ffead3;
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
 
 	:global(.bluesky) {
@@ -188,6 +192,7 @@
 		--main-font-1: #214049;
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
+		--link-col: #356574;
 	}
 
 	:global(.luckygreen) {
@@ -197,8 +202,8 @@
 		--complete: #468333;
 		--complete-col: #ffeedb;
 		--header-bg: #36a68c;
-		--main-font-2: #000;
-		--button-bg: #235e56;
+		--main-font-2: #15015c;
+		--button-bg: #077167;
 		--button-color: #fff;
 		--header-color: #fff;
 		--card-bg: #efefef;
@@ -209,6 +214,7 @@
 		--main-font-1: #214049;
 		--board-title-color: #47bcad;
 		--browser-color: var(--header-bg);
+		--link-col: #17665b;
 	}
 
 	:global(.uboa) {
@@ -230,6 +236,7 @@
 		--main-font-1: #8080e0;
 		--board-title-color: var(--main-font-1);
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
 	:global(.uboa .new-section, .uboa .container-header-buttons) {
 		color: var(--button-color);
@@ -253,6 +260,7 @@
 		--header-color: white;
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
 
 	:global(.pxtone) {
@@ -274,6 +282,7 @@
 		--header-color: var(--main-font-1);
 		--board-title-color: var(--main-font-1);
 		--browser-color: #343255;
+		--link-col: var(--button-bg);
 	}
 
 	:global(.dark) {
@@ -295,6 +304,7 @@
 		--header-color: #d3d3d3;
 		--board-title-color: #7e7e7e;
 		--browser-color: #131313;
+		--link-col: var(--button-bg);
 	}
 
 	:global(.blood) {
@@ -316,6 +326,7 @@
 		--body-background: #606464;
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
 
 	:global(body) {
@@ -327,7 +338,7 @@
 		--card-border: #00000018;
 		--alert: #b30505;
 		--news: #b30505;
-		--complete: #468333;
+		--complete: #00bd6d;
 		--complete-col: #ffeedb;
 		--header-bg: #828776;
 		--main-font-1: #262050;
@@ -342,33 +353,49 @@
 		--body-background: #ffead3;
 		--board-title-color: #47545d;
 		--browser-color: #47545d;
+		--link-col: var(--button-bg);
 	}
-	:global(.dfwm98) {
-		--card-border: #00000045;
-		--alert: #df223b;
-		--news: #cb4e16;
-		--complete: #468333;
+	:global(.dfwm) {
+		--gradient-col-1: #368c8c;
+
+		--card-border: #00000018;
+		--alert: #b30505;
+		--news: #b30505;
+		--complete: #00bd6d;
 		--complete-col: #ffeedb;
+		--header-bg: #828776;
+		--main-font-1: #262050;
+		--main-font-2: #262050;
+		--button-bg: #313179;
+		--button-color: #dedede;
+		--header-color: #353535;
+		--card-bg: #8a9393;
+		--container-bg: #b4b9ad;
+
+		--body-background: #ffead3;
+		--board-title-color: #47545d;
+		--browser-color: #231842;
+		--link-col: #143c29;
+
+		--header-bg: #231842;
+		--main-font-1: #231842;
+		--main-font-2: #262050;
+		--button-bg: #31795b;
 		--header-color: #fff;
-		--card-bg: #efefef;
-		--gradient-col-2: #f0f0f0;
-		--body-background: #f7f7f7;
-		--main-font-1: #214049;
-		--header-bg: #0b0c76;
-		--button-bg: #0c57af;
-		--button-color: white;
-		--container-bg: #d7d7d7;
-		--gradient-col-1: #007f82;
-		--main-font-2: #8c8c8c;
-		--board-title-color: #212121;
-		--browser-color: #007f82;
+		--card-bg: #6d8f8f;
+		/* --gradient-col-1: #176a62; */
+		--gradient-col-2: #39607b;
 	}
-	:global(.dfwm98 nav, .dfwm98 .title-container) {
-		background: linear-gradient(
-			90deg,
-			rgba(11, 12, 118, 1) 22%,
-			rgba(12, 121, 201, 1) 100%
-		) !important;
+
+	:global(.dfwm .cardday.active) {
+		background: #ffcb00 !important;
+		color: var(--header-bg) !important;
+	}
+	:global(.dfwm .cardday .daytag-container .day-createdon) {
+		background-color: var(--header-bg) !important;
+	}
+	:global(.dfwm .cardday .daytag-container .day-mentions) {
+		background-color: #ae1e1e !important;
 	}
 
 	:global(.goldSrc) {
@@ -390,8 +417,9 @@
 		--body-background: #606464;
 		--board-title-color: #968832;
 		--browser-color: var(--header-bg);
+		--link-col: var(--button-bg);
 	}
-	:global(
+	/* :global(
 			.goldSrc .instance-box,
 			.goldSrc .card,
 			.goldSrc .workspace-card,
@@ -411,5 +439,5 @@
 	}
 	:global(.goldSrc nav) {
 		border-bottom: 2px solid #393e34;
-	}
+	} */
 </style>

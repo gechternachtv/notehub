@@ -101,7 +101,7 @@ a {
 
 a {
   /* color: rgb(0,100,200); */
-  color: var(--button-bg);
+  color: var(--link-col);
   cursor: pointer;
 }
 
@@ -777,5 +777,9 @@ milkdown-list-item-block .label-wrapper {
 }
 
 .fullview .filepreview-editor-inside {
+  display: none !important;
+}
+
+.workspacepage .board-container .absolute.controls {
   display: none !important;
 }
