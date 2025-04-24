@@ -378,6 +378,8 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         }
 
 
+
+
         if (card.file) {
             console.log("cardfile exists")
             card.file = [...card.file, ...imagedataarray]
@@ -401,6 +403,31 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
 
+
+        if (card.imglink === "" && card.file?.length === 0) {
+            console.log("IMAGES!!!")
+            const imagesLinks = findMatchingEntries(card.raw, d => {
+                if (d) {
+                    if (d.type === "image") {
+
+                        return true
+
+                    }
+                }
+
+            });
+
+            if (imagesLinks.length) {
+                console.log(imagesLinks[0])
+                if (imagesLinks[0].value?.attrs?.src) {
+                    if (imagesLinks[0].value.attrs.src.length < 200) {
+                        card.imglink = imagesLinks[0].value.attrs.src
+                    }
+
+                }
+            }
+
+        }
 
 
 
