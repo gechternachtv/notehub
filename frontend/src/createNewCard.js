@@ -257,6 +257,25 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
 
+
+        const datementionsWords = words.filter(e => e.startsWith("@"))
+        const datesearchMentions = []
+
+        for (let index = 0; index < datementionsWords.length; index++) {
+            const e = datementionsWords[index];
+            // search tag
+            const namewithouthash = datementionsWords[index].replace(/^@/, '')
+            datesearchMentions.push(namewithouthash)
+
+        }
+
+
+        card.datementions = datesearchMentions.toString()
+
+
+
+
+
         //tags
         const tags = []
 
