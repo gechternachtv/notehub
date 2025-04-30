@@ -11,9 +11,11 @@
 		"yotsuba-b",
 		"yotsuba-c",
 		"futaba",
+		"plastich",
 		"dfwm",
 		"fvwm",
 		"goldSrc",
+		"brwrld",
 		"blood",
 		"uboa",
 		"pxtone",
@@ -169,6 +171,28 @@
 		--link-col: var(--button-bg);
 	}
 
+	:global(.plastich) {
+		--card-border: #00000018;
+		--alert: #db8414;
+		--news: #f10000;
+		--complete: #468333;
+		--complete-col: #ffeedb;
+		--header-bg: #920f06;
+		--main-font-1: #0a0a0a;
+		--main-font-2: #0a0a0a;
+		--button-bg: #5e0c0c;
+		--button-color: #fff;
+		--header-color: white;
+		--card-bg: #ece9e3;
+		--container-bg: #dad4c8;
+		--gradient-col-1: #dddcd8;
+		--gradient-col-2: #dddcd8;
+		--body-background: #606464;
+		--board-title-color: var(--header-bg);
+		--browser-color: var(--header-bg);
+		--link-col: #9b0000;
+	}
+
 	:global(.bluesky) {
 		--card-border: #00000018;
 		--alert: #d3152e;
@@ -243,19 +267,19 @@
 	}
 	:global(.plankton) {
 		--card-border: #00000018;
-		--alert: #6bad00;
+		--alert: #ff9000;
 		--news: #ff2164;
-		--complete: #468333;
+		--complete: #672eea;
 		--complete-col: #ffeedb;
 		--main-font-1: black;
 		--main-font-2: black;
 		--button-color: #ffe;
 		--card-bg: #eaeaea;
 		--container-bg: #fff;
-		--gradient-col-1: #faf4f4;
+		--gradient-col-1: #f5f5f5;
 		--gradient-col-2: #fff3e6;
 		--body-background: url("https://zonaplankton.net/backgrounds/page-pattern-default.png");
-		--header-bg: #0394fc;
+		--header-bg: #3ab6fe;
 		--button-bg: #ff2164;
 		--header-color: white;
 		--board-title-color: var(--header-bg);
@@ -396,6 +420,32 @@
 	}
 	:global(.dfwm .cardday .daytag-container .day-mentions) {
 		background-color: #ae1e1e !important;
+	}
+
+	:global(.brwrld) {
+		--card-border: #ffffff30;
+		--alert: #01f080;
+		--news: var(--alert);
+		--complete: #468333;
+		--complete-col: #ffeedb;
+		--main-font-1: #fff;
+		--main-font-2: #fff;
+		--button-color: #495e68;
+		--card-bg: #495e68;
+		--container-bg: #7c8d94;
+		--gradient-col-1: #7c8d94;
+		--gradient-col-2: #7c8d94;
+		/*! --body-background:url(https://zonaplankton.net/backgrounds/sidebar-pattern-pxtone.png); */
+		--header-bg: #495e68;
+		--button-bg: white;
+		--header-color: var(--main-font-1);
+		--board-title-color: var(--main-font-1);
+		--browser-color: #495e68;
+		--link-col: var(--button-bg);
+	}
+
+	:global(.brwrld .workspacepage > .grid) {
+		background: var(--header-bg);
 	}
 
 	:global(.goldSrc) {

@@ -78,7 +78,7 @@
           asyncComponent: () => import("./usergroups/usergrouppage.svelte"),
         }),
         "/": wrap({
-          asyncComponent: () => import("./usergroups/allusergroups.svelte"),
+          asyncComponent: () => import("./usergroups/homepage.svelte"),
         }),
       }}
     />

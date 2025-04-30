@@ -101,6 +101,35 @@ routerAdd("POST", "/createtags", (c) => {
     return c.json(200, returnTags)
 })
 
+routerAdd("GET", "/workspaceget/:id", (c) => {
+    const id = c.pathParam("id")
+
+    const boards = $app.dao().findRecordsByFilter(
+        "boards", `usergroup = "${id}"`
+    )
+
+    const workspaces = $app.dao().findRecordsByFilter(
+        "workspaces", `usergroup = "${id}"`
+    )
+
+
+    const boardstrimmed = boards.map(r => ({
+        id: r.id,
+        name: r.get("name"),
+        img: r.get("img"),
+        color: r.get("color")
+    }));
+
+
+    const workspacestrimmed = workspaces.map(r => ({
+        id: r.id
+    }));
+
+
+    return c.json(200, { boards: boardstrimmed, workspaces: workspacestrimmed })
+})
+
+
 
 onRecordAfterCreateRequest((e) => {
 

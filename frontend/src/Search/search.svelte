@@ -48,10 +48,13 @@
     checklistSearch.append("completed");
     checklistSearch = checklistSearch.head;
 
+    let datementions = false;
+
+    let filter;
+
     $: {
-        console.log(
-            `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}  ${isInProgress ? `&& done > 0 && done < 100` : isComplete ? `&& done = 100` : ``}`,
-        );
+        filter = `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}  ${isInProgress ? `&& done > 0 && done < 100` : isComplete ? `&& done = 100` : ``}${datementions ? ` && datementions != "" ` : ""}`;
+        console.log(filter);
     }
 
     const params = new URLSearchParams($querystring);
@@ -76,6 +79,7 @@
 
     async function getRecords() {
         try {
+            console.log(filter);
             // let params = new URLSearchParams(document.location.search);
             // let text = params.get("text"); // is the string "Jonathan"
             // console.log(text);
@@ -83,7 +87,7 @@
             const resultList = await pb
                 .collection("cards")
                 .getList(currentpage, 35, {
-                    filter: `(${searchtags.length > 0 ? `(${searchtags.map((e, i) => `tags ?~ "${e}" ${i === searchtags.length - 1 ? "" : `${tagsORAND}`}`).join(" ")}) &&` : ``} (${includeraw ? `raw ?~ "${textsearch}" || ` : ""}text ~ "${textsearch}" || title ~ "${textsearch}" || link ~ "${textsearch}" || file ~ "${textsearch}") ${needslink ? `&& link != ""` : ""} ${needsimg ? `&& (imglink != "" || file ~ "jpg" || file ~ "png" || file ~ "gif" || file ~ "webp")` : ""} ${needsfile ? `&& file != ""` : ""}) ${$localToken ? `&& board.usergroup.users ~ "${$localToken?.model?.id}" ${usergroupid ? ` && board.usergroup = "${usergroupid}"` : ""}` : ` && board.usergroup.public = "global-view" `}  ${isInProgress ? `&& done > 0 && done < 100` : isComplete ? `&& done = 100` : ``}`,
+                    filter: filter,
                     sort: `${sortby.data === "oldest" ? "" : "-"}created`,
                     expand: "tags,board.usergroup",
                     fields: "collectionId,color,created,datementions,done,favico,file,id,imglink,link,text,title,expand.tags.name,expand.tags.id,expand.tags.color,expand.board.name,expand.board.id,expand.board.color,expand.board.expand.usergroup.id,expand.board.expand.usergroup.name",
@@ -280,6 +284,14 @@
                     isComplete = false;
                 }
             }}>{checklistSearch.data}</button
+        >
+    </div>
+
+    <div class="flex">
+        Date mentions search: <button
+            on:click={() => {
+                datementions = !datementions;
+            }}>{datementions ? "mentions a date" : "ignore"}</button
         >
     </div>
 
