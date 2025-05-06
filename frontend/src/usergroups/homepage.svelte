@@ -51,7 +51,7 @@
 <style>
     main {
         padding-bottom: var(--bodypadding);
-        --avatar-size: 130px;
+        --avatar-size: 220px;
     }
 
     .calendar-user-grid {
@@ -65,6 +65,9 @@
     @media (max-width: 991px) {
         .calendar-user-grid {
             grid-template-columns: 1fr;
+        }
+        main {
+            --avatar-size: 130px;
         }
     }
 

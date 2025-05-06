@@ -154,9 +154,7 @@
         background: var(--header-bg);
         color: var(--header-color);
         width: fit-content;
-
-        border-radius: 6px;
-        margin-bottom: 2px;
+        margin-bottom: 6px;
         display: flex;
         align-items: center;
     }
@@ -173,6 +171,8 @@
     .instance-box {
         display: grid;
         grid-template-columns: auto 1fr;
+        max-width: 912px;
+        border-radius: 0px 10px 10px 0px;
     }
 
     @media (max-width: 991px) {

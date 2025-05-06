@@ -55,6 +55,7 @@
     }
 
     let promise;
+    let hascontent = false;
 
     // if (listView === undefined) {
     //     listView = !!window.localStorage.getItem("listView");
@@ -75,46 +76,58 @@
             `((created >= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 00:00:00" && created <= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 23:59:59")` +
             ` || datementions ~ "${formatNumber(e.detail.day)}-${formatNumber(e.detail.month)}-${e.detail.year}")` +
             ` && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
-        promise = getRecords();
+
+        promise = getRecords().then((e) => {
+            console.log("HEY");
+            console.log(e);
+            if (e?.items?.length) {
+                hascontent = true;
+            } else {
+                hascontent = false;
+            }
+            return e;
+        });
     };
 </script>
 
-<main>
+<main class:hascontent>
     <div class="calendar-wrapper">
         <Calendarselector on:dayclick={handledayclick}></Calendarselector>
     </div>
-    <div class="calendar-result minicard-container calendarcard-container">
-        {#await promise}
-            . . .
-        {:then searchresult}
-            {#if searchresult}
-                <div class="locked container">
-                    <!-- {board.id} -->
 
-                    <div class="grid-container">
-                        <!-- <div class="grid"
-                class:list={listView} use:dndzone={{items:cards,
-                morphDisabled:true,
-                dragDisabled:false,
-                type:"cards",
-                dropTargetStyle:{opacity:"0.6"}
-                ,dropTargetClasses:["floating"]
-                }
-                } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
-                        {#if searchresult.items.length}
+    {#await promise then searchresult}
+        {#if searchresult}
+            {#if searchresult.items.length}
+                <div
+                    class="calendar-result minicard-container calendarcard-container"
+                >
+                    <div class="locked container">
+                        <!-- {board.id} -->
+
+                        <div class="grid-container">
+                            <!-- <div class="grid"
+            class:list={listView} use:dndzone={{items:cards,
+            morphDisabled:true,
+            dragDisabled:false,
+            type:"cards",
+            dropTargetStyle:{opacity:"0.6"}
+            ,dropTargetClasses:["floating"]
+            }
+            } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
+
                             <Sortgrid class="card-grid list">
                                 {#each searchresult.items as card (card.id)}
                                     <Card {card}></Card>
                                 {/each}
                             </Sortgrid>
-                        {/if}
+                        </div>
                     </div>
                 </div>
             {/if}
-        {:catch error}
-            {error}
-        {/await}
-    </div>
+        {/if}
+    {:catch error}
+        {error}
+    {/await}
 </main>
 
 <style>
@@ -160,8 +173,12 @@
         margin: auto;
         margin-left: 0;
         /* max-width: var(--container); */
-        width: 100%;
+        width: auto;
         /* padding-bottom: 20px; */
+    }
+
+    main.hascontent {
+        width: 100%;
     }
 
     .grid-container {

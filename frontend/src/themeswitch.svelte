@@ -325,8 +325,8 @@
 		--board-title-color: var(--main-font-1);
 		--browser-color: #343255;
 		--link-col: var(--button-bg);
-		--menu-bg: var(--button-bg);
-		--menu-col: var(--button-color);
+		--menu-bg: #363456;
+		--menu-col: var(--button-bg);
 	}
 
 	:global(.dark) {
