@@ -8,7 +8,7 @@
         private: { text: "🔒 private" },
         view: { text: "public: 👁️ view" },
         "global-view": { text: "public: 🌐 global view" },
-        edit: { text: "public: 🔓 join and edit" },
+        "public-post": { text: "public-post: 🔓 post cards" },
     };
 </script>
 
@@ -28,8 +28,8 @@
                 +
             {/if}
         </button> -->
-            <div class="public">{getPublictext[usergroup.public].text}</div>
         </div>
+        <div class="public">{getPublictext[usergroup.public].text}</div>
         <div>
             {#if usergroup.expand?.users}
                 <div class="users-container">
@@ -63,7 +63,9 @@
 
     <div class="instancebox">
         <!-- {console.log(instance)} -->
-
+        <div>
+            <a class="morebutton" href="#/usergroup/{usergroup.id}">more →</a>
+        </div>
         <slot></slot>
         <div class="controls">
             <!-- <a class="btn" href="/#/usergroup/{instance.id}">full view</a> -->
@@ -74,6 +76,19 @@
 </main>
 
 <style>
+    .morebutton {
+        background: var(--button-bg);
+        color: var(--button-color) !important;
+        padding: 3px 10px;
+        display: block;
+
+        border-radius: 10px;
+        font-weight: 500;
+        width: fit-content;
+    }
+    .morebutton:hover {
+        text-decoration: none;
+    }
     .title-container {
         position: relative;
     }
@@ -139,13 +154,11 @@
         background: var(--header-bg);
         color: var(--header-color);
         width: fit-content;
-        padding: 3px 8px;
-        border-radius: 6px;
 
+        border-radius: 6px;
+        margin-bottom: 2px;
         display: flex;
         align-items: center;
-        margin-bottom: 15px;
-        margin-top: 15px;
     }
 
     h1 {
@@ -160,5 +173,16 @@
     .instance-box {
         display: grid;
         grid-template-columns: auto 1fr;
+    }
+
+    @media (max-width: 991px) {
+        .instance-box {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        .users-container {
+            flex-direction: row;
+        }
     }
 </style>

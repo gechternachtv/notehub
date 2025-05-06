@@ -25,7 +25,9 @@
                         <div class="user-container">
                             <!-- {$localToken.model.name} -->
 
-                            <div class="pleaseverify">Welcome to notehub!</div>
+                            <div class="pleaseverify">
+                                Hello, {$localToken.model.name}!
+                            </div>
                         </div>
                         <div class="user-container server">
                             <div>User ID : {$localToken.model.id}</div>
@@ -48,7 +50,7 @@
 
 <style>
     main {
-        padding-bottom: 10px;
+        padding-bottom: var(--bodypadding);
         --avatar-size: 130px;
     }
 
@@ -57,6 +59,7 @@
         grid-template-columns: 1fr 2fr;
         gap: 15px;
         margin-bottom: 15px;
+        align-items: end;
     }
 
     @media (max-width: 991px) {
@@ -111,28 +114,28 @@
 
     .user-home {
         background: var(--card-bg);
-        padding: min(20px, 2vw);
+
         border-radius: 10px;
         color: var(--header-color);
         background: var(--header-bg);
+        height: fit-content;
     }
 
-    @media (max-width: 991px) {
-        .user-container {
-            /* padding: 5px; */
-            /* font-weight: bold; */
-            /* border-radius: 5px; */
-            padding: 0px;
-            font-weight: normal;
-            border-radius: 0px;
-            font-size: 11px;
-        }
+    .user-container {
+        /* padding: 5px; */
+        /* font-weight: bold; */
+        /* border-radius: 5px; */
+        padding: 0px;
+        font-weight: 400;
+        border-radius: 0px;
+        font-size: 11px;
+        height: fit-content;
+    }
 
-        /* Element | http://localhost:5173/#/ */
+    /* Element | http://localhost:5173/#/ */
 
-        .user-home > div {
-            display: flex;
-            gap: 17px;
-        }
+    .user-home > div {
+        display: flex;
+        gap: 17px;
     }
 </style>

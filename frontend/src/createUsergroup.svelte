@@ -31,7 +31,10 @@
     let newusers = "";
 
     const publicopt = [
-        { value: "edit", desc: "edit - everyone with the link can join" },
+        {
+            value: "public-post",
+            desc: "public-post - everyone with the link can post cards",
+        },
         {
             value: "view",
             desc: "view - everyone with the link can view, only members can edit",

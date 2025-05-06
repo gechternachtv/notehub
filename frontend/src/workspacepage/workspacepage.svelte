@@ -75,7 +75,7 @@
         const record = await pb.collection("workspaces").getOne(workspace.id, {
             expand: "usergroup,boards.cards.tags",
             fields:
-                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
+                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.public,` +
                 `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                 `expand.boards.expand.cards.title,expand.boards.expand.cards.done,expand.boards.expand.cards.datementions,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -155,7 +155,7 @@
         const record = await pb.collection("workspaces").getOne(id, {
             expand: "usergroup,boards.cards.tags",
             fields:
-                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
+                `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.public,` +
                 `expand.boards.id,expand.boards.usergroup,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                 `expand.boards.expand.cards.title,expand.boards.expand.cards.done,expand.boards.expand.cards.datementions,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                 `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -197,7 +197,7 @@
             {
                 expand: "usergroup,boards.cards.tags",
                 fields:
-                    `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,` +
+                    `collectionId,boards,grid,id,img,name,imgposition,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.public,` +
                     `expand.boards.id,expand.boards.img,expand.boards.name,expand.boards.cards,expand.boards.color,expand.boards.collectionId,` +
                     `expand.boards.expand.cards.title,expand.boards.expand.cards.done,expand.boards.expand.cards.datementions,expand.boards.expand.cards.collectionId,expand.boards.expand.cards.check,expand.boards.expand.cards.created,` +
                     `expand.boards.expand.cards.id,expand.boards.expand.cards.color,expand.boards.expand.cards.file,expand.boards.expand.cards.imglink,expand.boards.expand.cards.favico,` +
@@ -394,14 +394,15 @@
     }
 
     main {
-        width: calc(100% + 60px);
-        margin-left: -30px;
-        margin-top: -30px;
+        width: calc(100% + 40px);
+        margin-left: -20px;
+        margin-top: -20px;
+
         padding: 30px;
         box-sizing: border-box;
         background: var(--gradient-col-1);
         position: relative;
-        height: calc(100vh - var(--bodypadding));
+
         --board-height: calc(100vh - 310px);
     }
     @media (max-height: 499px) {
@@ -500,5 +501,6 @@
         position: absolute;
         left: 0;
         width: 100%;
+        background: var(--gradient-col-1);
     }
 </style>

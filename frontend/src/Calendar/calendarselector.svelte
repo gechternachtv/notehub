@@ -167,7 +167,7 @@
         max-width: 300px;
         font-weight: bold;
         font-size: 12px;
-        /* margin: auto; */
+        margin: auto;
         margin-bottom: 30px;
         min-height: 280px;
     }

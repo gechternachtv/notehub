@@ -77,6 +77,9 @@
         "/usergroup/:usergroup": wrap({
           asyncComponent: () => import("./usergroups/usergrouppage.svelte"),
         }),
+        "/invite/:usergroup/:inviteid": wrap({
+          asyncComponent: () => import("./usergroups/invitepage.svelte"),
+        }),
         "/": wrap({
           asyncComponent: () => import("./usergroups/homepage.svelte"),
         }),
@@ -91,7 +94,7 @@
   .app {
     padding: var(--bodypadding);
     padding-bottom: 0px;
-    min-height: calc(100vh - var(--bodypadding));
+
     position: relative;
   }
 

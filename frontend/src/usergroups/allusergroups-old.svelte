@@ -94,7 +94,7 @@
                     workspaces={recordworkspaces}
                 ></Usergroupbox>
             {/each}
-            {#each usergroups.filter((e) => e.public === "edit") as usergroup}
+            {#each usergroups.filter((e) => e.public === "public-post") as usergroup}
                 <Usergroupbox
                     {usergroup}
                     boards={recordboards}
@@ -135,7 +135,7 @@
 
 <style>
     main {
-        padding-bottom: 10px;
+        padding-bottom: var(--bodypadding);
         --avatar-size: 130px;
     }
     .createusergroup {
@@ -168,6 +168,7 @@
         grid-template-columns: 1fr 2fr;
         gap: 15px;
         margin-bottom: 15px;
+        align-items: end;
     }
 
     @media (max-width: 991px) {

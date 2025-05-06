@@ -62,7 +62,8 @@
 }
 
 html {
-  --bodypadding: 30px;
+  --bodypadding: 20px;
+
 }
 
 @media (max-width:1325px) {
@@ -506,6 +507,7 @@ button {
 .locked .editor-controls {
   display: none !important;
 }
+
 
 .canmove .grabber-board,
 .canmove .editorOpentoggle,

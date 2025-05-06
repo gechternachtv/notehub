@@ -101,6 +101,135 @@ routerAdd("POST", "/createtags", (c) => {
     return c.json(200, returnTags)
 })
 
+routerAdd("GET", "/validateinvite/:usergroup/:id", (c) => {
+    const urlUsergroup = c.pathParam("usergroup");
+    const id = c.pathParam("id");
+    const authRecord = c.get("authRecord");
+
+    console.log("url usergroup:")
+    console.log(urlUsergroup)
+
+    console.log("invite id:")
+    console.log(id)
+
+    console.log("user:")
+    console.log(authRecord.id)
+
+    if (!authRecord) {
+        return c.json(401, { error: "unauthorized" });
+    }
+
+
+    const invites = $app.dao().findRecordsByFilter("usergroup_invites", `id = "${id}"`);
+    if (invites.length === 0) {
+        return c.json(404, { error: "invite not found" });
+    }
+    const invite = invites[0];
+
+    console.log(invite)
+
+
+    const usergroupId = invite.get("usergroup");
+
+
+
+
+    if (invite.get("host") == authRecord.id) {
+        return c.json(400, { error: "cannot invite self" });
+    }
+
+
+    if (usergroupId !== urlUsergroup) {
+        return c.json(400, { error: "unauthorized" });
+    }
+
+
+    const usergroups = $app.dao().findRecordsByFilter("usergroups", `id = "${usergroupId}"`);
+    if (usergroups.length === 0) {
+        return c.json(404, { error: "usergroup not found" });
+    }
+    const usergroup = usergroups[0];
+
+
+    let users = usergroup.get("users") || [];
+    if (typeof users === "string") {
+        try {
+            users = JSON.parse(users);
+        } catch (e) {
+            users = [];
+        }
+    }
+
+    if (!users.includes(invite.get("host"))) {
+        return c.json(400, { error: "host not part of usergroup" });
+    }
+
+
+    if (users.includes(authRecord.id)) {
+        return c.json(200, {
+            success: true,
+            message: "user already in group",
+            usergroup: usergroupId,
+            userId: authRecord.id
+        });
+    }
+
+
+    users.push(authRecord.id);
+    usergroup.set("users", users);
+
+    const collection = $app.dao().findCollectionByNameOrId("usergroups");
+    $app.dao().saveRecord(usergroup)
+
+    return c.json(200, {
+        success: true,
+        message: "user added to usergroup",
+        usergroup: usergroupId,
+        userId: authRecord.id
+    });
+});
+
+onRecordBeforeCreateRequest(async (e) => {
+    console.log("1 - Before create hook triggered");
+
+    try {
+        const auth = e.httpContext.get("authRecord");
+        const usergroup = e.record.get("usergroup");
+
+        if (!auth || !usergroup) {
+
+            return;
+        }
+
+
+
+
+        const duplicates = $app.dao().findRecordsByFilter(
+            "usergroup_invites",
+            `host = "${auth.id}" && usergroup = "${usergroup}"`
+        );
+
+
+
+
+        for (const duplicate of duplicates) {
+
+            $app.dao().deleteRecord(duplicate);
+        }
+
+
+
+
+        e.record.set("host", auth.id);
+
+
+    } catch (error) {
+        console.error("Error in beforeCreate hook:", error);
+        throw error;
+    }
+}, "usergroup_invites");
+
+
 routerAdd("GET", "/workspaceget/:id", (c) => {
     const id = c.pathParam("id")
 
@@ -128,7 +257,6 @@ routerAdd("GET", "/workspaceget/:id", (c) => {
 
     return c.json(200, { boards: boardstrimmed, workspaces: workspacestrimmed })
 })
-
 
 
 onRecordAfterCreateRequest((e) => {

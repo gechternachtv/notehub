@@ -9,6 +9,7 @@
     let showModal = false;
     let currentusergroupid = window.localStorage.getItem("lastusergroup");
     let currentusergroup;
+    let usergroupactive = false;
 
     const recordallusergroupnames = pb
         .collection("usergroups")
@@ -76,12 +77,13 @@
     {#await recordallusergroupnames}
         ...
     {:then usergroups}
-        <div class="usergroup-menu-grid">
+        <div class:usergroupactive class="usergroup-menu-grid">
             <div class="menu">
                 {#each usergroups as usergroup}
                     <button
                         class:active={currentusergroupid === usergroup.id}
                         on:click={() => {
+                            usergroupactive = true;
                             currentusergroup = usergroup;
                             currentusergroupid = usergroup.id;
                             window.localStorage.setItem(
@@ -110,6 +112,12 @@
             </div>
 
             <div class="usergroupbox">
+                <button
+                    class="closeboardviewfull"
+                    on:click={() => {
+                        usergroupactive = false;
+                    }}>←</button
+                >
                 <Usergroupcontent usergroup={currentusergroup}
                 ></Usergroupcontent>
             </div>
@@ -120,13 +128,13 @@
 </main>
 
 <style>
-    .active {
-        background: var(--header-bg);
-        color: var(--header-color);
-    }
-
     .menu {
-        background: var(--button-bg);
+        background: var(--menu-bg);
+        color: var(--menu-col);
+        width: 183px;
+        overflow: hidden;
+        position: relative;
+        z-index: 3;
     }
 
     .menu button {
@@ -134,14 +142,46 @@
         border-radius: 0;
         font-size: 12px;
         font-weight: normal;
+        color: var(--menu-col);
+        background: var(--menu-bg);
     }
 
-    /* Element | http://localhost:5173/#/ */
+    .menu button.active {
+        background: var(--header-bg);
+        color: var(--header-color);
+    }
 
     .usergroup-menu-grid {
         display: grid;
         grid-template-columns: 183px auto;
         overflow: hidden;
         border-radius: 8px;
+        transition: all 0.3s;
+    }
+    /* mobile */
+
+    .closeboardviewfull {
+        display: none;
+    }
+
+    @media (max-width: 991px) {
+        .usergroup-menu-grid {
+            grid-template-columns: 100% 0%;
+        }
+        .menu {
+            width: 100%;
+        }
+
+        .usergroup-menu-grid.usergroupactive {
+            grid-template-columns: 0% 100%;
+        }
+
+        .closeboardviewfull {
+            display: block;
+            position: absolute;
+            z-index: 2;
+            right: 13px;
+            margin-top: 4px;
+        }
     }
 </style>

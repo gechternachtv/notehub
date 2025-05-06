@@ -8,19 +8,21 @@
     import CreateUsergroup from "../createUsergroup.svelte";
     import { localToken, server } from "../stores.js";
     import { push } from "svelte-spa-router";
+    import Invite from "./invitepopup.svelte";
 
     export let params;
 
     let usergroup;
     let showModalEdit,
         showModalDelete,
+        showModalInvite,
         showModalLeave = false;
 
     const getPublictext = {
         private: { text: "🔒 private" },
         view: { text: "public: 👁️ view" },
         "global-view": { text: "public: 🌐 global view" },
-        edit: { text: "public: 🔓 join and edit" },
+        "public-post": { text: "public-post: 🔓 post cards" },
     };
 
     const getUserGroup = async () => {
@@ -38,8 +40,7 @@
         if (
             !usergroup.users.includes(
                 $localToken ? $localToken?.model.id : "???",
-            ) &&
-            usergroup.public === "edit"
+            )
         ) {
             const newrecord = await pb
                 .collection("usergroups")
@@ -140,21 +141,17 @@
                     ></CreateUsergroup>
                 </Modal>
             {/if}
-            {#if !usergroup.users.includes($localToken ? $localToken?.model.id : "???") && usergroup.public === "edit"}
-                {#if $localToken}
-                    <button class="btn createusergroup" on:click={joinUserGroup}
-                        >Join userGroup</button
-                    >
-                {:else}
-                    <button
-                        class="btn createusergroup"
-                        on:click={() => {
-                            push("/login");
-                        }}>Join userGroup</button
-                    >
-                {/if}
+            {#if $localToken && usergroup.users.includes($localToken ? $localToken?.model?.id : "???")}
+                <button
+                    class="btn createusergroup"
+                    on:click={() => {
+                        showModalInvite = true;
+                    }}>Create Invite</button
+                >
+                <Modal bind:showModal={showModalInvite}>
+                    <Invite ug={usergroup} showModal={showModalInvite}></Invite>
+                </Modal>
             {/if}
-
             {#if usergroup.users.includes($localToken ? $localToken?.model.id : "???")}
                 {#if usergroup.owner === ($localToken ? $localToken?.model.id : "???")}
                     <button
@@ -191,12 +188,12 @@
                     <Modal bind:showModal={showModalLeave}>
                         <div class="modal-container">
                             Are you sure you want to leave this usergroup?
-                            {#if usergroup.public != "edit"}
-                                <div>
-                                    This can only be undone being added again by
-                                    another user in this group
-                                </div>
-                            {/if}
+
+                            <div>
+                                This can only be undone being added again by
+                                another user in this group
+                            </div>
+
                             <div class="btncontainer">
                                 <button
                                     class="btn"

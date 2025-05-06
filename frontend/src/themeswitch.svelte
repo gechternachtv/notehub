@@ -99,6 +99,8 @@
 		--board-title-color: #ae3100;
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(.yotsuba-b) {
@@ -125,6 +127,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: #34345c;
+		--menu-col: var(--button-color);
 	}
 
 	:global(.yotsuba-c) {
@@ -147,6 +151,8 @@
 		--container-bg: #f3f0e4;
 		--gradient-col-1: #f3f0e4;
 		--link-col: var(--button-bg);
+		--menu-bg: #24664a;
+		--menu-col: var(--button-color);
 	}
 
 	:global(.futaba) {
@@ -169,6 +175,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: #f0e0d6;
+		--menu-col: #800000;
 	}
 
 	:global(.plastich) {
@@ -191,6 +199,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: #9b0000;
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(.bluesky) {
@@ -217,6 +227,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: #356574;
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(.luckygreen) {
@@ -239,6 +251,8 @@
 		--board-title-color: #47bcad;
 		--browser-color: var(--header-bg);
 		--link-col: #17665b;
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(.uboa) {
@@ -261,6 +275,8 @@
 		--board-title-color: var(--main-font-1);
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: #4b4b4b;
+		--menu-col: var(--button-color);
 	}
 	:global(.uboa .new-section, .uboa .container-header-buttons) {
 		color: var(--button-color);
@@ -285,6 +301,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: #4166e5;
+		--menu-col: var(--button-color);
 	}
 
 	:global(.pxtone) {
@@ -307,6 +325,8 @@
 		--board-title-color: var(--main-font-1);
 		--browser-color: #343255;
 		--link-col: var(--button-bg);
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(.dark) {
@@ -329,6 +349,8 @@
 		--board-title-color: #7e7e7e;
 		--browser-color: #131313;
 		--link-col: var(--button-bg);
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(.blood) {
@@ -351,6 +373,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: var(--button-bg);
+		--menu-col: var(--button-color);
 	}
 
 	:global(body) {
@@ -378,6 +402,8 @@
 		--board-title-color: #47545d;
 		--browser-color: #47545d;
 		--link-col: var(--button-bg);
+		--menu-bg: #4e4e62;
+		--menu-col: var(--button-color);
 	}
 	:global(.dfwm) {
 		--gradient-col-1: #368c8c;
@@ -409,6 +435,8 @@
 		--card-bg: #6d8f8f;
 		/* --gradient-col-1: #176a62; */
 		--gradient-col-2: #39607b;
+		--menu-bg: #39607b;
+		--menu-col: var(--button-color);
 	}
 
 	:global(.dfwm .cardday.active) {
@@ -442,6 +470,8 @@
 		--board-title-color: var(--main-font-1);
 		--browser-color: #495e68;
 		--link-col: var(--button-bg);
+		--menu-bg: #35444b;
+		--menu-col: #9eacb3;
 	}
 
 	:global(.brwrld .workspacepage > .grid) {
@@ -468,6 +498,8 @@
 		--board-title-color: #968832;
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
+		--menu-bg: #1c2217;
+		--menu-col: var(--button-color);
 	}
 	/* :global(
 			.goldSrc .instance-box,
