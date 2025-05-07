@@ -15,12 +15,12 @@
     };
 
     export let workspace;
-    console.log(card);
+    // console.log(card);
 
     // let showModal = false;
 
     function closestDate(dates) {
-        console.log(dates);
+        // console.log(dates);
         if (dates.length) {
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Normalize time for accurate comparison

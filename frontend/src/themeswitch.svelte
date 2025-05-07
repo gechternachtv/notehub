@@ -175,8 +175,8 @@
 		--board-title-color: var(--header-bg);
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
-		--menu-bg: #f0e0d6;
-		--menu-col: #800000;
+		--menu-bg: #0f3c25;
+		--menu-col: white;
 	}
 
 	:global(.plastich) {

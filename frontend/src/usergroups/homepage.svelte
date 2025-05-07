@@ -10,7 +10,8 @@
     {#if $localToken}
         <div class="calendar-user-grid">
             <div class="user-home">
-                <div>
+                <div class="aaab"></div>
+                <div class="user-card">
                     {#if $localToken?.model.avatar}
                         <div class="profilepic-container">
                             <img
@@ -86,7 +87,7 @@
         height: auto;
     }
     .pleaseverify {
-        margin-top: 10px;
+        margin-top: 15px;
     }
 
     .profilepic-container {
@@ -116,6 +117,9 @@
     }
 
     .user-home {
+    }
+
+    .user-card {
         background: var(--card-bg);
 
         border-radius: 10px;
@@ -139,6 +143,6 @@
 
     .user-home > div {
         display: flex;
-        gap: 17px;
+        gap: 15px;
     }
 </style>

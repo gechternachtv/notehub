@@ -63,8 +63,12 @@
 
     <div class="instancebox">
         <!-- {console.log(instance)} -->
-        <div>
-            <a class="morebutton" href="#/usergroup/{usergroup.id}">more →</a>
+        <div class="morebutton-container">
+            <div class="morebutton-border">
+                <a class="morebutton" href="#/usergroup/{usergroup.id}"
+                    >more →</a
+                >
+            </div>
         </div>
         <slot></slot>
         <div class="controls">
@@ -84,6 +88,8 @@
 
         border-radius: 10px;
         font-weight: 500;
+        position: relative;
+        z-index: 2;
         width: fit-content;
     }
     .morebutton:hover {
@@ -184,5 +190,41 @@
         .users-container {
             flex-direction: row;
         }
+    }
+
+    .morebutton-container {
+        height: 20px;
+    }
+
+    .morebutton-border {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--header-bg);
+        padding: 8px;
+        border-radius: 0 0 16px 0;
+    }
+
+    .morebutton-border:after {
+        display: block;
+        content: "";
+        position: absolute;
+
+        background-color: transparent;
+        bottom: -40px;
+        height: 40px;
+        width: 15px;
+        left: 0;
+        border-top-left-radius: 25px;
+        box-shadow: 0 -25px 0 0 var(--header-bg); /* This is where the magic happens! */
+    }
+    @media (max-width: 991px) {
+        .morebutton-border:after {
+            display: none;
+        }
+    }
+
+    .instancebox {
+        position: relative;
     }
 </style>

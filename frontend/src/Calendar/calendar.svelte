@@ -6,6 +6,7 @@
     import Calendarselector from "./calendarselector.svelte";
     import { onMount } from "svelte";
     import { localToken } from "../stores.js";
+    import Boardcard from "../Allboards/boardcard.svelte";
 
     //flip
 
@@ -44,8 +45,10 @@
             const resultList = await pb.collection("cards").getList(1, 60, {
                 filter: filter,
                 sort: `${sortby === "oldest" ? "" : "-"}created`,
-                expand: "tags",
+                expand: "tags,board",
             });
+
+            console.log("aqui:");
             console.log(resultList);
 
             return resultList;
@@ -78,14 +81,34 @@
             ` && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
 
         promise = getRecords().then((e) => {
-            console.log("HEY");
             console.log(e);
             if (e?.items?.length) {
                 hascontent = true;
+
+                const boards = new Map();
+                e.items.forEach((x) => {
+                    x.expand?.board;
+                    if (boards.get(x.expand?.board.id)) {
+                        boards.set(x.expand.board.id, {
+                            board: x.expand.board,
+                            cards: [...boards.get(x.expand?.board.id).cards, x],
+                        });
+                    } else {
+                        boards.set(x.expand.board.id, {
+                            board: x.expand.board,
+                            cards: [x],
+                        });
+                    }
+                });
+
+                console.log("map:");
+                console.log(boards);
+
+                return Array.from(boards);
             } else {
                 hascontent = false;
+                return false;
             }
-            return e;
         });
     };
 </script>
@@ -96,16 +119,15 @@
     </div>
 
     {#await promise then searchresult}
-        {#if searchresult}
-            {#if searchresult.items.length}
-                <div
-                    class="calendar-result minicard-container calendarcard-container"
-                >
-                    <div class="locked container">
-                        <!-- {board.id} -->
+        {#if searchresult?.length}
+            <div
+                class="calendar-result minicard-container calendarcard-container"
+            >
+                <div class="locked container">
+                    <!-- {board.id} -->
 
-                        <div class="grid-container">
-                            <!-- <div class="grid"
+                    <div class="grid-container">
+                        <!-- <div class="grid"
             class:list={listView} use:dndzone={{items:cards,
             morphDisabled:true,
             dragDisabled:false,
@@ -115,15 +137,29 @@
             }
             } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
 
-                            <Sortgrid class="card-grid list">
-                                {#each searchresult.items as card (card.id)}
-                                    <Card {card}></Card>
-                                {/each}
-                            </Sortgrid>
-                        </div>
+                        {#each searchresult as board}
+                            {#if board[1].cards}
+                                <Boardcard
+                                    workspacecard={true}
+                                    board={board[1].board}
+                                />
+                                <div
+                                    style="border-left:4px solid {board[1].board
+                                        .color}"
+                                >
+                                    <Sortgrid class="card-grid list">
+                                        {#each board[1].cards as card (card.id)}
+                                            <Card {card}></Card>
+                                        {/each}
+                                    </Sortgrid>
+                                </div>
+                            {/if}
+                        {/each}
+
+                        <!--  -->
                     </div>
                 </div>
-            {/if}
+            </div>
         {/if}
     {:catch error}
         {error}

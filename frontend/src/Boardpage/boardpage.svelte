@@ -145,7 +145,7 @@
                             expand: "cards.tags,usergroup",
                             fields:
                                 `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.id,expand.usergroup.public,` +
-                                `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
+                                `expand.cards.collectionId,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,expand.cards.done,expand.cards.datementions,` +
                                 `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup,description`,
@@ -238,7 +238,7 @@
                             expand: "cards.tags,usergroup,authors",
                             fields:
                                 `id,img,name,cards,color,collectionId,usergroup,expand.usergroup.users,expand.usergroup.name,expand.usergroup.id,expand.usergroup.public,` +
-                                `expand.cards.collectionId,expand.cards.check,expand.cards.created,expand.cards.id,expand.cards.color,` +
+                                `expand.cards.collectionId,expand.cards.created,expand.cards.id,expand.cards.color,` +
                                 `expand.cards.file,expand.cards.imglink,expand.cards.favico,expand.cards.title,` +
                                 `expand.cards.link,expand.cards.text,expand.cards.done,expand.cards.datementions,` +
                                 `expand.cards.expand.tags.name,expand.cards.expand.tags.id,expand.cards.expand.tags.color,expand.cards.expand.tags.usergroup`,

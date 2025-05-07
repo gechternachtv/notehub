@@ -5,7 +5,6 @@ export default (element) => {
 
 
         const filearr = element.file
-        console.log(filearr);
 
         if (filearr.length) {
 

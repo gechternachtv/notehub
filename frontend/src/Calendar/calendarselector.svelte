@@ -79,13 +79,15 @@
 
 <div class="container">
     <div class="header">
+        <div class="header-date">
+            <div class="year">{year}</div>
+            <div class="month">{months[month]}</div>
+            <div class="current-day">{currentday}</div>
+        </div>
         <div class="controls">
             <button on:click={monthsub}>←</button>
             <button on:click={monthadd}>→</button>
         </div>
-        <div class="year">{year}</div>
-        <div class="month">{months[month]}</div>
-        <div class="current-day">{currentday}</div>
     </div>
 
     <div class="calendar">
@@ -168,8 +170,8 @@
         font-weight: bold;
         font-size: 12px;
         margin: auto;
-        margin-bottom: 30px;
-        min-height: 280px;
+        margin-bottom: 17px;
+        /* min-height: 280px; */
     }
     .weekday {
         min-height: 30px;
@@ -205,6 +207,12 @@
     }
 
     .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .header-date {
         display: flex;
         align-items: center;
         gap: 10px;
