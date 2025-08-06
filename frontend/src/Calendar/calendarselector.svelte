@@ -142,14 +142,14 @@
                             {day.day}
                         </button>
                     {:else}
-                        <div
+                        <button
                             class:today={day.day === new Date().getDate() &&
                                 month === new Date().getUTCMonth() &&
                                 year === new Date().getUTCFullYear()}
                             class="nocardday"
                         >
                             {day.day}
-                        </div>
+                        </button>
                     {/if}
 
                     <!-- {`${year}-${fn(month + 1)}-${fn(day.day)}`} -->

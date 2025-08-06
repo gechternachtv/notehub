@@ -5,6 +5,7 @@
     // import Modal from "../modal/modal.svelte";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
+    import getDateschecked from "../getDateschecked.js";
     import getFiles from "../getFiles.js";
 
     // import Cardpage from "../Cardpage/cardpage.svelte";
@@ -25,13 +26,9 @@
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Normalize time for accurate comparison
 
-            const futureDates = dates
-                .map((dateStr) => {
-                    const [day, month, year] = dateStr.split("-").map(Number);
-                    const dateObj = new Date(year, month - 1, day);
-                    return { dateStr, dateObj };
-                })
-                .filter(({ dateObj }) => dateObj >= today);
+            const futureDates = getDateschecked(dates).filter(
+                ({ dateObj }) => dateObj >= today,
+            );
 
             if (futureDates.length > 0) {
                 const closest = futureDates.sort(
@@ -58,16 +55,9 @@
             // If no future date exists, return the most recent past date
             return {
                 date:
-                    dates
-                        .map((dateStr) => {
-                            const [day, month, year] = dateStr
-                                .split("-")
-                                .map(Number);
-                            const dateObj = new Date(year, month - 1, day);
-                            return { dateStr, dateObj };
-                        })
-                        .sort((a, b) => b.dateObj - a.dateObj)[0]?.dateObj ||
-                    null,
+                    getDateschecked(dates).sort(
+                        (a, b) => b.dateObj - a.dateObj,
+                    )[0]?.dateObj || null,
                 status: "passed",
             };
         }

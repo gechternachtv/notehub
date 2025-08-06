@@ -10,7 +10,6 @@
     {#if $localToken}
         <div class="calendar-user-grid">
             <div class="user-home">
-                <div class="aaab"></div>
                 <div class="user-card">
                     {#if $localToken?.model.avatar}
                         <div class="profilepic-container">
@@ -41,6 +40,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="fastboard"></div>
             </div>
 
             <Calendar></Calendar>
@@ -50,6 +50,12 @@
 </main>
 
 <style>
+    .fastboard {
+        height: 100%;
+        background: var(--menu-bg);
+        border-radius: 10px;
+    }
+
     main {
         padding-bottom: var(--bodypadding);
         --avatar-size: 220px;
@@ -117,6 +123,10 @@
     }
 
     .user-home {
+        height: 100%;
+        display: flex;
+        gap: 15px;
+        flex-direction: column;
     }
 
     .user-card {

@@ -42,9 +42,10 @@
         .absolute {
             padding: 6px 7px;
             padding-left: 20px;
-            top: 24px;
             font-size: 1.2rem;
             z-index: 3;
+
+            top: 34px;
         }
     }
 </style>

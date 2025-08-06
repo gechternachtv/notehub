@@ -6,6 +6,7 @@
 	const themes = [
 		"luckygreen",
 		"bluesky",
+		"paperscan",
 		"plankton",
 		"yotsuba",
 		"yotsuba-b",
@@ -522,4 +523,42 @@
 	:global(.goldSrc nav) {
 		border-bottom: 2px solid #393e34;
 	} */
+
+	:global(.paperscan) {
+		--card-border: #00000018;
+		--complete: #00bd6d;
+		--complete-col: #ffeedb;
+		--main-font-1: #262050;
+		--main-font-2: #262050;
+		--button-color: #dedede;
+		--body-background: #ffead3;
+		--browser-color: #47545d;
+		--alert: #66bd9d;
+		--news: #13363e;
+		--header-bg: #959595;
+		--button-bg: #3e5e60;
+		--header-color: #262626;
+		--card-bg: #e4e4e4;
+		--container-bg: #ccc;
+		--gradient-col-1: #e1e1e1;
+		--gradient-col-2: #757f86;
+		--board-title-color: #15363a;
+		--link-col: #000;
+		--menu-bg: #a1a4a6;
+		--menu-col: #000;
+	}
+
+	:global(.paperscan nav) {
+		backdrop-filter: blur(16px) saturate(180%) !important;
+		background-color: rgba(230, 239, 255, 0.2) !important;
+	}
+
+	:global(.paperscan .card) {
+		background-color: rgba(230, 239, 255, 0.2);
+	}
+
+	:global(.paperscan .absolute.controls) {
+		backdrop-filter: blur(16px) saturate(180%);
+		background-color: rgba(230, 239, 255, 0.2);
+	}
 </style>

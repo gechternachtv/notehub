@@ -4,6 +4,7 @@
     import { pb } from "../pb.js";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
+    import getDateschecked from "../getDateschecked.js";
     import getFiles from "../getFiles.js";
     import Confirmaction from "../confirmaction.svelte";
     import colorsames from "../colorsnames";
@@ -71,13 +72,9 @@
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Normalize time for accurate comparison
 
-            const futureDates = dates
-                .map((dateStr) => {
-                    const [day, month, year] = dateStr.split("-").map(Number);
-                    const dateObj = new Date(year, month - 1, day);
-                    return { dateStr, dateObj };
-                })
-                .filter(({ dateObj }) => dateObj >= today);
+            const futureDates = getDateschecked(dates).filter(
+                ({ dateObj }) => dateObj >= today,
+            );
 
             if (futureDates.length > 0) {
                 const closest = futureDates.sort(
@@ -104,16 +101,11 @@
             // If no future date exists, return the most recent past date
             return {
                 date:
-                    dates
-                        .map((dateStr) => {
-                            const [day, month, year] = dateStr
-                                .split("-")
-                                .map(Number);
-                            const dateObj = new Date(year, month - 1, day);
-                            return { dateStr, dateObj };
-                        })
+                    getDateschecked(dates)
+                        .filter(({ dateObj }) => dateObj !== null) // filter out invalid ones
                         .sort((a, b) => b.dateObj - a.dateObj)[0]?.dateObj ||
                     null,
+
                 status: "passed",
             };
         }
@@ -407,7 +399,7 @@
         {#if card.datementions}
             {#if card.datementions.split(",").length > 0}
                 <div class="duedate {duedate.status}">
-                    📆 {dateFormat(duedate.date, false)}
+                    📆 {dateFormat(duedate.date)}
                 </div>
             {/if}
         {/if}

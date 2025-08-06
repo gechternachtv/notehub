@@ -169,7 +169,7 @@
 <style>
     .calendar-result {
         width: 100%;
-        max-height: 400px;
+        max-height: 268px;
         overflow: scroll;
     }
     .calendar-wrapper {
