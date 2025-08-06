@@ -102,6 +102,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
+		--mentions: #e04001;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.yotsuba-b) {
@@ -130,6 +132,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #34345c;
 		--menu-col: var(--button-color);
+		--mentions: #00b95a;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.yotsuba-c) {
@@ -154,6 +158,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #24664a;
 		--menu-col: var(--button-color);
+		--mentions: var(--button-bg);
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.futaba) {
@@ -178,6 +184,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #0f3c25;
 		--menu-col: white;
+		--mentions: #56b584;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.plastich) {
@@ -202,6 +210,8 @@
 		--link-col: #9b0000;
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
+		--mentions: #e60808;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.bluesky) {
@@ -230,6 +240,8 @@
 		--link-col: #356574;
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
+		--mentions: #28bae8;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.luckygreen) {
@@ -254,6 +266,8 @@
 		--link-col: #17665b;
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
+		--mentions: #01b9a8;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.uboa) {
@@ -278,6 +292,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #4b4b4b;
 		--menu-col: var(--button-color);
+		--mentions: var(--button-bg);
+		--createdon: var(--main-font-2);
 	}
 	:global(.uboa .new-section, .uboa .container-header-buttons) {
 		color: var(--button-color);
@@ -304,6 +320,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #4166e5;
 		--menu-col: var(--button-color);
+		--mentions: var(--button-bg);
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.pxtone) {
@@ -328,6 +346,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #363456;
 		--menu-col: var(--button-bg);
+		--mentions: var(--alert);
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.dark) {
@@ -352,6 +372,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
+		--mentions: var(--main-font-2);
+		--createdon: #4f4f4f;
 	}
 
 	:global(.blood) {
@@ -376,6 +398,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
+		--mentions: var(--button-bg);
+		--createdon: var(--main-font-2);
 	}
 
 	:global(body) {
@@ -405,6 +429,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #4e4e62;
 		--menu-col: var(--button-color);
+		--mentions: #1edbc0;
+		--createdon: var(--main-font-2);
 	}
 	:global(.dfwm) {
 		--gradient-col-1: #368c8c;
@@ -438,6 +464,8 @@
 		--gradient-col-2: #39607b;
 		--menu-bg: #39607b;
 		--menu-col: var(--button-color);
+		--mentions: var(--button-bg);
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.dfwm .cardday.active) {
@@ -473,6 +501,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #35444b;
 		--menu-col: #9eacb3;
+		--mentions: #08b2c4;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.brwrld .workspacepage > .grid) {
@@ -501,6 +531,8 @@
 		--link-col: var(--button-bg);
 		--menu-bg: #1c2217;
 		--menu-col: var(--button-color);
+		--mentions: #f7f7f7;
+		--createdon: var(--main-font-2);
 	}
 	/* :global(
 			.goldSrc .instance-box,
@@ -536,7 +568,7 @@
 		--alert: #66bd9d;
 		--news: #13363e;
 		--header-bg: #959595;
-		--button-bg: #3e5e60;
+		--button-bg: #007317;
 		--header-color: #262626;
 		--card-bg: #e4e4e4;
 		--container-bg: #ccc;
@@ -546,6 +578,9 @@
 		--link-col: #000;
 		--menu-bg: #a1a4a6;
 		--menu-col: #000;
+
+		--mentions: #04d788;
+		--createdon: var(--main-font-2);
 	}
 
 	:global(.paperscan nav) {

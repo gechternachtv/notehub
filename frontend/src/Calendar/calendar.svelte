@@ -116,6 +116,11 @@
 <main class:hascontent>
     <div class="calendar-wrapper">
         <Calendarselector on:dayclick={handledayclick}></Calendarselector>
+        <div class="button-container">
+            <button class="minibutton">edit</button>
+            <button class="minibutton">week</button>
+            <button class="minibutton">year</button>
+        </div>
     </div>
 
     {#await promise then searchresult}
@@ -167,9 +172,13 @@
 </main>
 
 <style>
+    .button-container {
+        display: flex;
+        gap: 6px;
+    }
     .calendar-result {
         width: 100%;
-        max-height: 268px;
+        max-height: 306px;
         overflow: scroll;
     }
     .calendar-wrapper {

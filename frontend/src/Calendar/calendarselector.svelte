@@ -230,7 +230,7 @@
     }
     .day-mentions,
     .day-createdon {
-        background: var(--button-bg);
+        background: var(--mentions);
         width: 4px;
         height: 4px;
         border-radius: 10px;
@@ -238,7 +238,7 @@
     }
 
     .day-createdon {
-        background: var(--main-font-2);
+        background: var(--createdon);
     }
 
     button {

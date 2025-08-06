@@ -25,6 +25,24 @@
 
     const dispatch = createEventDispatcher();
 
+    let editordefaultValue = {
+        type: "json",
+        value: {
+            type: "doc",
+            content: [
+                {
+                    type: "paragraph",
+                    content: [
+                        {
+                            type: "text",
+                            text: " ",
+                        },
+                    ],
+                },
+            ],
+        },
+    };
+
     let showModal = false;
     let boardisactive = true;
 
@@ -507,6 +525,7 @@
                                 class="editor"
                             >
                                 <Editor
+                                    defaultValue={editordefaultValue}
                                     bind:files
                                     bind:fileelement
                                     on:newcontent={handleNewCard}
@@ -523,6 +542,7 @@
                             class="editor"
                         >
                             <Editor
+                                defaultValue={editordefaultValue}
                                 bind:files
                                 bind:fileelement
                                 on:newcontent={handleNewCard}

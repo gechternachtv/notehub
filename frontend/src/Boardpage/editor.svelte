@@ -87,19 +87,11 @@
 	function editor(dom) {
 		const MakeEditor = Editor.make()
 			.config((ctx) => {
-				// ctx.update(editorViewOptionsCtx, (prev) => ({
-				// 	...prev,
-				// 	editable,
-				// }));
-				// ctx.get(listenerCtx).updated((ctx, doc, prevDoc) => {
-				//     output = doc.toJSON();
-				//     console.log(output)
-				// });
 				ctx.set(rootCtx, dom);
 				// @ts-ignore
 				ctx.set(defaultValueCtx, defaultValue);
 			})
-			// .use(nord)
+
 			// .use(emoji)
 			.use(commonmark)
 			.use(gfm)
@@ -107,7 +99,6 @@
 			.use(history)
 			.use(cursor)
 			// .use(datePlugin)
-
 			// .use(listener)
 			.create();
 

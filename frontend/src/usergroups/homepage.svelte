@@ -54,6 +54,9 @@
         height: 100%;
         background: var(--menu-bg);
         border-radius: 10px;
+
+        background-image: url("https://lainchan.org/b.php");
+        background-size: cover;
     }
 
     main {

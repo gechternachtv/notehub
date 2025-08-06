@@ -795,3 +795,16 @@ milkdown-list-item-block .label-wrapper {
   max-width: 29px;
   max-height: 29px;
 }
+
+.minibutton {
+  background: var(--button-bg);
+  color: var(--button-color) !important;
+  padding: 3px 10px;
+  display: block;
+  border-radius: 10px;
+  font-weight: 500;
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  font-size: 10px;
+}
