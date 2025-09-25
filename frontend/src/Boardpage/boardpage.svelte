@@ -118,7 +118,7 @@
     let currentCardsList = board.cards;
 
     let currentview = new LinkedList();
-    ["Card mode", "Table mode"].forEach((mode) => {
+    ["Normal", "Compact", "Table"].forEach((mode) => {
         if (boardpage && localStorage.getItem("currentview") === mode) {
             currentview.append(mode, true);
         } else {
@@ -455,7 +455,7 @@
                     >
                 {/if}
 
-                {#if currentview.data == "Table mode"}
+                {#if currentview.data == "Table"}
                     <div class="tablegrid-controls">
                         {#each Object.keys(showcard) as showcardval}
                             {#if showcardval != "shortcut"}
@@ -492,7 +492,7 @@
                     ,dropTargetClasses:["floating"]
                     }
                     } on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"> -->
-                    {#if currentview.data == "Table mode"}
+                    {#if currentview.data == "Table"}
                         <div class="table-grid">
                             {#each Object.keys(showcard).filter((key) => showcard[key] === true) as showcardval}
                                 <div
@@ -507,15 +507,20 @@
                                 ></Tablecard>
                             {/each}
                         </div>
-                    {:else if currentview.data == "Card mode"}
-                        <Sortgrid
-                            class="card-grid"
-                            on:change={handleDndFinalize}
+                    {:else if currentview.data == "Normal" || currentview.data == "Compact"}
+                        <div
+                            class:minicard-container={currentview.data ==
+                                "Compact"}
                         >
-                            {#each cardsFull as card (card.id)}
-                                <Card {card} {workspace}></Card>
-                            {/each}
-                        </Sortgrid>
+                            <Sortgrid
+                                class="card-grid"
+                                on:change={handleDndFinalize}
+                            >
+                                {#each cardsFull as card (card.id)}
+                                    <Card {card} {workspace}></Card>
+                                {/each}
+                            </Sortgrid>
+                        </div>
                     {/if}
 
                     {#if editorOpen && canedit}

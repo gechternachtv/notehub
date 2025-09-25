@@ -2,6 +2,7 @@
     import { localToken, server } from "../stores.js";
     import Calendar from "../Calendar/calendar.svelte";
     import Allusergroups from "./allusergroups.svelte";
+    import Fastboard from "./fastboard.svelte";
 
     document.querySelector("title").innerHTML = "notehub!";
 </script>
@@ -22,25 +23,36 @@
                         </div>
                     {/if}
                     <div>
-                        <div class="user-container">
+                        <div class="user-container-main">
                             <!-- {$localToken.model.name} -->
 
-                            <div class="pleaseverify">
-                                Hello, {$localToken.model.name}!
+                            <div class="userinfo">
+                                <div class="pleaseverify">
+                                    Hello, {$localToken.model.name}!
+                                </div>
+
+                                <div class="user-container server">
+                                    <div>User ID : {$localToken.model.id}</div>
+                                </div>
+                                <div class="user-container server">
+                                    <div>Server : {$server.name}</div>
+                                </div>
+                                <div class="user-container server">
+                                    <div>
+                                        Version : {import.meta.env.VITE_VERSION}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="user-container server">
-                            <div>User ID : {$localToken.model.id}</div>
-                        </div>
-                        <div class="user-container server">
-                            <div>Server : {$server.name}</div>
-                        </div>
-                        <div class="user-container server">
-                            <div>Version : {import.meta.env.VITE_VERSION}</div>
+
+                            <div class="user-container server">
+                                <a href="/#/account" class="minibutton"
+                                    >account →</a
+                                >
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="fastboard"></div>
+                <Fastboard></Fastboard>
             </div>
 
             <Calendar></Calendar>
@@ -50,15 +62,6 @@
 </main>
 
 <style>
-    .fastboard {
-        height: 100%;
-        background: var(--menu-bg);
-        border-radius: 10px;
-
-        background-image: url("https://lainchan.org/b.php");
-        background-size: cover;
-    }
-
     main {
         padding-bottom: var(--bodypadding);
         --avatar-size: 220px;
@@ -82,7 +85,6 @@
     }
 
     .user-container {
-        background: var(--header-bg);
         color: var(--header-color);
         padding: 5px;
         font-weight: bold;
@@ -94,9 +96,6 @@
         border-radius: 10px;
         max-width: var(--avatar-size);
         height: auto;
-    }
-    .pleaseverify {
-        margin-top: 15px;
     }
 
     .profilepic-container {
@@ -157,5 +156,16 @@
     .user-home > div {
         display: flex;
         gap: 15px;
+    }
+
+    /* Element | http://localhost:5173/#/ */
+
+    .user-container-main {
+        height: 100%;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 15px 0;
     }
 </style>

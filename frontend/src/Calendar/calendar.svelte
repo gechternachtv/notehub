@@ -117,9 +117,9 @@
     <div class="calendar-wrapper">
         <Calendarselector on:dayclick={handledayclick}></Calendarselector>
         <div class="button-container">
-            <button class="minibutton">edit</button>
-            <button class="minibutton">week</button>
-            <button class="minibutton">year</button>
+            <!-- <button class="minibutton">edit</button> -->
+            <!-- <button class="minibutton">week</button>
+            <button class="minibutton">year</button> -->
         </div>
     </div>
 
@@ -178,7 +178,7 @@
     }
     .calendar-result {
         width: 100%;
-        max-height: 306px;
+        height: 306px;
         overflow: scroll;
     }
     .calendar-wrapper {
@@ -189,6 +189,7 @@
         display: flex;
         gap: 30px;
         margin-left: 0;
+        min-height: 347px;
     }
 
     @media (max-width: 991px) {

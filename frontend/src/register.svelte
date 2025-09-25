@@ -1,6 +1,7 @@
 <script>
   import { push } from "svelte-spa-router";
   import { pb } from "./pb.js";
+  import UserConfig from "./User_config.svelte";
   // import {push} from 'svelte-spa-router'
   import { localToken, server } from "./stores.js";
 
@@ -172,6 +173,8 @@
           <button on:click={logout}>logout</button>
         </div>
       </div>
+
+      <UserConfig></UserConfig>
     {/if}
     {#if !$localToken}<h1>Notehub register:</h1>{/if}
 
