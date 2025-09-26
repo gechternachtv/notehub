@@ -5,8 +5,9 @@
     import { pb } from "../pb.js";
     import Calendarselector from "./calendarselector.svelte";
     import { onMount } from "svelte";
-    import { localToken } from "../stores.js";
+    import { localToken, texttemplate } from "../stores.js";
     import Boardcard from "../Allboards/boardcard.svelte";
+    import { push } from "svelte-spa-router";
 
     //flip
 
@@ -72,7 +73,27 @@
     //         listView = false;
     //     }
     // };
+    const handlenewday = (e) => {
+        if ($localToken) {
+            console.log($localToken.model.calendar_board);
+            if ($localToken.model?.calendar_board) {
+                $texttemplate = [
+                    {
+                        content: [
+                            {
+                                text: `@${e.detail.day}-${e.detail.month}-${e.detail.year}`,
+                                type: "text",
+                            },
+                        ],
+                        type: "paragraph",
+                    },
+                ];
 
+                console.log($texttemplate);
+                push(`/board/${$localToken.model.calendar_board}?usetemplate`);
+            }
+        }
+    };
     const handledayclick = (e) => {
         console.log(e.detail);
         filter =
@@ -115,7 +136,8 @@
 
 <main class:hascontent>
     <div class="calendar-wrapper">
-        <Calendarselector on:dayclick={handledayclick}></Calendarselector>
+        <Calendarselector on:dayclick={handledayclick} on:newday={handlenewday}
+        ></Calendarselector>
         <div class="button-container">
             <!-- <button class="minibutton">edit</button> -->
             <!-- <button class="minibutton">week</button>

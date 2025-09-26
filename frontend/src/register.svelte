@@ -142,7 +142,11 @@
 <main>
   <article>
     {#if $localToken}
-      <div class:grid={$localToken.model.avatar}>
+      <div
+        style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
+          .model?.id}/{$localToken.model?.banner_img}')"
+        class:grid={$localToken.model?.avatar}
+      >
         {#if $localToken.model.avatar}
           <div class="profilepic-container">
             <img
@@ -153,7 +157,7 @@
             />
           </div>
         {/if}
-        <div>
+        <div class="miniprofilecontainer">
           <div class={true ? "success" : "error"}>
             Hello, {$localToken.model.name}
             {#if !true}
@@ -245,13 +249,14 @@
   article {
     background: var(--container-bg);
     color: var(--button-bg);
-    padding: 30px;
+    padding: 20px;
     max-width: 95vw;
-    width: 500px;
+    width: 580px;
     margin: auto;
     text-align: center;
     box-sizing: border-box;
     margin-top: 20px;
+    position: relative;
   }
 
   .input {
@@ -300,6 +305,7 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 20px;
+    padding: 20px;
   }
   .warningcontainer {
     margin-bottom: 10px;
@@ -348,5 +354,11 @@
   }
   .server {
     margin-top: 10px;
+  }
+  .grid {
+    background: var(--menu-bg);
+    background-image: var(--bgbannerimg);
+    background-size: cover;
+    background-position: center;
   }
 </style>

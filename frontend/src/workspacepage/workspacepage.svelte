@@ -449,8 +449,8 @@
         height: 250px;
         background-position: bottom;
         background-size: cover;
-        width: calc(100% + 60px);
-        margin-left: -30px;
+        width: calc(100% + 50px);
+        margin-left: -25px;
         margin-top: -30px;
         overflow: hidden;
     }

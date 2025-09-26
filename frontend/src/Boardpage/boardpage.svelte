@@ -13,13 +13,15 @@
     // import { push } from "svelte-spa-router";
     import { onDestroy } from "svelte";
     import { createEventDispatcher } from "svelte";
-    import { localToken, editorblocked } from "../stores.js";
+    import { localToken, editorblocked, texttemplate } from "../stores.js";
     import Contextmenu from "../contextmenu.svelte";
 
     import { querystring } from "svelte-spa-router";
 
     import contrastcolor from "../contrastcolor";
     import LinkedList from "../linkedlist";
+
+    const urlparams = new URLSearchParams($querystring);
 
     editorblocked.set(false);
 
@@ -43,6 +45,21 @@
         },
     };
 
+    if (urlparams.get("usetemplate") != null) {
+        editordefaultValue = {
+            type: "json",
+            value: {
+                type: "doc",
+                content: [
+                    {
+                        type: "paragraph",
+                        content: $texttemplate,
+                    },
+                ],
+            },
+        };
+    }
+
     let showModal = false;
     let boardisactive = true;
 
@@ -63,7 +80,6 @@
 
     export let workspace;
 
-    const urlparams = new URLSearchParams($querystring);
     const workspacename = urlparams.get("workspacename");
     const workspaceid = urlparams.get("workspaceid");
     if (workspacename && workspaceid) {

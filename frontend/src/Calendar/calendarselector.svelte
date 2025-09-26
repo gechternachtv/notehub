@@ -147,6 +147,17 @@
                                 month === new Date().getUTCMonth() &&
                                 year === new Date().getUTCFullYear()}
                             class="nocardday"
+                            on:click={(e) => {
+                                console.log(fn(day.day));
+                                currentday = day.day;
+                                currentmonth = day.month;
+                                currentyear = day.year;
+                                dispatch("newday", {
+                                    day: fn(day.day),
+                                    month: fn(month + 1),
+                                    year: year,
+                                });
+                            }}
                         >
                             {day.day}
                         </button>

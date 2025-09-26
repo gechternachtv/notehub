@@ -13,7 +13,8 @@
     const dispatch = createEventDispatcher();
 
     export let single = true;
-    export let usergroup;
+    export let usergroup = null;
+    export let currentBoards = [];
 
     let showconfirmbox = false;
     let checkboxholder;

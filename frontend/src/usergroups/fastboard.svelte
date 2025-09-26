@@ -3,16 +3,18 @@
 </script>
 
 <main>
-    {#if $localToken.model}
-        {#if $localToken.model.default_board}
-            <div
-                class="bannercontainer"
-                style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
-                    .model.id}/{$localToken?.model.banner_img}')"
-            >
-                <a href="#/board/{$localToken.model.default_board}"> </a>
-            </div>
-        {/if}
+    {#if $localToken.model?.default_board}
+        <div
+            class="bannercontainer"
+            style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
+                .model.id}/{$localToken?.model.banner_img}')"
+        >
+            <a href="#/board/{$localToken.model.default_board}"> </a>
+        </div>
+    {:else}
+        <div class="bannercontainer">
+            <a href="#/account"> </a>
+        </div>
     {/if}
 </main>
 

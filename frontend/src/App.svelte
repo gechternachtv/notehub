@@ -110,6 +110,8 @@
     justify-content: flex-end;
     line-height: 21px;
     min-height: 40px;
+    /* border-radius: 0 0 10px 0; */
+    /* margin-right: 15px; */
   }
   nav a {
     color: var(--header-color);
@@ -198,8 +200,8 @@
 
   .home {
     font-weight: bold;
-    font-size: 23px;
-    padding: 9px 20px;
+    font-size: 36px;
+    padding: 9px 15px;
     width: 100%;
     text-align: left;
   }
@@ -212,7 +214,7 @@
   }
 
   .servername {
-    font-size: 8px;
+    font-size: 12px;
     margin: 0px;
     background: var(--header-color);
     color: var(--header-bg);

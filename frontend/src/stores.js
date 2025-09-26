@@ -11,4 +11,6 @@ export let localToken = writable(window.localStorage.getItem('pocketbase_auth') 
 
 export let editorblocked = writable(false)
 
+export let texttemplate = writable({})
+
 
