@@ -5,7 +5,6 @@
   import { localToken, server } from "./stores.js";
   import { wrap } from "svelte-spa-router/wrap";
   import { pb } from "./pb.js";
-
   if (!pb.authStore.isValid) {
     pb.authStore.clear();
     localToken.set(false);
@@ -88,7 +87,8 @@
   </div>
 </div>
 
-<footer><Themeswitch /></footer>
+<footer>
+  <Themeswitch /></footer>
 
 <style>
   .app {

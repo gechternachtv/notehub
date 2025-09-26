@@ -398,7 +398,7 @@
     {/if}
 </svelte:head> -->
 
-<main class:paddingtop={boardpage}>
+<main class:paddingtop={boardpage} class="boardpagecontainer">
     {#if boardisactive}
         <!-- content here -->
 

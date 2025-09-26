@@ -136,7 +136,7 @@
 <style>
     main {
         padding-bottom: var(--bodypadding);
-        --avatar-size: 130px;
+       --avatar-size: 193px;
     }
     .createusergroup {
         width: 100%;

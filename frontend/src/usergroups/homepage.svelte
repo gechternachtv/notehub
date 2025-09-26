@@ -27,9 +27,7 @@
                             <!-- {$localToken.model.name} -->
 
                             <div class="userinfo">
-                                <div class="pleaseverify">
-                                    Hello, {$localToken.model.name}!
-                                </div>
+                                <div class="pleaseverify">{$localToken.model.name}</div>
 
                                 <div class="user-container server">
                                     <div>User ID : {$localToken.model.id}</div>
@@ -69,7 +67,7 @@
 
     .calendar-user-grid {
         display: grid;
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns:minmax(0, 465px) 2fr;
         gap: 15px;
         margin-bottom: 15px;
         align-items: end;
@@ -80,7 +78,7 @@
             grid-template-columns: 1fr;
         }
         main {
-            --avatar-size: 130px;
+           --avatar-size: 193px;
         }
     }
 
@@ -167,5 +165,10 @@
         flex-direction: column;
         justify-content: space-between;
         padding: 15px 0;
+    }
+
+    .pleaseverify {
+        font-weight: 600;
+        font-size: 30px;
     }
 </style>

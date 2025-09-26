@@ -4,6 +4,7 @@
   import UserConfig from "./User_config.svelte";
   // import {push} from 'svelte-spa-router'
   import { localToken, server } from "./stores.js";
+  import Themecolors from "./themecolors.svelte";
 
   const localStorageItem = window.localStorage.getItem("pocketbase_auth");
 
@@ -141,6 +142,7 @@
 
 <main>
   <article>
+
     {#if $localToken}
       <div
         style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
@@ -176,8 +178,12 @@
 
           <button on:click={logout}>logout</button>
         </div>
-      </div>
 
+        
+      </div>
+        <div class="colorsshow">
+          <Themecolors></Themecolors>
+        </div>
       <UserConfig></UserConfig>
     {/if}
     {#if !$localToken}<h1>Notehub register:</h1>{/if}
@@ -226,6 +232,8 @@
         </div>
       {/each}
     {/if}
+
+
   </article>
 </main>
 
@@ -247,16 +255,18 @@
   }
 
   article {
-    background: var(--container-bg);
+    background: var(--card-bg);
     color: var(--button-bg);
-    padding: 20px;
+    padding: 15px;
     max-width: 95vw;
     width: 580px;
     margin: auto;
+    margin-left:0;
     text-align: center;
     box-sizing: border-box;
-    margin-top: 20px;
     position: relative;
+    border-radius: 10px;
+    margin-bottom:15px !important;
   }
 
   .input {
@@ -360,5 +370,12 @@
     background-image: var(--bgbannerimg);
     background-size: cover;
     background-position: center;
+  }
+  main{
+    padding-bottom:4px;
+  }
+  .colorshow {
+    padding: 0;
+    margin: 10px 0;
   }
 </style>

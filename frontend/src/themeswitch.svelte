@@ -1,22 +1,24 @@
 <script lang="ts">
-	import { Body, classList, style } from "svelte-body";
+	import { classList, style } from "svelte-body";
 
 	let classes = "luckygreen";
 	let styles = "";
 	const themes = [
 		"luckygreen",
-		"bluesky",
 		"paperscan",
+		"bluesky",
 		"plankton",
 		"yotsuba",
 		"yotsuba-b",
 		"yotsuba-c",
 		"futaba",
+		"cupid",
 		"plastich",
 		"dfwm",
 		"fvwm",
 		"goldSrc",
 		"brwrld",
+		"ghostequip",
 		"blood",
 		"uboa",
 		"pxtone",
@@ -61,6 +63,7 @@
 		margin: 4px;
 		cursor: pointer;
 	}
+
 
 	/* :global(.yotsuba) {
 			--card-border:#00000018;
@@ -214,15 +217,15 @@
 		--createdon: var(--main-font-2);
 	}
 
-	:global(.bluesky) {
+:global(.bluesky) {
 		--card-border: #00000018;
 		--alert: #d3152e;
 		--news: #cb4e16;
 		--complete: #468333;
 		--complete-col: #ffeedb;
-		--header-bg: #42a0bd;
+		--header-bg: #1c96c4;
 		--main-font-2: black;
-		--button-bg: #356574;
+		--button-bg: #0e6986;
 		--button-color: #fff;
 		--header-color: #fff;
 		--card-bg: #eee;
@@ -312,17 +315,30 @@
 		--gradient-col-1: #f5f5f5;
 		--gradient-col-2: #fff3e6;
 		--body-background: url("https://zonaplankton.net/backgrounds/page-pattern-default.png");
-		--header-bg: #3ab6fe;
-		--button-bg: #ff2164;
+		
+	
 		--header-color: white;
-		--board-title-color: var(--header-bg);
+
 		--browser-color: var(--header-bg);
 		--link-col: var(--button-bg);
 		--menu-bg: #4166e5;
 		--menu-col: var(--button-color);
 		--mentions: var(--button-bg);
 		--createdon: var(--main-font-2);
+
+		--header-bg: #0394fc;
+		--button-bg: #107d46;
+		--board-title-color: #313131;
 	}
+
+	:global(.plankton nav, .plankton .absolute.controls){
+  		background: var(--news) !important;
+	}
+	:global(.plankton .absolute.controls button){
+		background: #fff !important;
+		color: var(--header-bg) !important;
+	}
+
 
 	:global(.pxtone) {
 		--card-border: #ffffff30;
@@ -492,7 +508,6 @@
 		--container-bg: #7c8d94;
 		--gradient-col-1: #7c8d94;
 		--gradient-col-2: #7c8d94;
-		/*! --body-background:url(https://zonaplankton.net/backgrounds/sidebar-pattern-pxtone.png); */
 		--header-bg: #495e68;
 		--button-bg: white;
 		--header-color: var(--main-font-1);
@@ -507,6 +522,79 @@
 
 	:global(.brwrld .workspacepage > .grid) {
 		background: var(--header-bg);
+	}
+
+	:global(.ghostequip) {
+		--card-border: #ffffff30;
+		--alert: #831f0d;
+		--news: var(--alert);
+		--complete: #468333;
+		--complete-col: #ffeedb;
+
+		--main-font-2: #fff;
+
+		
+
+		
+		--gradient-col-2: #7c8d94;
+		
+
+		--header-color: var(--main-font-1);
+		--board-title-color: var(--main-font-1);
+
+		--link-col: var(--button-bg);
+
+		--menu-col: #9eacb3;
+		--mentions: #08b2c4;
+
+
+		--main-font-1: #ececec;
+		--button-color: #ececec;
+		--card-bg: #979183;
+		--container-bg: #167553;
+		--gradient-col-1: #cecfba;
+		--header-bg: #167553;
+		--button-bg: #312e54;
+		--browser-color: #312e54;
+		--menu-bg: #312e54;
+		--createdon: #312e54;
+	}
+
+	:global(.ghostequip .maincontainer) {
+		background:transparent !important;
+	}
+
+	:global(.ghostequip .instancebox) {
+		background: #3a2828 !important;
+	}
+
+	:global(.ghostequip .calendarcard-container .card-grid.list) {
+		background: var(--card-bg) !important;
+		border: 4px solid var(--card-bg) !important;
+	}
+
+	:global(.ghostequip .userbox) {
+		background: #8c8c8c;
+	}
+
+	:global(.ghostequip .boardpagecontainer){
+		background:transparent !important;
+	}
+	:global(.ghostequip .boardpagecontainer .board-header) {
+		color:var(--button-bg) !important
+	}
+
+	:global(.ghostequip .board-container){
+  		background: #ebecda !important;
+	}
+	:global(.ghostequip .board-description, .ghostequip .card .board-header,.ghostequip .duedate,.ghostequip .title,.ghostequip .minicard-container .updates, .ghostequip .date, .ghostequip .column ) {
+		color: var(--createdon) !important;
+	}
+	:global(.ghostequip .tablecard_id a){
+		color: var(--createdon) !important;
+	}
+	:global(.ghostequip .card)  {
+  		color:var(--button-bg)
 	}
 
 	:global(.goldSrc) {
@@ -567,14 +655,14 @@
 		--browser-color: #47545d;
 		--alert: #66bd9d;
 		--news: #13363e;
-		--header-bg: #959595;
-		--button-bg: #007317;
+		--header-bg: #ececec;
+		--button-bg: #860441;
 		--header-color: #262626;
 		--card-bg: #e4e4e4;
 		--container-bg: #ccc;
 		--gradient-col-1: #e1e1e1;
 		--gradient-col-2: #757f86;
-		--board-title-color: #15363a;
+		--board-title-color: #1b153a;
 		--link-col: #000;
 		--menu-bg: #a1a4a6;
 		--menu-col: #000;
@@ -583,17 +671,51 @@
 		--createdon: var(--main-font-2);
 	}
 
-	:global(.paperscan nav) {
-		backdrop-filter: blur(16px) saturate(180%) !important;
-		background-color: rgba(230, 239, 255, 0.2) !important;
-	}
 
 	:global(.paperscan .card) {
 		background-color: rgba(230, 239, 255, 0.2);
 	}
 
-	:global(.paperscan .absolute.controls) {
-		backdrop-filter: blur(16px) saturate(180%);
-		background-color: rgba(230, 239, 255, 0.2);
+	:global(.paperscan .board-container) {
+ 		backdrop-filter: blur(16px) saturate(180%) !important;
+		background-color: #e6efff69 !important;
+	}
+	:global(.paperscan nav .home) {
+		color:var(--button-bg) !important
+	}
+	:global(.paperscan .servername){
+		background:var(--button-bg) !important
+	}
+
+	:global(.paperscan .workspacepage .board-container > main) {
+		background: transparent !important;
+	}
+
+
+
+	:global(.cupid) {
+		--card-border:#00000018;
+		--alert:#b30505;
+		--news:#b30505;
+		--complete:#00bd6d;
+		--complete-col:#ff8f00;
+		--header-bg:#f06a82;
+		--main-font-1:#9d0000;
+		--main-font-2:#502020;
+		--button-bg:#65a2d3;
+		--button-color:#fff;
+		--header-color:#fff;
+		--card-bg:#ffd6d6;
+		--container-bg:#ffeff6;
+		--gradient-col-1:#ffdee2;
+		--gradient-col-2:#ffe9e9;
+		--body-background:#fff5ea;
+		--board-title-color:#881515;
+		--browser-color:#ffdee2;
+		--link-col:#f00;
+		--menu-bg:#ffe5ea;
+		--menu-col:#6f3838;
+		--mentions:#3902ff;
+		--createdon:#ff15da;
 	}
 </style>

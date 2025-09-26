@@ -8,7 +8,7 @@
     let newname, newurl;
     let allservers = window.localStorage.getItem("allservers")
         ? JSON.parse(window.localStorage.getItem("allservers"))
-        : [{ name: import.meta.env.VITE_NAME, url: import.meta.env.VITE_URL }];
+        : [{ name: import.meta.env.VITE_NAME, url: import.meta.env.VITE_URL },{name: "🔰 local" , url:"http://127.0.0.1:8090"}];
     let errormsg = "";
 </script>
 

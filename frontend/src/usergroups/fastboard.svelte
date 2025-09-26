@@ -23,6 +23,7 @@
         height: 100%;
         border-radius: 10px;
         overflow: hidden;
+        min-height: 80px;
     }
     .bannercontainer {
         background: var(--menu-bg);

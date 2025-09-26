@@ -48,7 +48,7 @@
     };
 </script>
 
-<div>User config</div>
+
 <div class="option">
     default board:
     <button
@@ -85,6 +85,7 @@
 
 <div class="option">
     banner:
+    <div>
     <input
         on:change={handleBannerChange}
         class="avatar"
@@ -92,10 +93,12 @@
         name=""
         accept="image/*"
     />
+    </div>
 </div>
 
 <style>
     .option {
         text-align: left;
+        margin-bottom:10px;
     }
 </style>
