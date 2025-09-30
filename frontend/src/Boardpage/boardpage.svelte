@@ -265,7 +265,6 @@
                             } else if (e.action === "delete") {
                                 boardisactive = false;
                                 pb.collection("boards").unsubscribe(params.id);
-                                // console.log("deleted!");
                             }
                         },
                         {
