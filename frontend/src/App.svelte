@@ -88,7 +88,8 @@
 </div>
 
 <footer>
-  <Themeswitch /></footer>
+  <Themeswitch />
+</footer>
 
 <style>
   .app {

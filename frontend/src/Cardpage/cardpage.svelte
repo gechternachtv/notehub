@@ -3,7 +3,7 @@
     import dateFormat from "../dateFormat.js";
     import { pop } from "svelte-spa-router";
     import { pb } from "../pb.js";
-    import Editor from "../Boardpage/editor.svelte";
+    import Editor from "../editor/editor.svelte";
     import Card from "./card.svelte";
     import createNewCard from "../createNewCard.js";
     import { localToken, editorblocked, server } from "../stores.js";

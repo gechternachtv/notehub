@@ -4,7 +4,7 @@
     import dateFormat from "../dateFormat";
     import Card from "../Card/card.svelte";
     import Tablecard from "../Card/tablecard.svelte";
-    import Editor from "./editor.svelte";
+    import Editor from "../editor/editor.svelte";
 
     import createNewCard from "../createNewCard";
     import Boardcard from "../Allboards/boardcard.svelte";
