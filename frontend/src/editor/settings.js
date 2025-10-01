@@ -3,42 +3,11 @@ import { undo, redo, history } from 'prosemirror-history';
 import { toggleMark, wrapIn, chainCommands, exitCode, setBlockType, joinUp, joinDown, lift, selectParentNode, baseKeymap } from 'prosemirror-commands';
 import { NodeSelection, Plugin } from 'prosemirror-state';
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
-import { undoInputRule, smartQuotes, ellipsis, emDash, inputRules, wrappingInputRule, textblockTypeInputRule } from 'prosemirror-inputrules';
-import { Schema } from "prosemirror-model"
-
-//schemas:
-
-const mentionSchema = new Schema({
-    nodes: {
-        doc: { content: "paragraph+" },
-
-        paragraph: {
-            content: "text*",
-            toDOM: () => ["p", { class: "my-paragraph" }, 0],
-            parseDOM: [{ tag: "p.my-paragraph" }]
-        },
-
-        text: {
-            inline: true,
-            toDOM: node => ["span", { class: "my-text" }, 0],
-            parseDOM: [{ tag: "span.my-text" }]
-        },
-
-        // example of an inline atom node
-        mention: {
-            inline: true,
-            group: "inline",
-            atom: true,
-            attrs: { number: {} },
-            toDOM: node => ["span", { class: "my-mention", "data-number": node.attrs.number }, node.attrs.number],
-            parseDOM: [{ tag: "span.my-mention", getAttrs: dom => ({ number: dom.getAttribute("data-number") }) }]
-        }
-    }
-});
+import { undoInputRule, smartQuotes, ellipsis, emDash, inputRules, wrappingInputRule, textblockTypeInputRule, InputRule } from 'prosemirror-inputrules';
+import { Schema } from "prosemirror-model";
 
 
-/** Keymap bindings for basic markdown commands */
-function buildKeymap(schema, mapKeys) {
+export function buildKeymap(schema, mapKeys) {
     let keys = {}, type;
     function bind(key, cmd) {
         if (mapKeys) {
@@ -48,6 +17,7 @@ function buildKeymap(schema, mapKeys) {
         }
         keys[key] = cmd;
     }
+
     // Undo/Redo
     bind("Mod-z", undo);
     bind("Shift-Mod-z", redo);
@@ -61,17 +31,17 @@ function buildKeymap(schema, mapKeys) {
     bind("Escape", selectParentNode);
 
     // Marks
-    if (type = schema.marks.strong) {
-        bind("Mod-b", toggleMark(type));
-        bind("Mod-B", toggleMark(type));
+    if (type = schema.marks && schema.marks.strong) {
+        bind("Mod-b", toggleMark(schema.marks.strong));
+        bind("Mod-B", toggleMark(schema.marks.strong));
     }
-    if (type = schema.marks.em) {
-        bind("Mod-i", toggleMark(type));
-        bind("Mod-I", toggleMark(type));
+    if (type = schema.marks && schema.marks.em) {
+        bind("Mod-i", toggleMark(schema.marks.em));
+        bind("Mod-I", toggleMark(schema.marks.em));
     }
-    if (type = schema.marks.code)
-        bind("Mod-`", toggleMark(type));
-
+    if (type = schema.marks && schema.marks.code) {
+        bind("Mod-`", toggleMark(schema.marks.code));
+    }
 
     if (type = schema.nodes.hard_break) {
         let br = type;
@@ -89,12 +59,10 @@ function buildKeymap(schema, mapKeys) {
         bind("Mod-]", sinkListItem(type));
     }
 
-
-
     // Horizontal rule
     if (type = schema.nodes.horizontal_rule) {
         let hr = type;
-        bind("Mod-_", (state, dispatch) => {
+        bind("Mod--", (state, dispatch) => {
             if (dispatch) dispatch(state.tr.replaceSelectionWith(hr.create()).scrollIntoView());
             return true;
         });
@@ -130,25 +98,27 @@ function headingRule(nodeType, maxLevel) {
     return textblockTypeInputRule(new RegExp(`^(#{1,${maxLevel}})\\s$`), nodeType, match => ({ level: match[1].length }));
 }
 
+
+
 /** Build all input rules for markdown blocks */
-function buildInputRules(schema) {
+export function buildInputRules(schema) {
     let rules = smartQuotes.concat(ellipsis, emDash), type;
     if (type = schema.nodes.blockquote) rules.push(blockQuoteRule(type));
     if (type = schema.nodes.ordered_list) rules.push(orderedListRule(type));
     if (type = schema.nodes.bullet_list) rules.push(bulletListRule(type));
     if (type = schema.nodes.code_block) rules.push(codeBlockRule(type));
     if (type = schema.nodes.heading) rules.push(headingRule(type, 6));
+
     return inputRules({ rules });
 }
 
 /** Minimal example setup: input rules + keymap + base keymap + history */
-function exampleSetup({ schema, mapKeys } = {}) {
+export function exampleSetup({ schema, mapKeys } = {}) {
     return [
         buildInputRules(schema),
         keymap(buildKeymap(schema, mapKeys)),
         keymap(baseKeymap),
+        starKeymap,
         history()
     ];
 }
-
-export { buildInputRules, buildKeymap, exampleSetup };
