@@ -14,20 +14,17 @@
     "vite": "^5.1.4"
   },
   "dependencies": {
+    "@tiptap/core": "^3.6.2",
+    "@tiptap/extension-image": "^3.6.2",
+    "@tiptap/extension-list": "^3.6.2",
+    "@tiptap/extension-text-style": "^3.6.2",
+    "@tiptap/starter-kit": "^3.6.2",
     "calendar-base": "^2.0.1",
     "picmo": "^5.8.5",
     "pocketbase": "^0.21.5",
-    "prosemirror-commands": "^1.7.1",
-    "prosemirror-example-setup": "^1.2.3",
-    "prosemirror-history": "^1.4.1",
-    "prosemirror-keymap": "^1.2.3",
-    "prosemirror-model": "^1.25.3",
-    "prosemirror-schema-basic": "^1.2.4",
-    "prosemirror-schema-list": "^1.5.1",
-    "prosemirror-state": "^1.4.3",
-    "prosemirror-view": "^1.41.2",
     "sortablejs": "^1.15.6",
     "svelte-body": "^1.4.0",
-    "svelte-spa-router": "^4.0.1"
+    "svelte-spa-router": "^4.0.1",
+    "tiptap": "^1.32.2"
   }
 }

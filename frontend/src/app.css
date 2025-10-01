@@ -829,8 +829,16 @@ li[data-checked="false"]::before {
   content: '☐ ';
 }
 
-.mention {
-  background: #00aaff;
-  color: white;
-  font-weight: bold;
+.task-item {
+  display: flex !important;
+  align-items: center;
+}
+
+.task-item:before {
+  display: none;
+}
+
+.task-item input {
+  margin: 0;
+  margin-right: 10px;
 }
