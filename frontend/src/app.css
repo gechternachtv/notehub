@@ -828,3 +828,10 @@ li[data-checked="true"]::before {
 li[data-checked="false"]::before {
   content: '☐ ';
 }
+
+mention {
+  color: green;
+  background: #e0ffe0;
+  padding: 0 2px;
+  border-radius: 2px;
+}

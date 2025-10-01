@@ -4,6 +4,38 @@ import { toggleMark, wrapIn, chainCommands, exitCode, setBlockType, joinUp, join
 import { NodeSelection, Plugin } from 'prosemirror-state';
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 import { undoInputRule, smartQuotes, ellipsis, emDash, inputRules, wrappingInputRule, textblockTypeInputRule } from 'prosemirror-inputrules';
+import { Schema } from "prosemirror-model"
+
+//schemas:
+
+const mentionSchema = new Schema({
+    nodes: {
+        doc: { content: "paragraph+" },
+
+        paragraph: {
+            content: "text*",
+            toDOM: () => ["p", { class: "my-paragraph" }, 0],
+            parseDOM: [{ tag: "p.my-paragraph" }]
+        },
+
+        text: {
+            inline: true,
+            toDOM: node => ["span", { class: "my-text" }, 0],
+            parseDOM: [{ tag: "span.my-text" }]
+        },
+
+        // example of an inline atom node
+        mention: {
+            inline: true,
+            group: "inline",
+            atom: true,
+            attrs: { number: {} },
+            toDOM: node => ["span", { class: "my-mention", "data-number": node.attrs.number }, node.attrs.number],
+            parseDOM: [{ tag: "span.my-mention", getAttrs: dom => ({ number: dom.getAttribute("data-number") }) }]
+        }
+    }
+});
+
 
 /** Keymap bindings for basic markdown commands */
 function buildKeymap(schema, mapKeys) {
@@ -70,8 +102,6 @@ function buildKeymap(schema, mapKeys) {
 
     return keys;
 }
-
-
 
 /** Input rules for basic markdown block types */
 function blockQuoteRule(nodeType) {
