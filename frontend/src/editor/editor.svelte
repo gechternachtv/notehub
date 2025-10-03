@@ -7,10 +7,19 @@
 	import Image from "@tiptap/extension-image";
 	import { onMount } from "svelte";
 	import { TaskItem, TaskList } from "@tiptap/extension-list";
-
+	import { DateHighlighter } from "./datesinput";
+	import { TagHighlighter } from "./taginput.js";
 	let element;
 	let editor;
 
+	export let defaultValue = {
+		type: "doc",
+		content: [
+			{
+				type: "paragraph",
+			},
+		],
+	};
 	onMount(() => {
 		editor = new Editor({
 			element: element,
@@ -33,49 +42,22 @@
 						class: "task-item",
 					},
 				}),
+				DateHighlighter,
+				TagHighlighter,
 			],
-			content: `
-			  <h2>
-				Hi there,
-			  </h2>
-			  <p>
-				this is a <em>basic</em> example of <strong>Tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-			  </p>
-			  <ul>
-				<li>
-				  That’s a bullet list with one …
-				</li>
-				<li>
-				  … or two list items.
-				</li>
-			  </ul>
-			  <p>
-				Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-			  </p>
-			  <pre><code class="language-css">body {
-	display: none;
-  }</code></pre>
-			  <p>
-				I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-			  </p>
-			  <blockquote>
-				Wow, that’s amazing. Good work, boy! 👏
-				<br />
-				— Mom
-			  </blockquote>
-
-
-			          <ul data-type="taskList">
-          <li data-type="taskItem" data-checked="true">A list item</li>
-          <li data-type="taskItem" data-checked="false">And another one</li>
-        </ul>
-			`,
 			onTransaction: () => {
-				// force re-render so `editor.isActive` works as expected
 				editor = editor;
 			},
 		});
+
+		editor.commands.setContent(defaultValue);
 	});
+
+	const handlesend = () => {
+		if (editor) {
+			console.log(editor.getJSON());
+		}
+	};
 </script>
 
 <main>
@@ -278,6 +260,7 @@
 		</div>
 	{/if}
 	<div class="editorcontainer" bind:this={element} />
+	<button on:click={handlesend}></button>
 </main>
 
 <style>
@@ -291,6 +274,5 @@
 
 	.editorcontainer {
 		background: #ffffff1c;
-		padding: 5px;
 	}
 </style>

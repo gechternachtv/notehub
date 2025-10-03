@@ -842,3 +842,31 @@ li[data-checked="false"]::before {
   margin: 0;
   margin-right: 10px;
 }
+
+.date-mark {
+  background: var(--board-title-color);
+  color: var(--button-color);
+  border-radius: 20px;
+  padding: 2px 4px;
+  width: fit-content;
+}
+
+.date-mark:before {
+  content: '🗓️ ';
+  display: inline;
+}
+
+.tiptap.ProseMirror {
+  padding: 5px;
+}
+
+.tiptap.ProseMirror a {
+  text-decoration: underline;
+}
+
+.tiptap.ProseMirror .tag-mark {
+  color: white;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 7px;
+}

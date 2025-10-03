@@ -77,17 +77,23 @@
         if ($localToken) {
             console.log($localToken.model.calendar_board);
             if ($localToken.model?.calendar_board) {
-                $texttemplate = [
-                    {
-                        content: [
-                            {
-                                text: `@${e.detail.day}-${e.detail.month}-${e.detail.year}`,
-                                type: "text",
-                            },
-                        ],
-                        type: "paragraph",
-                    },
-                ];
+                $texttemplate = {
+                    type: "doc",
+                    content: [
+                        {
+                            type: "paragraph",
+                            content: [
+                                {
+                                    type: "text",
+                                    text: `@${e.detail.day}-${e.detail.month}-${e.detail.year}`,
+                                },
+                            ],
+                        },
+                        {
+                            type: "paragraph",
+                        },
+                    ],
+                };
 
                 console.log($texttemplate);
                 push(`/board/${$localToken.model.calendar_board}?usetemplate`);

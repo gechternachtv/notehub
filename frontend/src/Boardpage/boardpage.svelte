@@ -28,36 +28,17 @@
     const dispatch = createEventDispatcher();
 
     let editordefaultValue = {
-        type: "json",
-        value: {
-            type: "doc",
-            content: [
-                {
-                    type: "paragraph",
-                    content: [
-                        {
-                            type: "text",
-                            text: " ",
-                        },
-                    ],
-                },
-            ],
-        },
+        type: "doc",
+        content: [
+            {
+                type: "paragraph",
+            },
+        ],
     };
 
     if (urlparams.get("usetemplate") != null) {
-        editordefaultValue = {
-            type: "json",
-            value: {
-                type: "doc",
-                content: [
-                    {
-                        type: "paragraph",
-                        content: $texttemplate,
-                    },
-                ],
-            },
-        };
+        console.log($texttemplate);
+        editordefaultValue = $texttemplate;
     }
 
     let showModal = false;
