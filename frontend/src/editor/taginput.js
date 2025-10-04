@@ -1,13 +1,22 @@
 import { Extension, Mark } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
+import { pb } from '../pb';
 
 // Define the fixed list of tags
-const tags = [
+let tags = [
     { name: 'tag1', color: 'red' },
     { name: 'tag2', color: 'blue' },
     { name: 'tag3', color: 'green' },
 ];
+
+(async () => {
+    const records = await pb.collection("tags").getFullList({
+        fields: "name,color,id",
+    });
+    tags = records
+})()
+
 
 // Define the TagMark to wrap matched tag text
 export const TagMark = Mark.create({
