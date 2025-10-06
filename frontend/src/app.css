@@ -867,6 +867,18 @@ li[data-checked="false"]::before {
 .tiptap.ProseMirror .tag-mark {
   color: white;
   font-weight: bold;
-  padding: 2px 8px;
-  border-radius: 7px;
+  padding: 2px 6px;
+  border-radius: 8px;
+}
+
+.tagsuggestions {
+  display: flex;
+  gap: 4px;
+  opacity: 0.6;
+}
+
+.tagsuggestions>div {
+  padding: 0 6px;
+  border-radius: 10px;
+  font-weight: bold;
 }

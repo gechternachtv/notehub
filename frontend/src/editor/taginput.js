@@ -3,31 +3,26 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { pb } from '../pb'
 
-import { currentUsergroup } from '../stores'
+import { currentUsergroup, tagSuggestions } from '../stores'
 
 // ─────────────────────────────────────────────
 // Load tags from PocketBase
 // ─────────────────────────────────────────────
 let tags = []
 
-
-
 currentUsergroup.subscribe(async e => {
     try {
-        console.log(e)
         if (e?.id) {
             const records = await pb.collection('tags').getFullList({
                 filter: `usergroup.id = "${e.id}"`,
                 fields: 'name,color,id',
             })
             tags = records
-            console.log('Loaded tags:', tags)
         }
     } catch (error) {
         console.warn(error)
     }
 })
-
 
 // ─────────────────────────────────────────────
 // Define the TagMark
@@ -36,42 +31,30 @@ export const TagMark = Mark.create({
     name: 'tagMark',
 
     addOptions() {
-        return {
-            HTMLAttributes: { class: 'tag-mark' },
-        }
+        return { HTMLAttributes: { class: 'tag-mark' } }
     },
 
     addAttributes() {
         return {
             name: {
                 default: null,
-                parseHTML: element => element.getAttribute('data-name'),
-                renderHTML: attributes => {
-                    if (!attributes.name) return {}
-                    return { 'data-name': attributes.name }
-                },
+                parseHTML: el => el.getAttribute('data-name'),
+                renderHTML: attrs => (attrs.name ? { 'data-name': attrs.name } : {}),
             },
             color: {
                 default: 'rgb(41, 72, 115)',
-                parseHTML: element => element.style.background || 'rgb(41, 72, 115)',
-                renderHTML: attributes => {
-                    return { style: `background: ${attributes.color || 'rgb(41, 72, 115)'}` }
-                },
+                parseHTML: el => el.style.background || 'rgb(41, 72, 115)',
+                renderHTML: attrs => ({ style: `background: ${attrs.color || 'rgb(41,72,115)'}` }),
             },
             id: {
                 default: null,
-                parseHTML: element => element.getAttribute('data-tag-id'),
-                renderHTML: attributes => {
-                    if (!attributes.id) return {}
-                    return { 'data-tag-id': attributes.id }
-                },
+                parseHTML: el => el.getAttribute('data-tag-id'),
+                renderHTML: attrs => (attrs.id ? { 'data-tag-id': attrs.id } : {}),
             },
         }
     },
 
-    parseHTML() {
-        return [{ tag: 'span.tag-mark' }]
-    },
+    parseHTML() { return [{ tag: 'span.tag-mark' }] },
 
     renderHTML({ HTMLAttributes }) {
         return ['span', this.mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
@@ -83,11 +66,8 @@ export const TagMark = Mark.create({
 // ─────────────────────────────────────────────
 function findTags(doc) {
     const decorations = []
+    const regex = /(?:^|\s)#([^\s#]+)/g
 
-    // Match any #word without spaces and at least one char after #
-    const regex = /#([^\s#]+)/g
-
-    console.log(doc)
 
     doc.descendants((node, pos) => {
         if (!node.isText) return
@@ -100,9 +80,7 @@ function findTags(doc) {
             const end = start + match[0].length
             const tagName = match[1]
 
-            // Try to find matching tag from PocketBase
             const tag = tags.find(t => t.name === tagName)
-
             const color = tag?.color || 'rgb(41, 72, 115)'
             const id = tag?.id || null
 
@@ -134,31 +112,64 @@ function findTags(doc) {
 export const TagHighlighter = Extension.create({
     name: 'tagHighlighter',
 
+    addMarks() { return { tagMark: TagMark } },
+
     addProseMirrorPlugins() {
         return [
             new Plugin({
                 key: new PluginKey('tagHighlighter'),
                 state: {
-                    init(_, { doc }) {
-                        return findTags(doc)
-                    },
-                    apply(transaction, oldState) {
-                        return transaction.docChanged ? findTags(transaction.doc) : oldState
-                    },
+                    init(_, { doc }) { return findTags(doc) },
+                    apply(transaction, oldState) { return transaction.docChanged ? findTags(transaction.doc) : oldState },
                 },
                 props: {
-                    decorations(state) {
-                        return this.getState(state)
+
+                    decorations(state) { return this.getState(state) },
+
+                    // 👇 Live detection of the tag being typed
+                    handleTextInput(view, from, to, text) {
+
+                        const { state } = view
+                        const pos = state.selection.from
+                        const textBefore = state.doc.textBetween(0, pos, '\n', '\0')
+
+                        console.log(text)
+                        if (text === "#") {
+                            console.log(tags)
+                            tagSuggestions.set(tags)
+                        } else {
+                            const match = textBefore.match(/(?:^|\s)#([^\s#]*)$/)
+                            if (match) {
+                                const currentTag = match[1] + text
+
+                                const suggestions = tags.filter(tag =>
+                                    tag.name.toLowerCase().startsWith(currentTag.toLowerCase())
+                                )
+                                tagSuggestions.update(a => suggestions)
+
+                            } else {
+                                tagSuggestions.update(a => [])
+                            }
+                        }
+                        // Match the latest #word being typed (even incomplete)
+
+
+                        return false // allow normal typing
                     },
+                    handleKeyDown(view, event) {
+                        if (event.key === 'Enter') {
+                            tagSuggestions.set([])
+                        } else if (event.key === 'Backspace') {
+                            tagSuggestions.set([])
+                        } else if (event.key === 'Space') {
+                            tagSuggestions.set([])
+                        }
+                        return false // allow normal handling
+                    },
+
                 },
             }),
         ]
-    },
-
-    addMarks() {
-        return {
-            tagMark: TagMark,
-        }
     },
 })
 

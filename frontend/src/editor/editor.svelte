@@ -9,6 +9,8 @@
 	import { TaskItem, TaskList } from "@tiptap/extension-list";
 	import { DateHighlighter } from "./datesinput";
 	import { TagHighlighter } from "./taginput.js";
+	import { tagSuggestions } from "../stores.js";
+	import Picmobutton from "../Picmo/picmobutton.svelte";
 	let element;
 	let editor;
 
@@ -20,6 +22,9 @@
 			},
 		],
 	};
+
+	$tagSuggestions = [];
+
 	onMount(() => {
 		editor = new Editor({
 			element: element,
@@ -58,9 +63,16 @@
 			console.log(editor.getJSON());
 		}
 	};
+
+	const emojiSelect = (e) => {
+		if (editor) {
+			editor.chain().focus().setEmoji("zap").run;
+		}
+	};
 </script>
 
 <main>
+	<Picmobutton on:emojiselect={emojiSelect}></Picmobutton>
 	{#if editor}
 		<div class="control-group">
 			<div class="button-group">
@@ -261,6 +273,18 @@
 	{/if}
 	<div class="editorcontainer" bind:this={element} />
 	<button on:click={handlesend}></button>
+
+	{#if $tagSuggestions}
+		{#if $tagSuggestions.length}
+			<div class="tagsuggestions">
+				{#each $tagSuggestions as suggestion}
+					<div style="background:{suggestion.color};color:white">
+						{suggestion.name}
+					</div>
+				{/each}
+			</div>
+		{/if}
+	{/if}
 </main>
 
 <style>

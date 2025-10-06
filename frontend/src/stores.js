@@ -15,4 +15,6 @@ export let texttemplate = writable({})
 
 export let currentUsergroup = writable({})
 
+export let tagSuggestions = writable([])
+
 
