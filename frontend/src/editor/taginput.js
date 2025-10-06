@@ -3,18 +3,31 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 import { pb } from '../pb'
 
+import { currentUsergroup } from '../stores'
+
 // ─────────────────────────────────────────────
 // Load tags from PocketBase
 // ─────────────────────────────────────────────
 let tags = []
 
-    ; (async () => {
-        const records = await pb.collection('tags').getFullList({
-            fields: 'name,color,id',
-        })
-        tags = records
-        console.log('Loaded tags:', tags)
-    })()
+
+
+currentUsergroup.subscribe(async e => {
+    try {
+        console.log(e)
+        if (e?.id) {
+            const records = await pb.collection('tags').getFullList({
+                filter: `usergroup.id = "${e.id}"`,
+                fields: 'name,color,id',
+            })
+            tags = records
+            console.log('Loaded tags:', tags)
+        }
+    } catch (error) {
+        console.warn(error)
+    }
+})
+
 
 // ─────────────────────────────────────────────
 // Define the TagMark

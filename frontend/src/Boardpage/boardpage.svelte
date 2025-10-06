@@ -13,7 +13,12 @@
     // import { push } from "svelte-spa-router";
     import { onDestroy } from "svelte";
     import { createEventDispatcher } from "svelte";
-    import { localToken, editorblocked, texttemplate } from "../stores.js";
+    import {
+        localToken,
+        editorblocked,
+        texttemplate,
+        currentUsergroup,
+    } from "../stores.js";
     import Contextmenu from "../contextmenu.svelte";
 
     import { querystring } from "svelte-spa-router";
@@ -171,6 +176,9 @@
                         ...record.expand?.usergroup,
                         id: record.usergroup,
                     };
+                    console.log("setting usergroup:");
+                    console.log(usergroup);
+                    $currentUsergroup = usergroup;
 
                     canedit = record.expand?.usergroup.users?.includes(
                         $localToken ? $localToken?.model.id : "???",

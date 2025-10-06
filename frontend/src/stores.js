@@ -13,4 +13,6 @@ export let editorblocked = writable(false)
 
 export let texttemplate = writable({})
 
+export let currentUsergroup = writable({})
+
 

@@ -6,7 +6,12 @@
     import Editor from "../editor/editor.svelte";
     import Card from "./card.svelte";
     import createNewCard from "../createNewCard.js";
-    import { localToken, editorblocked, server } from "../stores.js";
+    import {
+        localToken,
+        editorblocked,
+        server,
+        currentUsergroup,
+    } from "../stores.js";
     import { querystring } from "svelte-spa-router";
     import findMatchingEntries from "../findMatchingEntriesJSON";
     import Contextmenu from "../contextmenu.svelte";
@@ -41,6 +46,8 @@
                         `link,raw,done,datementions,` +
                         `authors,expand.tags.name,expand.tags.color,expand.tags.id,expand.board.name,expand.board.img,expand.board.collectionId,expand.board.color,expand.board.color,expand.board.expand.usergroup.name,expand.authors.id, expand.authors.avatar,expand.authors.name,expand.authors.collectionId`,
                 });
+                $currentUsergroup = res.expand.board.expand.usergroup;
+
                 console.log(res);
 
                 // console.log(res);
