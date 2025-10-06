@@ -22,7 +22,7 @@
     "@tiptap/starter-kit": "^3.6.2",
     "@tiptap/suggestion": "^3.6.5",
     "calendar-base": "^2.0.1",
-    "picmo": "^5.8.5",
+    "emoji-picker-element": "^1.27.0",
     "pocketbase": "^0.21.5",
     "sortablejs": "^1.15.6",
     "svelte-body": "^1.4.0",
