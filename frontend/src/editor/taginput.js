@@ -87,6 +87,8 @@ function findTags(doc) {
     // Match any #word without spaces and at least one char after #
     const regex = /#([^\s#]+)/g
 
+    console.log(doc)
+
     doc.descendants((node, pos) => {
         if (!node.isText) return
         const text = node.text || ''
