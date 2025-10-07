@@ -7,7 +7,7 @@ import findMatchingEntries from "./findMatchingEntriesJSON";
 export default async (usergroup, tiptapobj, authors, board, fileInputelement = null, currentfile = []) => {
 
 
-    const fileinputarray = Array.from(fileInputelement.files);
+    // const fileinputarray = Array.from(fileInputelement.files);
 
     const content = tiptapobj.raw
 
