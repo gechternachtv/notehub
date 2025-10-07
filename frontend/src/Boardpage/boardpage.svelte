@@ -111,8 +111,6 @@
     export let params = { id: board.id };
 
     let dragDisabled = false;
-    let fileelement;
-    let files;
 
     let editorOpen = false;
     //flip
@@ -297,8 +295,9 @@
             e.detail,
             [$localToken?.model.id],
             board.id,
-            fileelement,
         );
+
+        console.log(card);
 
         document.querySelector(".card-grid")?.setAttribute("style", ``);
 
@@ -319,19 +318,6 @@
         const boarddata = {
             cards: newcardlist,
         };
-
-        // const boardrecord = await pb
-        //     .collection("boards")
-        //     .update(board.id, boarddata);
-
-        // card.id = cardrecord.id
-
-        // cards = cardFilter([{...cardrecord,tags:card.tags},...cards])
-
-        // board = boardrecord
-        if (fileelement) {
-            fileelement.value = "";
-        }
 
         window.scrollTo(0, 0);
         editorblocked.set(false);
@@ -538,8 +524,6 @@
                             >
                                 <Editor
                                     defaultValue={editordefaultValue}
-                                    bind:files
-                                    bind:fileelement
                                     on:newcontent={handleNewCard}
                                 ></Editor>
                             </div>
@@ -555,8 +539,6 @@
                         >
                             <Editor
                                 defaultValue={editordefaultValue}
-                                bind:files
-                                bind:fileelement
                                 on:newcontent={handleNewCard}
                             ></Editor>
                         </div>

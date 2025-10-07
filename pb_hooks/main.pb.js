@@ -2,6 +2,8 @@
 
 routerAdd("POST", "/meta", (c) => {
 
+
+
     const apikeymodule = require(`${__hooks}/apikey.js`)
     const apikey = process.env.LINKPREVIEW ? process.env.LINKPREVIEW : apikeymodule.get()
 
@@ -53,6 +55,8 @@ routerAdd("POST", "/meta", (c) => {
 
     }
 
+
+
 })
 
 routerAdd("POST", "/createtags", (c) => {
@@ -60,40 +64,32 @@ routerAdd("POST", "/createtags", (c) => {
 
     const returnTags = []
 
-
     data.tags.forEach(tag => {
-        try {
-            const tagrecord = $app.dao().findFirstRecordByFilter(
-                "tags", `name = "${tag.name}" && usergroup = "${tag.usergroup}"`)
-            // console.log(JSON.stringify(tagrecord))
-            returnTags.push(tagrecord)
+
+
+        const collection = $app.dao().findCollectionByNameOrId("tags")
+
+        const record = new Record(collection)
+
+        const form = new RecordUpsertForm($app, record)
+
+        const newtagdata = {
+            "name": tag.name,
+            "color": "rgb(41, 72, 115)",
+            "usergroup": data.usergroup,
         }
-        catch (error) {
-
-            const collection = $app.dao().findCollectionByNameOrId("tags")
-
-            const record = new Record(collection)
-
-            const form = new RecordUpsertForm($app, record)
-
-            const newtagdata = {
-                "name": tag.name,
-                "color": tag.color,
-                "usergroup": tag.usergroup,
-            }
 
 
 
-            form.loadData(newtagdata)
+        form.loadData(newtagdata)
 
-            form.submit()
+        form.submit()
 
-            const tagrecord = $app.dao().findFirstRecordByFilter(
-                "tags", `name = "${tag.name}" && usergroup = "${tag.usergroup}"`)
-            // console.log(JSON.stringify(tagrecord))
-            returnTags.push(tagrecord)
+        const tagrecord = $app.dao().findFirstRecordByFilter(
+            "tags", `name = "${tag.name}" && usergroup = "${data.usergroup}"`)
+        console.log(JSON.stringify(tagrecord))
+        returnTags.push(tagrecord)
 
-        }
 
 
     })

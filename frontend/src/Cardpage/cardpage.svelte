@@ -284,7 +284,8 @@
                             clearAllonEnter={false}
                             on:editorready={oneditorready}
                         ></Editor> -->
-                        <Editor {defaultValue}></Editor>
+                        <Editor {defaultValue} on:newcontent={handleNewCard}
+                        ></Editor>
                     </Card>
                 </div>
             </div>

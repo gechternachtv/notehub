@@ -886,3 +886,7 @@ li[data-checked="false"]::before {
 .boardpagecontainer {
   border-radius: 10px;
 }
+
+.tiptap.ProseMirror img {
+  max-width: 100%;
+}

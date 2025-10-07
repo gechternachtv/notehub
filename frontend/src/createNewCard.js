@@ -1,38 +1,22 @@
-// import { bulletList } from "@milkdown/prose/schema-list"
-// import dateFormat from "./dateFormat"
-// import getFile from "./getFile"
-// import { pb } from "./pb.js"
+
 import { server } from "./stores"
 import { get } from "svelte/store"
 import findMatchingEntries from "./findMatchingEntriesJSON";
-// import colorhex from "./colorsnames"
 
-export default async (usergroup, markdownobj, authors, board, fileInputelement = null, currentfile = []) => {
 
+export default async (usergroup, tiptapobj, authors, board, fileInputelement = null, currentfile = []) => {
 
 
     const fileinputarray = Array.from(fileInputelement.files);
 
+    const content = tiptapobj.raw
 
-
-
-
-
-
-
-
-
-    const content = markdownobj.json.content
-    const mdtext = markdownobj.string
 
 
     function stringReplacer(originalString, stringsToRemove = []) {
 
         const foo = [...stringsToRemove].filter(e => e != "")
         let resultString = originalString
-        // console.log("😴")
-
-
         foo.forEach(element => {
             resultString = resultString.replaceAll(element, "")
         });
@@ -85,216 +69,164 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
         text: "",
         favico: "",
         raw: content,
-        file: currentfile,
         authors: authors,
         board: board,
         done: 0,
+        file: currentfile
         // datementions: ""
     }
 
-
-
-    if (fileinputarray.length) {
-        card.file = [...fileinputarray, ...currentfile]
+    //title
+    if (tiptapobj.card_title) {
+        card.title = tiptapobj.card_title
     }
 
+    //checklist
+    let totalCheckedNumber = 0
 
-    //done percentage
-    var totalBoxNumber = 0
-    var totalCheckedNumber = 0
+    const checklistitems = tiptapobj.card_checklistitem
 
-    const allBulletLists = content.filter(e => e.type === "bullet_list")
-
-    if (allBulletLists.length) {
-        allBulletLists.forEach(bulletList => {
-            bulletList.content?.forEach(checkbox => {
-                if (checkbox.type === "list_item") {
-                    totalBoxNumber += 1
-
-                    if (checkbox.attrs.checked) {
-                        totalCheckedNumber += 1
-                    }
-
-                }
-            })
-        })
-
-
-
-
-        if (totalBoxNumber > 0) {
-            //is checklist
-            const donePercentage = (totalCheckedNumber / totalBoxNumber) * 100;
-
-            if (donePercentage > 0) {
-                card.done = Math.floor(donePercentage)
-            } else {
-                card.done = 1
+    if (checklistitems?.length) {
+        checklistitems.forEach(bulletList => {
+            if (bulletList.dataChecked === "true") {
+                console.log(bulletList.dataChecked)
+                totalCheckedNumber += 1
             }
+        })
+        const donePercentage = (totalCheckedNumber / checklistitems.length) * 100;
+
+        if (donePercentage > 0) {
+            card.done = Math.floor(donePercentage)
         } else {
-            card.done = 0
+            card.done = 1
         }
-
-
     } else {
         card.done = 0
     }
 
 
 
-    //paragraph
-    const paragraph = content.filter(e => e.type === "paragraph").filter(e => e.content)
-
-    //title
-    const heading = content.find(e => e.type === "heading")
-
-
-
-
-    if (heading?.content) {
-        card.title = stringReplacer(heading.content[0].text)
-    }
-
-    if (paragraph) {
-
-        const words = mdtext.replaceAll("\n", " ").split(" ")
 
 
 
 
 
-        //link-check
-        // console.log(texts)
-        const url = words?.find(e => e.match(/https?:\/\/[^\s]+/))
-        // console.log(url)
+    if (tiptapobj.card_mainlink) {
+        if (validateUrl(tiptapobj.card_mainlink)) {
+
+            card.link = validateUrl(tiptapobj.card_mainlink)
+
+            if (card.link.endsWith('.png') ||
+                card.link.endsWith('.jpg') ||
+                card.link.endsWith('.jpeg') ||
+                card.link.endsWith('.gif') ||
+                card.link.endsWith('.bmp') ||
+                card.link.endsWith('.webp') ||
+                card.link.endsWith('.svg')) {
+
+                card.imglink = card.link
+            }
+            else {
+                try { //metadata
+
+                    const res = await (await fetch(`${get(server).url}/meta`, {
+                        method: "POST",
+                        mode: "cors", // no-cors, *cors, same-origin
+                        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                        credentials: "same-origin", // include, *same-origin, omit
+                        headers: {
+                            "Content-Type": "application/json",
+                            // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        redirect: "follow", // manual, *follow, error
+                        referrerPolicy: "no-referrer",
+                        body: JSON.stringify({ url: card.link })
+                    })).json()
+
+                    const tempDocument = document.implementation.createHTMLDocument();
+                    tempDocument.head.outerHTML = res
 
 
-        if (url) {
-            if (validateUrl(url)) {
+                    if (tempDocument.head) {
 
-                card.link = url
+                        meta.color = tempDocument.head.querySelector('meta[name="theme-color"]')?.getAttribute("content")
+                        meta.title = tempDocument.head.querySelector('title')?.innerHTML
 
-                if (url.endsWith('.png') ||
-                    url.endsWith('.jpg') ||
-                    url.endsWith('.jpeg') ||
-                    url.endsWith('.gif') ||
-                    url.endsWith('.bmp') ||
-                    url.endsWith('.webp') ||
-                    url.endsWith('.svg')) {
+                        meta.text = tempDocument.head.querySelector('meta[property="og:description"]')?.getAttribute("content")
 
-                    card.imglink = url
-                }
-                else {
-                    try { //metadata
-
-                        const res = await (await fetch(`${get(server).url}/meta`, {
-                            method: "POST",
-                            mode: "cors", // no-cors, *cors, same-origin
-                            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                            credentials: "same-origin", // include, *same-origin, omit
-                            headers: {
-                                "Content-Type": "application/json",
-                                // 'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            redirect: "follow", // manual, *follow, error
-                            referrerPolicy: "no-referrer",
-                            body: JSON.stringify({ url: card.link })
-                        })).json()
-
-                        const tempDocument = document.implementation.createHTMLDocument();
-                        tempDocument.head.outerHTML = res
-
-
-                        if (tempDocument.head) {
-
-                            meta.color = tempDocument.head.querySelector('meta[name="theme-color"]')?.getAttribute("content")
-                            meta.title = tempDocument.head.querySelector('title')?.innerHTML
-
-                            meta.text = tempDocument.head.querySelector('meta[property="og:description"]')?.getAttribute("content")
-
-                            //favico
-                            try {
-                                if (validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)) {
-                                    meta.favico = validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)
-                                } else if (validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)) {
-                                    meta.favico = validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)
-                                }
-                            } catch (err) {
-                                console.warn(err)
+                        //favico
+                        try {
+                            if (validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)) {
+                                meta.favico = validateUrl(tempDocument.head.querySelector('link[rel="icon"]')?.getAttribute("href"), card.link)
+                            } else if (validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)) {
+                                meta.favico = validateUrl(tempDocument.head.querySelector(`link[rel="shortcut icon"]`)?.getAttribute("href"), card.link)
                             }
-                            //image
-                            try {
-                                if (validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)) {
-                                    meta.img = validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)
-                                } else if (validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)) {
-                                    meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
-                                }
-
-                            } catch (err) {
-                                console.warn(err)
+                        } catch (err) {
+                            console.warn(err)
+                        }
+                        //image
+                        try {
+                            if (validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)) {
+                                meta.img = validateUrl(tempDocument?.head?.querySelector('meta[property="og:image"]')?.getAttribute("content"), card.link)
+                            } else if (validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)) {
+                                meta.img = validateUrl(tempDocument?.head?.querySelector('link[rel="image_src"]')?.getAttribute("content"), card.link)
                             }
 
+                        } catch (err) {
+                            console.warn(err)
                         }
 
-
-
-
-                    } catch (error) {
-                        console.warn(error)
                     }
+
+
+
+
+                } catch (error) {
+                    console.warn(error)
                 }
-
-
-
-
             }
-        }
-        //title
-        if (card.title === "" && meta.title /*link metadata*/) {
-            card.title = meta.title
-        }
 
 
 
-
-
-        const datementionsWords = words.filter(e => e.startsWith("@"))
-        const datesearchMentions = []
-
-        for (let index = 0; index < datementionsWords.length; index++) {
-            const e = datementionsWords[index];
-            // search tag
-            const namewithouthash = datementionsWords[index].replace(/^@/, '')
-            datesearchMentions.push(namewithouthash)
 
         }
+    }
+    //title
+    if (card.title === "" && meta.title /*link metadata*/) {
+        card.title = meta.title
+    }
 
 
-        card.datementions = datesearchMentions.toString()
+
+
+    //data mentions
+
+    if (tiptapobj.card_datementions) {
+        card.datementions = tiptapobj.card_datementions.map(e => e.dataDate).toString()
+    }
 
 
 
 
 
-        //tags
-        const tags = []
 
-        const tagWords = words.filter(e => e.startsWith("#"))
-        const searchTags = []
-        for (let index = 0; index < tagWords.length; index++) {
-            const e = tagWords[index];
-            // search tag
-            const namewithouthash = tagWords[index].replace(/^#/, '')
-            const name = namewithouthash.split("-").length > 1 ? namewithouthash.split("-")[0] : namewithouthash
-            const color = namewithouthash.split("-").length > 1 ? namewithouthash.split("-")[1] : `#294873`
+    //tags
 
-            searchTags.push({ name: name, color: color, usergroup: usergroup })
+    if (tiptapobj.card_tags.length) {
+        const oldtags = []
+        const newtags = []
 
-        }
 
+        tiptapobj.card_tags.forEach(tag => {
+            if (tag.dataTagId) {
+                oldtags.push({ name: tag.dataName, id: tag.dataTagId })
+            } else {
+                newtags.push({ name: tag.dataName })
+            }
+        })
 
         //
-        if (searchTags.length) {
+        if (newtags.length) {
 
             const res = await (await fetch(`${get(server).url}/createtags`, {
                 method: "POST",
@@ -307,28 +239,18 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
                 },
                 redirect: "follow", // manual, *follow, error
                 referrerPolicy: "no-referrer",
-                body: JSON.stringify({ tags: searchTags })
+                body: JSON.stringify({ usergroup: usergroup, tags: newtags })
             })).json()
 
-
-            card.tags = res
-
-
+            console.log(oldtags, res)
+            card.tags = [...oldtags, ...res]
 
 
-
-
+        } else {
+            card.tags = oldtags
         }
 
-
-
-
-
-
-
-
-        //img
-
+    }
 
 
 
@@ -337,191 +259,201 @@ export default async (usergroup, markdownobj, authors, board, fileInputelement =
 
 
 
+    //img
 
-        const matches = findMatchingEntries(card.raw, d => {
+
+
+
+
+
+
+
+
+
+
+    const matches = findMatchingEntries(card.raw, d => {
+        if (d) {
+            if (typeof d === 'string') {
+                if (d.startsWith('data:image/')) {
+                    return true
+                }
+            }
+        }
+
+    });
+
+
+    const imagedataarray = []
+
+    for (let index = 0; index < matches.length; index++) {
+        const { parent, keyInParent } = matches[index];
+
+        const imgTitle = 'image';
+        const src = parent[keyInParent];
+        const imgExtension = src.substring(src.lastIndexOf('.') + 1);
+
+        try {
+            const blob = await (await fetch(src)).blob();
+
+            const newfile = new File([blob], `${index}`, {
+                type: blob.type,
+            });
+
+
+
+            parent[keyInParent] = `imagedata[${card.file.length + index}]`
+
+            imagedataarray[index] = newfile; //
+
+        } catch (error) {
+            console.error("Error fetching image:", error);
+        }
+    }
+
+
+
+
+    if (card.file) {
+        console.log("cardfile exists")
+        card.file = [...card.file, ...imagedataarray]
+        console.log(card.file)
+    } else {
+        card.file = imagedataarray
+    }
+
+
+
+
+
+    if (meta.img) {
+        card.imglink = meta.img
+    }
+
+
+
+
+
+
+
+
+
+    if (card.imglink === "" && card.file?.length === 0) {
+        console.log("IMAGES!!!")
+        const imagesLinks = findMatchingEntries(card.raw, d => {
             if (d) {
-                if (typeof d === 'string') {
-                    if (d.startsWith('data:image/')) {
-                        return true
-                    }
+                if (d.type === "image") {
+
+                    return true
+
                 }
             }
 
         });
 
+        if (imagesLinks.length) {
+            console.log(imagesLinks[0])
+            if (imagesLinks[0].value?.attrs?.src) {
+                if (imagesLinks[0].value.attrs.src.length < 200) {
+                    card.imglink = imagesLinks[0].value.attrs.src
+                }
 
-        const imagedataarray = []
-
-        for (let index = 0; index < matches.length; index++) {
-            const { parent, keyInParent } = matches[index];
-
-            const imgTitle = 'image';
-            const src = parent[keyInParent];
-            const imgExtension = src.substring(src.lastIndexOf('.') + 1);
-
-            try {
-                const blob = await (await fetch(src)).blob();
-
-                const newfile = new File([blob], `${index}`, {
-                    type: blob.type,
-                });
-
-
-
-                parent[keyInParent] = `imagedata[${card.file.length + index}]`
-
-                imagedataarray[index] = newfile; //
-
-            } catch (error) {
-                console.error("Error fetching image:", error);
             }
         }
-
-
-
-
-        if (card.file) {
-            console.log("cardfile exists")
-            card.file = [...card.file, ...imagedataarray]
-            console.log(card.file)
-        } else {
-            card.file = imagedataarray
-        }
-
-
-
-
-
-        if (meta.img) {
-            card.imglink = meta.img
-        }
-
-
-
-
-
-
-
-
-
-        if (card.imglink === "" && card.file?.length === 0) {
-            console.log("IMAGES!!!")
-            const imagesLinks = findMatchingEntries(card.raw, d => {
-                if (d) {
-                    if (d.type === "image") {
-
-                        return true
-
-                    }
-                }
-
-            });
-
-            if (imagesLinks.length) {
-                console.log(imagesLinks[0])
-                if (imagesLinks[0].value?.attrs?.src) {
-                    if (imagesLinks[0].value.attrs.src.length < 200) {
-                        card.imglink = imagesLinks[0].value.attrs.src
-                    }
-
-                }
-            }
-
-        }
-
-
-
-
-
-
-
-
-        //favico
-        if (meta.favico) {
-            card.favico = meta.favico
-        }
-        //color
-        if (meta.color) {
-            card.color = meta.color
-        }
-
-
-
-
-        const dataWords = words.filter(e => e.startsWith("$"))
-        dataWords.forEach(dataWord => {
-            try {
-
-
-                const name = dataWord.replace("$", '').split(":")[0]
-                const data = dataWord.replace("$", '').split(":")[1]
-
-                function isNumber(str) {
-                    return !isNaN(str) && str.trim() !== '';
-                }
-
-
-                if (name == "done") {
-                    if (isNumber(data)) {
-                        card[name] = Math.floor(Number(data));
-                        card.text = card.text.replace(dataWord, "")
-                    } else if (data.includes("/")) {
-                        let [before, after] = data.split("/");
-                        if (isNumber(before) && isNumber(after) && after != "0") {
-                            if (Number(after) > Number(before)) {
-                                const fraction = Number(before) / Number(after);
-                                const percentage = fraction * 100;
-                                card[name] = Math.floor(percentage);
-                            } else {
-                                card[name] = 100;
-                            }
-
-                            card.text = card.text.replace(dataWord, "")
-                        }
-                    }
-
-                }
-                if (name == "color") {
-                    card[name] = data;
-                    card.text = card.text.replace(dataWord, "")
-                }
-
-
-            } catch (error) {
-                console.warn(error)
-            }
-
-        })
-
-
-        //text
-
-
-        const textWithoutStuff = stringReplacer(mdtext, [...dataWords, card.link, (card.link ? "" : card.title), ...card.tags.map(e => `#${e.name}`), ...card.tags.map(e => `-${e.color}`)])
-        if (textWithoutStuff.replace(/[^a-zA-Z0-9]/g, '').length > 0) {
-
-            card.text = textWithoutStuff.substring(0, 150)
-        } else if (meta.text) {
-            card.text = meta.text.substring(0, 150)
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
+
+
+
+
+
+
+
+
+    //favico
+    if (meta.favico) {
+        card.favico = meta.favico
+    }
+    //color
+    if (meta.color) {
+        card.color = meta.color
+    }
+
+
+
+
+    // const dataWords = words.filter(e => e.startsWith("$"))
+    // dataWords.forEach(dataWord => {
+    //     try {
+
+
+    //         const name = dataWord.replace("$", '').split(":")[0]
+    //         const data = dataWord.replace("$", '').split(":")[1]
+
+    //         function isNumber(str) {
+    //             return !isNaN(str) && str.trim() !== '';
+    //         }
+
+
+    //         if (name == "done") {
+    //             if (isNumber(data)) {
+    //                 card[name] = Math.floor(Number(data));
+    //                 card.text = card.text.replace(dataWord, "")
+    //             } else if (data.includes("/")) {
+    //                 let [before, after] = data.split("/");
+    //                 if (isNumber(before) && isNumber(after) && after != "0") {
+    //                     if (Number(after) > Number(before)) {
+    //                         const fraction = Number(before) / Number(after);
+    //                         const percentage = fraction * 100;
+    //                         card[name] = Math.floor(percentage);
+    //                     } else {
+    //                         card[name] = 100;
+    //                     }
+
+    //                     card.text = card.text.replace(dataWord, "")
+    //                 }
+    //             }
+
+    //         }
+    //         if (name == "color") {
+    //             card[name] = data;
+    //             card.text = card.text.replace(dataWord, "")
+    //         }
+
+
+    //     } catch (error) {
+    //         console.warn(error)
+    //     }
+
+    // })
+
+
+    //text
+
+
+    const textWithoutStuff = stringReplacer(tiptapobj.text, [card.link, (card.link ? "" : card.title), ...card.tags.map(e => `#${e.name}`)])
+    if (textWithoutStuff.replace(/[^a-zA-Z0-9]/g, '').length > 0) {
+        card.text = textWithoutStuff.substring(0, 150)
+    } else if (meta.text) {
+        card.text = meta.text.substring(0, 150)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -11,8 +11,14 @@
 	import { TagHighlighter } from "./taginput.js";
 	import { tagSuggestions } from "../stores.js";
 	import Picmobutton from "../Picmo/picmobutton.svelte";
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher();
+
 	let element;
 	let editor;
+
+	let fileInput;
 
 	export let defaultValue = {
 		type: "json",
@@ -89,18 +95,20 @@
 			const card_datementions = Array.from(
 				element.querySelectorAll(".tiptap.ProseMirror .date-mark"),
 			).map((e) => {
-				return { dataChecked: e.getAttribute("data-date") };
+				return { dataDate: e.getAttribute("data-date") };
 			});
-			console.log({
+
+			const newcardcontent = {
+				raw: editor.getJSON().content,
+				text: element.querySelector(".tiptap.ProseMirror").innerText,
 				card_images,
 				card_tags,
 				card_checklistitem,
 				card_title,
 				card_mainlink,
 				card_datementions,
-			});
-
-			console.log(editor.getJSON().content);
+			};
+			dispatch("newcontent", newcardcontent);
 		}
 	};
 
@@ -118,13 +126,32 @@
 			}
 		}
 	};
+
+	const handleImageFile = (event) => {
+		const file = event.target.files?.[0];
+		if (!file || !editor) return;
+		if (!file.type.startsWith("image/")) {
+			alert("Please select an image file");
+			return;
+		}
+
+		const reader = new FileReader();
+		reader.onload = () => {
+			const src = reader.result;
+			editor.chain().focus().setImage({ src, alt: file.name }).run();
+			event.target.value = "";
+		};
+		reader.readAsDataURL(file);
+	};
 </script>
 
 <main>
-	<Picmobutton allowcuston={true} on:emojiselect={emojiSelect}></Picmobutton>
 	{#if editor}
 		<div class="control-group">
 			<div class="button-group">
+				<Picmobutton allowcuston={true} on:emojiselect={emojiSelect}
+				></Picmobutton>
+
 				<button
 					on:click={() =>
 						console.log &&
@@ -204,11 +231,24 @@
 				>
 					Purple
 				</button>
+
+				<!-- 👇 Added button + hidden input -->
+				<button on:click={() => fileInput.click()}>
+					Insert image
+				</button>
+				<input
+					type="file"
+					accept="image/*"
+					bind:this={fileInput}
+					on:change={handleImageFile}
+					style="display: none"
+				/>
 			</div>
 		</div>
 	{/if}
+
 	<div class="editorcontainer" bind:this={element} />
-	<button on:click={handlesend}></button>
+	<button on:click={handlesend}>send!</button>
 
 	{#if $tagSuggestions}
 		{#if $tagSuggestions.length}
