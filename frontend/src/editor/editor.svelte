@@ -15,10 +15,12 @@
 
 	const dispatch = createEventDispatcher();
 
+	let colorinput;
 	let element;
 	let editor;
 
 	let fileInput;
+	let changeColor = false;
 
 	export let defaultValue = {
 		type: "json",
@@ -159,7 +161,7 @@
 					disabled={!editor.can().chain().focus().toggleBold().run()}
 					class={editor.isActive("bold") ? "is-active" : ""}
 				>
-					Bold
+					B
 				</button>
 				<button
 					on:click={() => editor.chain().focus().toggleItalic().run()}
@@ -171,34 +173,7 @@
 						.run()}
 					class={editor.isActive("italic") ? "is-active" : ""}
 				>
-					Italic
-				</button>
-				<button
-					on:click={() => editor.chain().focus().toggleStrike().run()}
-					disabled={!editor
-						.can()
-						.chain()
-						.focus()
-						.toggleStrike()
-						.run()}
-					class={editor.isActive("strike") ? "is-active" : ""}
-				>
-					Strike
-				</button>
-
-				<button
-					on:click={() =>
-						editor.chain().focus().toggleBulletList().run()}
-					class={editor.isActive("bulletList") ? "is-active" : ""}
-				>
-					Bullet list
-				</button>
-				<button
-					on:click={() =>
-						editor.chain().focus().toggleOrderedList().run()}
-					class={editor.isActive("orderedList") ? "is-active" : ""}
-				>
-					Ordered list
+					I
 				</button>
 
 				<button
@@ -206,36 +181,43 @@
 						editor.chain().focus().toggleBlockquote().run()}
 					class={editor.isActive("blockquote") ? "is-active" : ""}
 				>
-					Blockquote
+					q
 				</button>
 				<button
 					on:click={() =>
 						editor.chain().focus().setHorizontalRule().run()}
 				>
-					Horizontal rule
+					-
 				</button>
 
 				<button
 					on:click={() => editor.chain().focus().undo().run()}
 					disabled={!editor.can().chain().focus().undo().run()}
 				>
-					Undo
+					z
 				</button>
-
 				<button
-					on:click={() =>
-						editor.chain().focus().setColor("#958DF1").run()}
-					class={editor.isActive("textStyle", { color: "#958DF1" })
-						? "is-active"
-						: ""}
+					on:click={() => {
+						changeColor = !changeColor;
+						if (changeColor) {
+							if (colorinput?.value) {
+								editor
+									.chain()
+									.focus()
+									.setColor(colorinput.value)
+									.run();
+							}
+						} else {
+							editor.chain().focus().unsetColor().run();
+						}
+					}}
+					class:isactive={changeColor}
 				>
-					Purple
+					c
 				</button>
+				<input bind:this={colorinput} type="color" />
 
-				<!-- 👇 Added button + hidden input -->
-				<button on:click={() => fileInput.click()}>
-					Insert image
-				</button>
+				<button on:click={() => fileInput.click()}> img </button>
 				<input
 					type="file"
 					accept="image/*"
