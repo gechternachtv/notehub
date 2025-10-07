@@ -146,7 +146,7 @@
   }
 
   .maincontainer {
-    background: var(--container-bg);
+    background: var(--maincontainer-bg);
     color: var(--main-font-1);
     margin: auto;
     max-width: 1440px;

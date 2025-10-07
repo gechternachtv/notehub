@@ -1,12 +1,13 @@
 <script>
     import { createEventDispatcher } from "svelte";
     import Picmo from "./picmo.svelte";
+
+    export let allowcuston = false;
     let showPicmo = false;
 
     const dispatch = createEventDispatcher();
 
     const handleEmojiselect = (e) => {
-        console.log(e.detail);
         showPicmo = false;
         dispatch("emojiselect", e.detail);
     };
@@ -25,7 +26,7 @@
         {/if}
     </button>
     {#if showPicmo}
-        <Picmo on:emojiselect={handleEmojiselect} />
+        <Picmo {allowcuston} on:emojiselect={handleEmojiselect} />
     {/if}
 </main>
 

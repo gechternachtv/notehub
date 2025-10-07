@@ -64,7 +64,6 @@
 		cursor: pointer;
 	}
 
-
 	/* :global(.yotsuba) {
 			--card-border:#00000018;
 --alert:#b30505;
@@ -107,6 +106,7 @@
 		--menu-col: var(--button-color);
 		--mentions: #e04001;
 		--createdon: var(--main-font-2);
+		--maincontainer-bg: #fff8f0;
 	}
 
 	:global(.yotsuba-b) {
@@ -123,6 +123,7 @@
 		--header-color: #000;
 		--card-bg: #d6daf0;
 		--container-bg: #ffe;
+		--maincontainer-bg: #ffe;
 		--gradient-col-1: #d1d5ee;
 		--gradient-col-2: #ffe;
 		--body-background: linear-gradient(
@@ -157,6 +158,7 @@
 		--button-bg: #0f9998;
 		--card-bg: #ebe4cb;
 		--container-bg: #f3f0e4;
+		--maincontainer-bg: #f3f0e4;
 		--gradient-col-1: #f3f0e4;
 		--link-col: var(--button-bg);
 		--menu-bg: #24664a;
@@ -179,6 +181,7 @@
 		--header-color: white;
 		--card-bg: #f8e3ca;
 		--container-bg: #fff3e6;
+		--maincontainer-bg: #fff3e6;
 		--gradient-col-1: #fff9f5;
 		--gradient-col-2: #fff3e6;
 		--body-background: #ffead3;
@@ -205,6 +208,7 @@
 		--header-color: white;
 		--card-bg: #ece9e3;
 		--container-bg: #dad4c8;
+		--maincontainer-bg: #dad4c8;
 		--gradient-col-1: #dddcd8;
 		--gradient-col-2: #dddcd8;
 		--body-background: #606464;
@@ -217,7 +221,7 @@
 		--createdon: var(--main-font-2);
 	}
 
-:global(.bluesky) {
+	:global(.bluesky) {
 		--card-border: #00000018;
 		--alert: #d3152e;
 		--news: #cb4e16;
@@ -230,6 +234,7 @@
 		--header-color: #fff;
 		--card-bg: #eee;
 		--container-bg: #fafeff;
+		--maincontainer-bg: #fafeff;
 		--gradient-col-1: #eef2f3;
 		--gradient-col-2: #e8e8e8;
 		--body-background: linear-gradient(
@@ -260,6 +265,7 @@
 		--header-color: #fff;
 		--card-bg: #efefef;
 		--container-bg: #fff;
+		--maincontainer-bg: #fff;
 		--gradient-col-1: #f0f0f0;
 		--gradient-col-2: #f0f0f0;
 		--body-background: #f7f7f7;
@@ -286,6 +292,7 @@
 		--header-color: #fff;
 		--card-bg: #383838;
 		--container-bg: #1c1c1c;
+		--maincontainer-bg: #121212;
 		--gradient-col-1: #121212;
 		--gradient-col-2: #343434;
 		--body-background: #343434;
@@ -312,11 +319,11 @@
 		--button-color: #ffe;
 		--card-bg: #eaeaea;
 		--container-bg: #fff;
+		--maincontainer-bg: transparent;
 		--gradient-col-1: #f5f5f5;
 		--gradient-col-2: #fff3e6;
 		--body-background: url("https://zonaplankton.net/backgrounds/page-pattern-default.png");
-		
-	
+
 		--header-color: white;
 
 		--browser-color: var(--header-bg);
@@ -331,14 +338,13 @@
 		--board-title-color: #313131;
 	}
 
-	:global(.plankton nav, .plankton .absolute.controls){
-  		background: var(--news) !important;
+	:global(.plankton nav, .plankton .absolute.controls) {
+		background: var(--news) !important;
 	}
-	:global(.plankton .absolute.controls button){
+	:global(.plankton .absolute.controls button) {
 		background: #fff !important;
 		color: var(--header-bg) !important;
 	}
-
 
 	:global(.pxtone) {
 		--card-border: #ffffff30;
@@ -351,6 +357,7 @@
 		--button-color: #0e0e2d;
 		--card-bg: #000010;
 		--container-bg: #1c1b22;
+		--maincontainer-bg: transparent;
 		--gradient-col-1: #272535;
 		--gradient-col-2: #3b3858;
 		--body-background: url("https://zonaplankton.net/backgrounds/sidebar-pattern-pxtone.png");
@@ -360,7 +367,7 @@
 		--board-title-color: var(--main-font-1);
 		--browser-color: #343255;
 		--link-col: var(--button-bg);
-		--menu-bg: #363456;
+		--menu-bg: #2c2b48;
 		--menu-col: var(--button-bg);
 		--mentions: var(--alert);
 		--createdon: var(--main-font-2);
@@ -377,7 +384,8 @@
 		--button-color: #000;
 		--card-bg: #0d0d0d;
 		--container-bg: #202020;
-		--gradient-col-1: #0b0b0b;
+		--maincontainer-bg: transparent;
+		--gradient-col-1: #282828;
 		--gradient-col-2: #737373;
 		--body-background: black;
 		--header-bg: #131313;
@@ -406,6 +414,7 @@
 		--header-color: #bdacac;
 		--card-bg: #5c6060;
 		--container-bg: #7e7e7e;
+		--maincontainer-bg: #7e7e7e;
 		--gradient-col-1: #a8a8a8;
 		--gradient-col-2: #b7b7b7;
 		--body-background: #606464;
@@ -437,6 +446,7 @@
 		--header-color: #353535;
 		--card-bg: #8a9393;
 		--container-bg: #babbae;
+		--maincontainer-bg: #babbae;
 		--gradient-col-1: #47545d;
 		--gradient-col-2: #47545d;
 		--body-background: #ffead3;
@@ -449,7 +459,7 @@
 		--createdon: var(--main-font-2);
 	}
 	:global(.dfwm) {
-		--gradient-col-1: #368c8c;
+		--gradient-col-1: #82b9b9;
 
 		--card-border: #00000018;
 		--alert: #b30505;
@@ -464,7 +474,7 @@
 		--header-color: #353535;
 		--card-bg: #8a9393;
 		--container-bg: #b4b9ad;
-
+		--maincontainer-bg: #b4b9ad;
 		--body-background: #ffead3;
 		--board-title-color: #47545d;
 		--browser-color: #231842;
@@ -533,11 +543,7 @@
 
 		--main-font-2: #fff;
 
-		
-
-		
 		--gradient-col-2: #7c8d94;
-		
 
 		--header-color: var(--main-font-1);
 		--board-title-color: var(--main-font-1);
@@ -546,7 +552,6 @@
 
 		--menu-col: #9eacb3;
 		--mentions: #08b2c4;
-
 
 		--main-font-1: #ececec;
 		--button-color: #ececec;
@@ -561,7 +566,7 @@
 	}
 
 	:global(.ghostequip .maincontainer) {
-		background:transparent !important;
+		background: transparent !important;
 	}
 
 	:global(.ghostequip .instancebox) {
@@ -577,24 +582,32 @@
 		background: #8c8c8c;
 	}
 
-	:global(.ghostequip .boardpagecontainer){
-		background:transparent !important;
+	:global(.ghostequip .boardpagecontainer) {
+		background: transparent !important;
 	}
 	:global(.ghostequip .boardpagecontainer .board-header) {
-		color:var(--button-bg) !important
+		color: var(--button-bg) !important;
 	}
 
-	:global(.ghostequip .board-container){
-  		background: #ebecda !important;
+	:global(.ghostequip .board-container) {
+		background: #ebecda !important;
 	}
-	:global(.ghostequip .board-description, .ghostequip .card .board-header,.ghostequip .duedate,.ghostequip .title,.ghostequip .minicard-container .updates, .ghostequip .date, .ghostequip .column ) {
+	:global(
+			.ghostequip .board-description,
+			.ghostequip .card .board-header,
+			.ghostequip .duedate,
+			.ghostequip .title,
+			.ghostequip .minicard-container .updates,
+			.ghostequip .date,
+			.ghostequip .column
+		) {
 		color: var(--createdon) !important;
 	}
-	:global(.ghostequip .tablecard_id a){
+	:global(.ghostequip .tablecard_id a) {
 		color: var(--createdon) !important;
 	}
-	:global(.ghostequip .card)  {
-  		color:var(--button-bg)
+	:global(.ghostequip .card) {
+		color: var(--button-bg);
 	}
 
 	:global(.goldSrc) {
@@ -611,6 +624,7 @@
 		--header-color: #939989;
 		--card-bg: #4c5945;
 		--container-bg: #252f1c;
+		--maincontainer-bg: #252f1c;
 		--gradient-col-1: #32392c;
 		--gradient-col-2: #b7b7b7;
 		--body-background: #606464;
@@ -660,6 +674,7 @@
 		--header-color: #262626;
 		--card-bg: #e4e4e4;
 		--container-bg: #ccc;
+		--maincontainer-bg: #ccc;
 		--gradient-col-1: #e1e1e1;
 		--gradient-col-2: #757f86;
 		--board-title-color: #1b153a;
@@ -671,51 +686,49 @@
 		--createdon: var(--main-font-2);
 	}
 
-
 	:global(.paperscan .card) {
 		background-color: rgba(230, 239, 255, 0.2);
 	}
 
 	:global(.paperscan .board-container) {
- 		backdrop-filter: blur(16px) saturate(180%) !important;
+		backdrop-filter: blur(16px) saturate(180%) !important;
 		background-color: #e6efff69 !important;
 	}
 	:global(.paperscan nav .home) {
-		color:var(--button-bg) !important
+		color: var(--button-bg) !important;
 	}
-	:global(.paperscan .servername){
-		background:var(--button-bg) !important
+	:global(.paperscan .servername) {
+		background: var(--button-bg) !important;
 	}
 
 	:global(.paperscan .workspacepage .board-container > main) {
 		background: transparent !important;
 	}
 
-
-
 	:global(.cupid) {
-		--card-border:#00000018;
-		--alert:#b30505;
-		--news:#b30505;
-		--complete:#00bd6d;
-		--complete-col:#ff8f00;
-		--header-bg:#f06a82;
-		--main-font-1:#9d0000;
-		--main-font-2:#502020;
-		--button-bg:#65a2d3;
-		--button-color:#fff;
-		--header-color:#fff;
-		--card-bg:#ffd6d6;
-		--container-bg:#ffeff6;
-		--gradient-col-1:#ffdee2;
-		--gradient-col-2:#ffe9e9;
-		--body-background:#fff5ea;
-		--board-title-color:#881515;
-		--browser-color:#ffdee2;
-		--link-col:#f00;
-		--menu-bg:#ffe5ea;
-		--menu-col:#6f3838;
-		--mentions:#3902ff;
-		--createdon:#ff15da;
+		--card-border: #00000018;
+		--alert: #b30505;
+		--news: #b30505;
+		--complete: #00bd6d;
+		--complete-col: #ff8f00;
+		--header-bg: #f06a82;
+		--main-font-1: #9d0000;
+		--main-font-2: #502020;
+		--button-bg: #65a2d3;
+		--button-color: #fff;
+		--header-color: #fff;
+		--card-bg: #ffd6d6;
+		--container-bg: #ffeff6;
+		--maincontainer-bg: #ffeff6;
+		--gradient-col-1: #ffdee2;
+		--gradient-col-2: #ffe9e9;
+		--body-background: #fff5ea;
+		--board-title-color: #881515;
+		--browser-color: #ffdee2;
+		--link-col: #f00;
+		--menu-bg: #ffe5ea;
+		--menu-col: #6f3838;
+		--mentions: #3902ff;
+		--createdon: #ff15da;
 	}
 </style>

@@ -24,48 +24,6 @@
 
     let cssel;
 
-    onMount(() => {
-        cssel.classList.add("customCardCss");
-        const codeBlock = card.raw.find((e) => e.attrs?.language === "style");
-        const codeBlockImg = card.raw.find((e) => e.attrs?.language === "img");
-        const codeBlockheadings = card.raw.find(
-            (e) => e.attrs?.language === "h",
-        );
-        const codeBlockp = card.raw.find((e) => e.attrs?.language === "p");
-
-        if (codeBlock) {
-            cssel.innerHTML += `
-
-    .milkdown {
-        ${codeBlock.content.map((a) => a.text).join("\n")}
-    }`;
-        }
-
-        if (codeBlockImg) {
-            cssel.innerHTML += `
-
-    .milkdown img{
-        ${codeBlockImg.content.map((a) => a.text).join("\n")}
-    }`;
-        }
-
-        if (codeBlockheadings) {
-            cssel.innerHTML += `
-
-    .milkdown h1,.milkdown h2,.milkdown h3,.milkdown h4,.milkdown h5,.milkdown h6,.milkdown h7,.milkdown h8{
-        ${codeBlockheadings.content.map((a) => a.text).join("\n")}
-    }`;
-        }
-
-        if (codeBlockp) {
-            cssel.innerHTML += `
-
-    .milkdown p{
-        ${codeBlockp.content.map((a) => a.text).join("\n")}
-    }`;
-        }
-    });
-
     function closestDate(dates) {
         console.log(dates);
         if (dates.length) {

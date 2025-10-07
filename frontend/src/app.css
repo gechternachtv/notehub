@@ -882,3 +882,7 @@ li[data-checked="false"]::before {
   border-radius: 10px;
   font-weight: bold;
 }
+
+.boardpagecontainer {
+  border-radius: 10px;
+}

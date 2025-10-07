@@ -15,12 +15,15 @@
 	let editor;
 
 	export let defaultValue = {
-		type: "doc",
-		content: [
-			{
-				type: "paragraph",
-			},
-		],
+		type: "json",
+		value: {
+			type: "doc",
+			content: [
+				{
+					type: "paragraph",
+				},
+			],
+		},
 	};
 
 	$tagSuggestions = [];
@@ -32,7 +35,6 @@
 				Color.configure({ types: [TextStyle.name, ListItem.name] }),
 				TextStyle.configure({ types: [ListItem.name] }),
 				StarterKit,
-				Image,
 				Image.configure({
 					inline: true,
 					allowBase64: true,
@@ -41,7 +43,6 @@
 					},
 				}),
 				TaskList,
-				TaskItem,
 				TaskItem.configure({
 					HTMLAttributes: {
 						class: "task-item",
@@ -55,24 +56,72 @@
 			},
 		});
 
-		editor.commands.setContent(defaultValue);
+		editor.commands.setContent(defaultValue.value.content);
 	});
 
 	const handlesend = () => {
 		if (editor) {
-			console.log(editor.getJSON());
+			const card_images = Array.from(
+				element.querySelectorAll(".tiptap.ProseMirror img"),
+			).map((e) => {
+				return { src: e.src };
+			});
+
+			const card_tags = Array.from(
+				element.querySelectorAll(".tiptap.ProseMirror .tag-mark"),
+			).map((e) => {
+				return {
+					dataName: e.getAttribute("data-name"),
+					dataTagId: e.getAttribute("data-tag-id"),
+				};
+			});
+			const card_checklistitem = Array.from(
+				element.querySelectorAll(".tiptap.ProseMirror .task-item"),
+			).map((e) => {
+				return { dataChecked: e.getAttribute("data-checked") };
+			});
+			const card_title = element.querySelector(
+				".tiptap.ProseMirror h1",
+			)?.innerText;
+			const card_mainlink = element.querySelector(
+				".tiptap.ProseMirror a",
+			)?.href;
+			const card_datementions = Array.from(
+				element.querySelectorAll(".tiptap.ProseMirror .date-mark"),
+			).map((e) => {
+				return { dataChecked: e.getAttribute("data-date") };
+			});
+			console.log({
+				card_images,
+				card_tags,
+				card_checklistitem,
+				card_title,
+				card_mainlink,
+				card_datementions,
+			});
+
+			console.log(editor.getJSON().content);
 		}
 	};
 
 	const emojiSelect = (e) => {
 		if (editor) {
-			editor.chain().focus().setEmoji("zap").run;
+			console.log(e.detail);
+			if (e.detail.unicode) {
+				editor.chain().focus().insertContent(e.detail.unicode).run();
+			} else if (e.detail.emoji?.url) {
+				editor
+					.chain()
+					.focus()
+					.setImage({ src: e.detail.emoji.url })
+					.run();
+			}
 		}
 	};
 </script>
 
 <main>
-	<Picmobutton on:emojiselect={emojiSelect}></Picmobutton>
+	<Picmobutton allowcuston={true} on:emojiselect={emojiSelect}></Picmobutton>
 	{#if editor}
 		<div class="control-group">
 			<div class="button-group">
@@ -109,106 +158,7 @@
 				>
 					Strike
 				</button>
-				<button
-					on:click={() => editor.chain().focus().toggleCode().run()}
-					disabled={!editor.can().chain().focus().toggleCode().run()}
-					class={editor.isActive("code") ? "is-active" : ""}
-				>
-					Code
-				</button>
-				<button
-					on:click={() =>
-						editor.chain().focus().unsetAllMarks().run()}
-					>Clear marks</button
-				>
-				<button
-					on:click={() => editor.chain().focus().clearNodes().run()}
-					>Clear nodes</button
-				>
-				<button
-					on:click={() => editor.chain().focus().setParagraph().run()}
-					class={editor.isActive("paragraph") ? "is-active" : ""}
-				>
-					Paragraph
-				</button>
-				<button
-					on:click={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHeading({ level: 1 })
-							.run()}
-					class={editor.isActive("heading", { level: 1 })
-						? "is-active"
-						: ""}
-				>
-					H1
-				</button>
-				<button
-					on:click={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHeading({ level: 2 })
-							.run()}
-					class={editor.isActive("heading", { level: 2 })
-						? "is-active"
-						: ""}
-				>
-					H2
-				</button>
-				<button
-					on:click={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHeading({ level: 3 })
-							.run()}
-					class={editor.isActive("heading", { level: 3 })
-						? "is-active"
-						: ""}
-				>
-					H3
-				</button>
-				<button
-					on:click={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHeading({ level: 4 })
-							.run()}
-					class={editor.isActive("heading", { level: 4 })
-						? "is-active"
-						: ""}
-				>
-					H4
-				</button>
-				<button
-					on:click={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHeading({ level: 5 })
-							.run()}
-					class={editor.isActive("heading", { level: 5 })
-						? "is-active"
-						: ""}
-				>
-					H5
-				</button>
-				<button
-					on:click={() =>
-						editor
-							.chain()
-							.focus()
-							.toggleHeading({ level: 6 })
-							.run()}
-					class={editor.isActive("heading", { level: 6 })
-						? "is-active"
-						: ""}
-				>
-					H6
-				</button>
+
 				<button
 					on:click={() =>
 						editor.chain().focus().toggleBulletList().run()}
@@ -223,13 +173,7 @@
 				>
 					Ordered list
 				</button>
-				<button
-					on:click={() =>
-						editor.chain().focus().toggleCodeBlock().run()}
-					class={editor.isActive("codeBlock") ? "is-active" : ""}
-				>
-					Code block
-				</button>
+
 				<button
 					on:click={() =>
 						editor.chain().focus().toggleBlockquote().run()}
@@ -243,22 +187,14 @@
 				>
 					Horizontal rule
 				</button>
-				<button
-					on:click={() => editor.chain().focus().setHardBreak().run()}
-					>Hard break</button
-				>
+
 				<button
 					on:click={() => editor.chain().focus().undo().run()}
 					disabled={!editor.can().chain().focus().undo().run()}
 				>
 					Undo
 				</button>
-				<button
-					on:click={() => editor.chain().focus().redo().run()}
-					disabled={!editor.can().chain().focus().redo().run()}
-				>
-					Redo
-				</button>
+
 				<button
 					on:click={() =>
 						editor.chain().focus().setColor("#958DF1").run()}

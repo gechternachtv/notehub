@@ -33,12 +33,15 @@
     const dispatch = createEventDispatcher();
 
     let editordefaultValue = {
-        type: "doc",
-        content: [
-            {
-                type: "paragraph",
-            },
-        ],
+        type: "json",
+        value: {
+            type: "doc",
+            content: [
+                {
+                    type: "paragraph",
+                },
+            ],
+        },
     };
 
     if (urlparams.get("usetemplate") != null) {

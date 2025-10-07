@@ -276,14 +276,15 @@
                             {/each}
                         {/if}
 
-                        <Editor
+                        <!-- <Editor
                             bind:files
                             bind:fileelement
                             {defaultValue}
                             on:newcontent={handleNewCard}
                             clearAllonEnter={false}
                             on:editorready={oneditorready}
-                        ></Editor>
+                        ></Editor> -->
+                        <Editor {defaultValue}></Editor>
                     </Card>
                 </div>
             </div>
