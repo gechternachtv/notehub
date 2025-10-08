@@ -9,18 +9,20 @@
 	import { TaskItem, TaskList } from "@tiptap/extension-list";
 	import { DateHighlighter } from "./datesinput";
 	import { TagHighlighter } from "./taginput.js";
-	import { tagSuggestions } from "../stores.js";
+	import { tagSuggestions, editorblocked } from "../stores.js";
 	import Picmobutton from "../Picmo/picmobutton.svelte";
 	import { createEventDispatcher } from "svelte";
 
 	const dispatch = createEventDispatcher();
 
 	let colorinput;
+	let colortrigger;
 	let element;
 	let editor;
-
 	let fileInput;
 	let changeColor = false;
+	let editor_initialized = false;
+	let editor_hadchanges = false;
 
 	export let defaultValue = {
 		type: "json",
@@ -62,9 +64,21 @@
 			onTransaction: () => {
 				editor = editor;
 			},
+			onUpdate: () => {
+				if (editor_initialized) {
+					editor_hadchanges = true;
+				}
+			},
 		});
 
 		editor.commands.setContent(defaultValue.value.content);
+
+		editorblocked.subscribe((a) => {
+			console.log(a);
+			editor.setEditable(!a);
+		});
+
+		editor_initialized = true;
 	});
 
 	const handlesend = () => {
@@ -148,9 +162,9 @@
 </script>
 
 <main>
-	{#if editor}
+	{#if editor && !$editorblocked}
 		<div class="control-group">
-			<div class="button-group">
+			<div class="button-group tiptapcontrols">
 				<Picmobutton allowcuston={true} on:emojiselect={emojiSelect}
 				></Picmobutton>
 
@@ -215,9 +229,26 @@
 				>
 					c
 				</button>
-				<input bind:this={colorinput} type="color" />
+				<input
+					bind:this={colorinput}
+					on:change={() => {
+						colortrigger.style = `background-color:${colorinput.value}`;
+					}}
+					style="display: none"
+					type="color"
+				/>
+				<button
+					class="colortrigger"
+					style="background-color:black"
+					bind:this={colortrigger}
+					on:click={() => {
+						colorinput?.click();
+					}}
+				></button>
 
-				<button on:click={() => fileInput.click()}> img </button>
+				<button class="imgbutton" on:click={() => fileInput.click()}>
+					img
+				</button>
 				<input
 					type="file"
 					accept="image/*"
@@ -230,8 +261,9 @@
 	{/if}
 
 	<div class="editorcontainer" bind:this={element} />
-	<button on:click={handlesend}>send!</button>
-
+	{#if editor_hadchanges && !$editorblocked}
+		<button on:click={handlesend}>💾 save!</button>
+	{/if}
 	{#if $tagSuggestions}
 		{#if $tagSuggestions.length}
 			<div class="tagsuggestions">

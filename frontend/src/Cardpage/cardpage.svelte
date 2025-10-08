@@ -160,26 +160,25 @@
     };
 
     const oneditorready = () => {
-        const thumb = document
-            .querySelector(".thumb .img-c img")
-            ?.getAttribute("src");
-        const milkdownimg = document
-            .querySelector(".milkdown img")
-            ?.getAttribute("src");
-
-        if (thumb && milkdownimg) {
-            if (thumb === milkdownimg) {
-                // console.log("im equal!");
-                document
-                    .querySelector(".thumb .img-c img")
-                    .setAttribute("style", "display:none");
-            }
-            if (milkdownimg.includes("data:image")) {
-                document
-                    .querySelector(".thumb .img-c img")
-                    .setAttribute("style", "display:none");
-            }
-        }
+        // const thumb = document
+        //     .querySelector(".thumb .img-c img")
+        //     ?.getAttribute("src");
+        // const milkdownimg = document
+        //     .querySelector(".tiptap.ProseMirror img")
+        //     ?.getAttribute("src");
+        // if (thumb && milkdownimg) {
+        //     if (thumb === milkdownimg) {
+        //         // console.log("im equal!");
+        //         document
+        //             .querySelector(".thumb .img-c img")
+        //             .setAttribute("style", "display:none");
+        //     }
+        //     if (milkdownimg.includes("data:image")) {
+        //         document
+        //             .querySelector(".thumb .img-c img")
+        //             .setAttribute("style", "display:none");
+        //     }
+        // }
     };
 </script>
 
@@ -244,7 +243,7 @@
                                             );
                                             document
                                                 .querySelectorAll(
-                                                    ".milkdown img",
+                                                    ".tiptap.ProseMirror img",
                                                 )
                                                 .forEach((e) => {
                                                     if (e.src.includes(file)) {

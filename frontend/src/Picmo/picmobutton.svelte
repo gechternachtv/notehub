@@ -15,14 +15,15 @@
 
 <main>
     <button
+        class="picmobutton"
         on:click={() => {
             showPicmo = !showPicmo;
         }}
     >
         {#if showPicmo}
-            x
+            ❌️
         {:else}
-            🐸​
+            <img src="https://2img.net/u/2615/11/13/86/smiles/2213793032.gif" />
         {/if}
     </button>
     {#if showPicmo}

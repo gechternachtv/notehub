@@ -133,9 +133,8 @@ export const TagHighlighter = Extension.create({
                         const pos = state.selection.from
                         const textBefore = state.doc.textBetween(0, pos, '\n', '\0')
 
-                        console.log(text)
                         if (text === "#") {
-                            console.log(tags)
+
                             tagSuggestions.set(tags)
                         } else {
                             const match = textBefore.match(/(?:^|\s)#([^\s#]*)$/)
