@@ -350,7 +350,7 @@
             "300x200"
           ],
           "maxSelect": 99,
-          "maxSize": 5242880,
+          "maxSize": 15242880,
           "protected": false
         }
       },
