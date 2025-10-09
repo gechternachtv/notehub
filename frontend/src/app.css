@@ -310,9 +310,6 @@ button {
   display: none;
 }
 
-.tiptapcontrols {
-  margin-bottom: 10px;
-}
 
 .tiptapcontrols input[type="color"] {
   border: 0px;
@@ -327,19 +324,36 @@ button {
   border-radius: 0px;
   height: fit-content;
   height: 25px;
-  min-width: 25px;
+  border-radius: 0px;
+  height: fit-content;
+  height: 25px;
+  min-width: 28px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tiptapcontrols button:hover {
+  color: var(--button-bg);
+  background: var(--button-color);
 }
 
 .tiptapcontrols .picmobutton {
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 0;
 }
 
 .tiptapcontrols .imgbutton {
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 0 0;
 }
 
 .tiptapcontrols .colortrigger {
   border: 4px solid var(--button-bg);
+}
+
+.tiptap.ProseMirror[contenteditable="true"] {
+  border: 1px solid var(--button-bg);
+  border-style: dotted;
 }
 
 emoji-picker {
@@ -349,6 +363,10 @@ emoji-picker {
   max-height: calc(100vh - 190px)
 }
 
+.tiptap.ProseMirror p {
+  margin: 5px;
+  font-size: 12px;
+}
 
 
 
@@ -923,4 +941,9 @@ li[data-checked="false"]::before {
 
 .tiptap.ProseMirror img {
   max-width: 100%;
+}
+
+.buttonsend {
+  padding: 1px 10px;
+  margin-top: 5px;
 }

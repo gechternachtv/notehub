@@ -15,6 +15,7 @@
 
 <main>
     <button
+        title="Emoji"
         class="picmobutton"
         on:click={() => {
             showPicmo = !showPicmo;

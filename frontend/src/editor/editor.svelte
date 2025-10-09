@@ -2,10 +2,10 @@
 	import { Color } from "@tiptap/extension-text-style";
 	import { ListItem } from "@tiptap/extension-list";
 	import { TextStyle } from "@tiptap/extension-text-style";
-	import StarterKit from "@tiptap/starter-kit";
+	import { StarterKit } from "./starterkit";
 	import { Editor } from "@tiptap/core";
 	import Image from "@tiptap/extension-image";
-	import { onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 	import { TaskItem, TaskList } from "@tiptap/extension-list";
 	import { DateHighlighter } from "./datesinput";
 	import { TagHighlighter } from "./taginput.js";
@@ -23,8 +23,7 @@
 	let changeColor = false;
 	let editor_initialized = false;
 	let editor_hadchanges = false;
-
-	export let defaultValue = {
+	let baseValue = {
 		type: "json",
 		value: {
 			type: "doc",
@@ -36,6 +35,8 @@
 		},
 	};
 
+	export let defaultValue = baseValue;
+	export let resetOnSend = false;
 	$tagSuggestions = [];
 
 	onMount(() => {
@@ -67,6 +68,7 @@
 			onUpdate: () => {
 				if (editor_initialized) {
 					editor_hadchanges = true;
+					editor.commands.focus();
 				}
 			},
 		});
@@ -74,11 +76,28 @@
 		editor.commands.setContent(defaultValue.value.content);
 
 		editorblocked.subscribe((a) => {
-			console.log(a);
 			editor.setEditable(!a);
 		});
 
 		editor_initialized = true;
+		editor.commands.focus();
+
+		const handler = (e) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+				e.preventDefault();
+				if (editor_hadchanges && editor.isFocused) {
+					handlesend();
+					if (resetOnSend) {
+						editor.commands.setContent(baseValue.value.content);
+					}
+				}
+			}
+		};
+
+		element.addEventListener("keydown", handler);
+		return () => {
+			element.removeEventListener("keydown", handler);
+		};
 	});
 
 	const handlesend = () => {
@@ -159,6 +178,15 @@
 		};
 		reader.readAsDataURL(file);
 	};
+
+	const handleCalendarClick = () => {
+		const d = new Date();
+		const day = String(d.getDate()).padStart(2, "0");
+		const month = String(d.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
+		const year = d.getFullYear();
+
+		editor.chain().focus().insertContent(`@${day}-${month}-${year} `).run();
+	};
 </script>
 
 <main>
@@ -169,6 +197,7 @@
 				></Picmobutton>
 
 				<button
+					title="Bold"
 					on:click={() =>
 						console.log &&
 						editor.chain().focus().toggleBold().run()}
@@ -178,6 +207,7 @@
 					B
 				</button>
 				<button
+					title="Italic"
 					on:click={() => editor.chain().focus().toggleItalic().run()}
 					disabled={!editor
 						.can()
@@ -191,6 +221,7 @@
 				</button>
 
 				<button
+					title="Blockquote"
 					on:click={() =>
 						editor.chain().focus().toggleBlockquote().run()}
 					class={editor.isActive("blockquote") ? "is-active" : ""}
@@ -198,6 +229,7 @@
 					q
 				</button>
 				<button
+					title="Horizontal Rule"
 					on:click={() =>
 						editor.chain().focus().setHorizontalRule().run()}
 				>
@@ -205,12 +237,14 @@
 				</button>
 
 				<button
+					title="Undo"
 					on:click={() => editor.chain().focus().undo().run()}
 					disabled={!editor.can().chain().focus().undo().run()}
 				>
-					z
+					↩️
 				</button>
 				<button
+					title="Apply color filter"
 					on:click={() => {
 						changeColor = !changeColor;
 						if (changeColor) {
@@ -227,7 +261,7 @@
 					}}
 					class:isactive={changeColor}
 				>
-					c
+					🖌️
 				</button>
 				<input
 					bind:this={colorinput}
@@ -238,6 +272,7 @@
 					type="color"
 				/>
 				<button
+					title="Choose color"
 					class="colortrigger"
 					style="background-color:black"
 					bind:this={colortrigger}
@@ -245,9 +280,20 @@
 						colorinput?.click();
 					}}
 				></button>
+				<button
+					title="Insert today's date"
+					class="calendarbtn"
+					on:click={handleCalendarClick}
+				>
+					🗓️
+				</button>
 
-				<button class="imgbutton" on:click={() => fileInput.click()}>
-					img
+				<button
+					title="Image"
+					class="imgbutton"
+					on:click={() => fileInput.click()}
+				>
+					🖼️
 				</button>
 				<input
 					type="file"
@@ -261,10 +307,7 @@
 	{/if}
 
 	<div class="editorcontainer" bind:this={element} />
-	{#if editor_hadchanges && !$editorblocked}
-		<button on:click={handlesend}>💾 save!</button>
-	{/if}
-	{#if $tagSuggestions}
+	{#if $tagSuggestions && editor?.isFocused}
 		{#if $tagSuggestions.length}
 			<div class="tagsuggestions">
 				{#each $tagSuggestions as suggestion}
@@ -275,12 +318,15 @@
 			</div>
 		{/if}
 	{/if}
+	{#if editor_hadchanges && !$editorblocked}
+		<button class="buttonsend" on:click={handlesend}>💾 save!</button>
+	{/if}
 </main>
 
 <style>
 	main {
 		background: var(--card-bg);
-		padding: 15px;
+		padding: 15px 0;
 	}
 	.button-group {
 		display: flex;

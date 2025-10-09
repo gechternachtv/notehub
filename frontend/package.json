@@ -19,7 +19,7 @@
     "@tiptap/extension-list": "^3.6.2",
     "@tiptap/extension-mention": "^3.6.5",
     "@tiptap/extension-text-style": "^3.6.2",
-    "@tiptap/starter-kit": "^3.6.2",
+    "@tiptap/starter-kit": "^3.6.5",
     "@tiptap/suggestion": "^3.6.5",
     "calendar-base": "^2.0.1",
     "emoji-picker-element": "^1.27.0",

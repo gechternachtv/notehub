@@ -523,6 +523,7 @@
                                 class="editor"
                             >
                                 <Editor
+                                    resetOnSend={true}
                                     defaultValue={editordefaultValue}
                                     on:newcontent={handleNewCard}
                                 ></Editor>
@@ -538,6 +539,7 @@
                             class="editor"
                         >
                             <Editor
+                                resetOnSend={true}
                                 defaultValue={editordefaultValue}
                                 on:newcontent={handleNewCard}
                             ></Editor>
@@ -562,6 +564,11 @@
 </main>
 
 <style>
+    .condesktop,
+    .conworkspace {
+        padding: 0 15px;
+        background: var(--card-bg);
+    }
     main {
         position: relative;
     }
