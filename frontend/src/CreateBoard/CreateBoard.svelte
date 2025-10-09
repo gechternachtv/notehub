@@ -38,7 +38,7 @@
 
     const handleEmojiselect = (e) => {
         console.log(e.detail.emoji);
-        name = `${e.detail.emoji} ${name}`;
+        name = `${e.detail.emoji.unicode} ${name}`;
     };
     const handleSend = () => {
         const data = {
@@ -112,7 +112,7 @@
     }
 </script>
 
-<main>
+<main class="create-board-popup">
     <div style="border-left: 4px solid {color}" class="board-header">
         {#if showImage}
             <div class="img-c">

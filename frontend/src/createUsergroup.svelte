@@ -7,7 +7,7 @@
     import { localToken } from "./stores.js";
 
     export let currentUsergroup = {
-        name: "new User Group",
+        name: "",
         public: "private",
         users: [...$localToken?.model?.id],
         expand: {
@@ -59,26 +59,28 @@
                 ]),
             });
         } else {
-            dispatch("new", {
-                name: name,
-                public: publicperm,
-                users: validateUsers([
-                    $localToken?.model?.id,
-                    ...users.map((e) => e.id),
-                    ...newusers.split(","),
-                ]),
-                owner: $localToken?.model?.id,
-            });
+            if (name != "") {
+                dispatch("new", {
+                    name: name,
+                    public: publicperm,
+                    users: validateUsers([
+                        $localToken?.model?.id,
+                        ...users.map((e) => e.id),
+                        ...newusers.split(","),
+                    ]),
+                    owner: $localToken?.model?.id,
+                });
+            }
         }
     }
 
     const handleEmojiselect = (e) => {
         console.log(e.detail.emoji);
-        name = `${e.detail.emoji} ${name}`;
+        name = `${e.detail.emoji.unicode} ${name}`;
     };
 </script>
 
-<main>
+<main class="create-usergroup-popup">
     <h1 class="board-name">
         {#if currentUsergroup.id}
             Edit
@@ -89,7 +91,7 @@
 
     <div class="grid">
         name : <Picmobutton on:emojiselect={handleEmojiselect} />
-        <input bind:value={name} />
+        <input placeholder="new UserGroup" bind:value={name} />
         permissions :
         <select bind:value={publicperm}>
             {#each publicopt as option, i}
@@ -132,14 +134,16 @@
         add users via id (multiple values sepparated by comma)
         <input bind:value={newusers} placeholder="id1,id2" />
     </div>
-
-    <button class="btn" on:click={handleSubmit}>
-        {#if currentUsergroup.id}
-            Edit
-        {:else}
-            Create
-        {/if}
-    </button>
+    {#if name != ""}
+        <button class="btn" on:click={handleSubmit}>
+            {#if currentUsergroup.id}
+                Edit
+            {:else}
+                Create
+            {/if}
+        </button>
+        <!-- content here -->
+    {/if}
 </main>
 
 <style>

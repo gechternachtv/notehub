@@ -87,9 +87,6 @@
 				e.preventDefault();
 				if (editor_hadchanges && editor.isFocused) {
 					handlesend();
-					if (resetOnSend) {
-						editor.commands.setContent(baseValue.value.content);
-					}
 				}
 			}
 		};
@@ -144,6 +141,9 @@
 				card_datementions,
 			};
 			dispatch("newcontent", newcardcontent);
+			if (resetOnSend) {
+				editor.commands.setContent(baseValue.value.content);
+			}
 		}
 	};
 

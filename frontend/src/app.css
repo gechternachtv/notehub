@@ -947,3 +947,13 @@ li[data-checked="false"]::before {
   padding: 1px 10px;
   margin-top: 5px;
 }
+
+.create-board-popup emoji-picker {
+  max-height: 150px;
+  top: 100%;
+}
+
+.create-usergroup-popup emoji-picker {
+  max-height: 150px;
+  top: 100%;
+}
