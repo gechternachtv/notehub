@@ -6,9 +6,9 @@
 
     const getPublictext = {
         private: { text: "🔒 private" },
-        view: { text: "public: 👁️ view" },
-        "global-view": { text: "public: 🌐 global view" },
-        "public-post": { text: "public-post: 🔓 post cards" },
+        view: { text: " 👁️ public" },
+        "global-view": { text: "🌐 global | cannot edit" },
+        "public-post": { text: " 🔓 open to post cards" },
     };
 </script>
 

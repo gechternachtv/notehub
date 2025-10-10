@@ -4,12 +4,26 @@
 
 <main>
     {#if $localToken.model?.default_board}
+        {#if $localToken?.model.banner_img}
+            <div
+                class="bannercontainer"
+                style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
+                    .model.id}/{$localToken?.model.banner_img}')"
+            >
+                <a href="#/board/{$localToken.model.default_board}"> </a>
+            </div>
+        {:else}
+            <div class="bannercontainer">
+                <a href="#/board/{$localToken.model.default_board}"> </a>
+            </div>
+        {/if}
+    {:else if $localToken?.model.banner_img}
         <div
             class="bannercontainer"
             style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
                 .model.id}/{$localToken?.model.banner_img}')"
         >
-            <a href="#/board/{$localToken.model.default_board}"> </a>
+            <a href="#/account"> </a>
         </div>
     {:else}
         <div class="bannercontainer">

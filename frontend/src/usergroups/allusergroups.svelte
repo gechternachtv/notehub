@@ -102,7 +102,7 @@
                         class="btn createusergroup"
                         on:click={() => {
                             showModal = true;
-                        }}>Create new userGroup</button
+                        }}>+ Create new userGroup</button
                     >
                     <Modal bind:showModal>
                         <CreateUsergroup on:new={handlenewusergroup}
