@@ -248,7 +248,7 @@
 
 <style>
     h1 {
-        font-size: 32px;
+        font-size: 3.2rem;
         margin-top: 0px;
     }
     .btncontainer {
@@ -309,7 +309,7 @@
     }
 
     .modal-container {
-        font-size: 15px;
+        font-size: 1.5rem;
         background: var(--card-bg);
         padding: 30px;
         color: var(--button-bg);

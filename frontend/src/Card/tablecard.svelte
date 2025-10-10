@@ -507,7 +507,7 @@
         /*! margin-bottom:4px; */
         padding: 3px 5px !important;
         color: white !important;
-        font-size: 10px;
+        font-size: 1rem;
     }
 
     .card-container---image img {

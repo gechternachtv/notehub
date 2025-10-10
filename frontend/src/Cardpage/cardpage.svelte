@@ -354,7 +354,7 @@
         display: flex;
         gap: 5px;
         align-items: center;
-        font-size: 10px;
+        font-size: 1rem;
     }
     .filename img {
         max-width: 30px;

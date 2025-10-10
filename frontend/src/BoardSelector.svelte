@@ -6,7 +6,7 @@
     import Boardcard from "./Allboards/boardcard.svelte";
     import Confirmaction from "./confirmaction.svelte";
     import { createEventDispatcher } from "svelte";
-    import { server } from "./stores";
+    import { server, localToken } from "./stores";
     // import {localToken} from '../stores.js'
 
     export let isopen = true;
@@ -14,7 +14,6 @@
 
     export let single = true;
     export let usergroup = null;
-    export let currentBoards = [];
 
     let showconfirmbox = false;
     let checkboxholder;
@@ -25,7 +24,7 @@
     const getallBoards = async () => {
         return await pb.collection("boards").getFullList({
             fields: "color,name,id,img,collectionId",
-            filter: `${usergroup ? `usergroup = "${usergroup}"` : ""}`,
+            filter: `${usergroup ? `usergroup = "${usergroup}" && ` : ""} usergroup.users ~ "${$localToken ? $localToken.model.id : "aaa"}"`,
         });
     };
     let promise;

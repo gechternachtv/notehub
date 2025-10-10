@@ -650,7 +650,7 @@
         opacity: 0.4;
         padding: 2px 11px;
         font-weight: 500;
-        font-size: 12px;
+        font-size: 1.2rem;
         border-radius: 20px;
     }
 

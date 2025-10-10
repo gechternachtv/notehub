@@ -140,7 +140,7 @@
     .menu button {
         width: 100%;
         border-radius: 0;
-        font-size: 12px;
+        font-size: 1.2rem;
         font-weight: normal;
         color: var(--menu-col);
         background: var(--menu-bg);

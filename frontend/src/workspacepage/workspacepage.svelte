@@ -492,7 +492,7 @@
     .textwarning {
         text-align: center;
         margin-top: 39px;
-        font-size: 20px;
+        font-size: 2rem;
         background: var(--card-bg);
         padding: 13px;
     }

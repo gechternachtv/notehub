@@ -595,7 +595,7 @@
         grid-template-rows: subgrid;
         overflow: hidden;
         box-shadow: inset 18px 20px 14px -27px rgba(0, 0, 0, 0.12);
-        font-size: 13px;
+        font-size: 1.3rem;
         border: 1px solid var(--card-border);
     }
 

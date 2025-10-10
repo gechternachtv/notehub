@@ -149,7 +149,7 @@
     background: var(--maincontainer-bg);
     color: var(--main-font-1);
     margin: auto;
-    max-width: 1440px;
+    max-width: 144rem;
     width: 100vw;
     /* padding-bottom: 40px; */
   }
@@ -201,7 +201,7 @@
 
   .home {
     font-weight: bold;
-    font-size: 36px;
+    font-size: 3.6rem;
     padding: 9px 15px;
     width: 100%;
     text-align: left;
@@ -211,11 +211,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 11px;
+    font-size: 1.1rem;
   }
 
   .servername {
-    font-size: 12px;
+    font-size: 1.2rem;
     margin: 0px;
     background: var(--header-color);
     color: var(--header-bg);

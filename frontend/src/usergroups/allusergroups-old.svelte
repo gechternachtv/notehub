@@ -136,19 +136,19 @@
 <style>
     main {
         padding-bottom: var(--bodypadding);
-       --avatar-size: 193px;
+        --avatar-size: 193px;
     }
     .createusergroup {
         width: 100%;
         text-align: center;
         justify-content: center;
         margin-top: 15px;
-        font-size: 19px;
+        font-size: 1.9rem;
         padding: 9px;
         margin-bottom: 15px;
     }
     h1 {
-        font-size: 32px;
+        font-size: 3.2rem;
     }
 
     .instance-grid {
@@ -183,7 +183,7 @@
         padding: 5px;
         font-weight: bold;
         border-radius: 5px;
-        font-size: 15px;
+        font-size: 1.5rem;
     }
 
     .profilepic {
@@ -237,7 +237,7 @@
             padding: 0px;
             font-weight: normal;
             border-radius: 0px;
-            font-size: 11px;
+            font-size: 1.1rem;
         }
 
         /* Element | http://localhost:5173/#/ */

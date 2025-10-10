@@ -281,6 +281,6 @@
         opacity: 0.6;
     }
     .boardemoji {
-        font-size: 54px;
+        font-size: 5.4rem;
     }
 </style>

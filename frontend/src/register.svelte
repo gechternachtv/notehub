@@ -142,7 +142,6 @@
 
 <main>
   <article>
-
     {#if $localToken}
       <div
         style="background-color:transparent; --bgbannerimg: url('{$server.url}/api/files/_pb_users_auth_/{$localToken
@@ -178,12 +177,10 @@
 
           <button on:click={logout}>logout</button>
         </div>
-
-        
       </div>
-        <div class="colorsshow">
-          <Themecolors></Themecolors>
-        </div>
+      <div class="colorsshow">
+        <Themecolors></Themecolors>
+      </div>
       <UserConfig></UserConfig>
     {/if}
     {#if !$localToken}<h1>Notehub register:</h1>{/if}
@@ -232,8 +229,6 @@
         </div>
       {/each}
     {/if}
-
-
   </article>
 </main>
 
@@ -243,7 +238,7 @@
     color: var(--button-color);
     padding: 5px;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 1.2rem;
     border-radius: 8px;
     border: 0px;
     min-width: 100px;
@@ -261,18 +256,18 @@
     max-width: 95vw;
     width: 580px;
     margin: auto;
-    margin-left:0;
+    margin-left: 0;
     text-align: center;
     box-sizing: border-box;
     position: relative;
     border-radius: 10px;
-    margin-bottom:15px !important;
+    margin-bottom: 15px !important;
   }
 
   .input {
     display: flex;
     flex-direction: column;
-    font-size: 12px;
+    font-size: 1.2rem;
     text-align: left;
     gap: 4px;
     margin-bottom: 13px;
@@ -282,7 +277,7 @@
   div {
     padding: 5px;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 1.2rem;
     border-radius: 8px;
     border: 0px;
     min-width: 100px;
@@ -371,8 +366,8 @@
     background-size: cover;
     background-position: center;
   }
-  main{
-    padding-bottom:4px;
+  main {
+    padding-bottom: 4px;
   }
   .colorshow {
     padding: 0;

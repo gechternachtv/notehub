@@ -209,7 +209,7 @@
   .input {
     display: flex;
     flex-direction: column;
-    font-size: 12px;
+    font-size: 1.2rem;
     text-align: left;
     gap: 4px;
     margin-bottom: 13px;
@@ -219,7 +219,7 @@
   div {
     padding: 5px;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 1.2rem;
     border-radius: 8px;
     border: 0px;
     min-width: 100px;

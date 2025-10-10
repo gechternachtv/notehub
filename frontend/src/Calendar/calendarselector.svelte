@@ -179,7 +179,7 @@
     .container {
         max-width: 300px;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 1.2rem;
         margin: auto;
         margin-bottom: 17px;
         /* min-height: 280px; */
@@ -210,11 +210,11 @@
     }
 
     .year {
-        font-size: 30px;
+        font-size: 3rem;
     }
 
     .month {
-        font-size: 18px;
+        font-size: 1.8rem;
     }
 
     .header {

@@ -128,7 +128,7 @@
         grid-template-columns: repeat(auto-fit, minmax(150px, 220px));
         gap: 13px;
         margin-top: 19px;
-        font-size: 13px;
+        font-size: 1.3rem;
         font-weight: bold;
     }
     .workspacecontainer .text {

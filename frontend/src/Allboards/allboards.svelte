@@ -123,7 +123,6 @@
 
 <style>
     main {
-        
         color: var(--main-font-1);
         margin: auto;
         max-width: var(--container);
