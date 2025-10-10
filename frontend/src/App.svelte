@@ -227,6 +227,9 @@
     line-height: 6px;
     left: auto;
     top: 5px;
+    font-size: 1.1rem;
+    height: 1.3rem;
+    line-height: 0.5rem;
   }
   .loginlink {
     display: flex;
