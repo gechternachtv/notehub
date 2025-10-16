@@ -617,24 +617,56 @@
 		--complete: #61912a;
 		--complete-col: #ffeedb;
 		--header-bg: #4c5945;
-		--main-font-1: #fff;
-		--main-font-2: #96872f;
+		--main-font-1: #2b270e;
+		--main-font-2: #2b270e;
 		--button-bg: #939989;
 		--button-color: #fff;
 		--header-color: #939989;
-		--card-bg: #4c5945;
+		--card-bg: #798176;
 		--container-bg: #252f1c;
 		--maincontainer-bg: #252f1c;
-		--gradient-col-1: #32392c;
+		--gradient-col-1: #252f1c;
 		--gradient-col-2: #b7b7b7;
 		--body-background: #606464;
 		--board-title-color: #968832;
 		--browser-color: var(--header-bg);
-		--link-col: var(--button-bg);
+		--link-col: #1c1c1c;
 		--menu-bg: #1c2217;
 		--menu-col: var(--button-color);
 		--mentions: #f7f7f7;
 		--createdon: var(--main-font-2);
+	}
+	:global(.goldSrc .instancebox) {
+		background: linear-gradient(
+			0deg,
+			rgba(192, 192, 190, 1) 3%,
+			rgba(253, 253, 253, 1) 100%
+		);
+		background: #c0c0be;
+	}
+	:global(
+			.goldSrc .instancebox .board-header,
+			.usergroup-area .board-header,
+			.calendar-result .board-header
+		) {
+		color: black !important;
+	}
+	:global(.goldSrc div.users-container .userbox) {
+		color: white;
+	}
+	:global(.goldSrc .board-header) {
+		color: #968832 !important;
+	}
+	:global(.goldSrc .workspace-card *) {
+		color: white;
+	}
+
+	:global(.goldSrc .calendar-user-grid .board-name) {
+		color: var(--main-font-1) !important;
+	}
+
+	:global(.goldSrc .today) {
+		border-bottom: 2px solid var(--main-font-1) !important;
 	}
 	/* :global(
 			.goldSrc .instance-box,
