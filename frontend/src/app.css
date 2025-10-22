@@ -50,36 +50,16 @@
   font-family: "River Mono";
   font-weight: 400;
 } */
-@media (min-width:1919px) {
-  body {
-    zoom: 1.1;
-  }
-}
 
-@media (min-width:2559px) {
-  body {
-    zoom: 1.2
-  }
-}
 
-@media (min-width:3839px) {
-  body {
-    zoom: 1.4;
-  }
-}
 
 
 @media (min-width:3839px) {
   body {
-    zoom: 1.4;
+    zoom: 1.2;
   }
 }
 
-@media (min-width:7679px) {
-  body {
-    zoom: 2;
-  }
-}
 
 ::-webkit-scrollbar {
   width: 10px;
