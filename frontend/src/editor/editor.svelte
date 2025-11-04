@@ -8,6 +8,7 @@
 	import { onMount, onDestroy } from "svelte";
 	import { TaskItem, TaskList } from "@tiptap/extension-list";
 	import { DateHighlighter } from "./datesinput";
+	import { DoneHighlighter } from "./doneinput";
 	import { TagHighlighter } from "./taginput.js";
 	import { tagSuggestions, editorblocked } from "../stores.js";
 	import Picmobutton from "../Picmo/picmobutton.svelte";
@@ -60,6 +61,7 @@
 					},
 				}),
 				DateHighlighter,
+				DoneHighlighter,
 				TagHighlighter,
 			],
 			onTransaction: () => {
@@ -129,6 +131,9 @@
 			).map((e) => {
 				return { dataDate: e.getAttribute("data-date") };
 			});
+			const card_donesetinput = element
+				.querySelector(".tiptap.ProseMirror .doneelement")
+				?.getAttribute("data-done");
 
 			const newcardcontent = {
 				raw: editor.getJSON().content,
@@ -139,6 +144,7 @@
 				card_title,
 				card_mainlink,
 				card_datementions,
+				card_donesetinput,
 			};
 			dispatch("newcontent", newcardcontent);
 			if (resetOnSend) {

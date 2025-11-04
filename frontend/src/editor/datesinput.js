@@ -2,7 +2,6 @@ import { Extension, Mark } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Decoration, DecorationSet } from '@tiptap/pm/view'
 
-// Define the DateMark to wrap matched date text
 export const DateMark = Mark.create({
     name: 'dateMark',
 
@@ -13,11 +12,7 @@ export const DateMark = Mark.create({
     },
 
     parseHTML() {
-        return [
-            {
-                tag: 'span.date-mark',
-            },
-        ]
+        return [{ tag: 'span.date-mark' }]
     },
 
     renderHTML({ HTMLAttributes }) {
@@ -25,42 +20,45 @@ export const DateMark = Mark.create({
     },
 })
 
-// Function to find @DD-MM-YYYY patterns in the document
 function findDates(doc) {
-    const decorations = [];
-    const regex = /@(\d{2}-\d{2}-\d{4})/g;
+    const decorations = []
 
-    // Iterate through all text nodes in the document
+    const regex = /@(\d{2}-\d{2}-\d{4})(?::(\d{2}):(\d{2}))?/g
+
     doc.descendants((node, pos) => {
-        if (!node.isText) return;
+        if (!node.isText) return
 
-        const text = node.text || '';
-        let match;
+        const text = node.text || ''
+        let match
+        regex.lastIndex = 0
 
-        // Reset regex lastIndex to avoid missing matches
-        regex.lastIndex = 0;
-
-        // Find all matches in the text node
         while ((match = regex.exec(text)) !== null) {
-            const start = pos + match.index;
-            const end = start + match[0].length;
+            const start = pos + match.index
+            const end = start + match[0].length
 
-            // Create a decoration with the DateMark
+
+            const fullDate =
+                match[2] && match[3]
+                    ? `${match[1]}:${match[2]}:${match[3]}`
+                    : match[1]
+
             decorations.push(
-                Decoration.inline(start, end, {
-                    class: 'date-mark',
-                    'data-date': match[1], // Optional: Store the date part for reference
-                }, {
-                    markType: 'dateMark', // Associate with the DateMark
-                })
-            );
+                Decoration.inline(
+                    start,
+                    end,
+                    {
+                        class: 'date-mark',
+                        'data-date': fullDate,
+                    },
+                    { markType: 'dateMark' },
+                ),
+            )
         }
-    });
+    })
 
-    return DecorationSet.create(doc, decorations);
+    return DecorationSet.create(doc, decorations)
 }
 
-// Extension to highlight @DD-MM-YYYY dates
 export const DateHighlighter = Extension.create({
     name: 'dateHighlighter',
 
@@ -70,22 +68,21 @@ export const DateHighlighter = Extension.create({
                 key: new PluginKey('dateHighlighter'),
                 state: {
                     init(_, { doc }) {
-                        return findDates(doc);
+                        return findDates(doc)
                     },
-                    apply(transaction, oldState) {
-                        return transaction.docChanged ? findDates(transaction.doc) : oldState;
+                    apply(tr, oldState) {
+                        return tr.docChanged ? findDates(tr.doc) : oldState
                     },
                 },
                 props: {
                     decorations(state) {
-                        return this.getState(state);
+                        return this.getState(state)
                     },
                 },
             }),
         ]
     },
 
-    // Register the DateMark with the editor's schema
     addMarks() {
         return {
             dateMark: DateMark,

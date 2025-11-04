@@ -82,27 +82,35 @@ export default async (usergroup, tiptapobj, authors, board, fileInputelement = n
     }
 
     //checklist
-    let totalCheckedNumber = 0
-
-    const checklistitems = tiptapobj.card_checklistitem
-
-    if (checklistitems?.length) {
-        checklistitems.forEach(bulletList => {
-            if (bulletList.dataChecked === "true") {
-                console.log(bulletList.dataChecked)
-                totalCheckedNumber += 1
-            }
-        })
-        const donePercentage = (totalCheckedNumber / checklistitems.length) * 100;
-
-        if (donePercentage > 0) {
-            card.done = Math.floor(donePercentage)
-        } else {
-            card.done = 1
-        }
+    if (tiptapobj.card_donesetinput) {
+        card.done = tiptapobj.card_donesetinput == 0 ? 1 : tiptapobj.card_donesetinput
     } else {
-        card.done = 0
+
+        let totalCheckedNumber = 0
+
+        const checklistitems = tiptapobj.card_checklistitem
+
+
+
+        if (checklistitems?.length) {
+            checklistitems.forEach(bulletList => {
+                if (bulletList.dataChecked === "true") {
+                    console.log(bulletList.dataChecked)
+                    totalCheckedNumber += 1
+                }
+            })
+            const donePercentage = (totalCheckedNumber / checklistitems.length) * 100;
+
+            if (donePercentage > 0) {
+                card.done = Math.floor(donePercentage)
+            } else {
+                card.done = 1
+            }
+        } else {
+            card.done = 0
+        }
     }
+
 
 
 
@@ -204,6 +212,8 @@ export default async (usergroup, tiptapobj, authors, board, fileInputelement = n
     if (tiptapobj.card_datementions) {
         card.datementions = tiptapobj.card_datementions.map(e => e.dataDate).toString()
     }
+
+
 
 
 

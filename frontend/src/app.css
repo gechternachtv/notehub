@@ -909,12 +909,35 @@ li[data-checked="false"]::before {
   background: var(--board-title-color);
   color: var(--button-color);
   border-radius: 20px;
-  padding: 2px 4px;
+  padding: 2px 9px;
   width: fit-content;
 }
 
 .date-mark:before {
   content: '🗓️ ';
+  display: inline;
+}
+
+.doneelement {
+  background: #3b88c3;
+  color: white;
+  border-radius: 20px;
+  padding: 2px 9px;
+  width: fit-content;
+}
+
+.doneelement[data-done="100"] {
+  background: var(--complete);
+  color: white;
+}
+
+.doneelement:before {
+  content: '◻️ ';
+  display: inline;
+}
+
+.doneelement[data-done="100"]:before {
+  content: '✅ ';
   display: inline;
 }
 

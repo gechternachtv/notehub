@@ -21,45 +21,50 @@
     // let showModal = false;
 
     function closestDate(dates) {
-        // console.log(dates);
-        if (dates.length) {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Normalize time for accurate comparison
+        try {
+            // console.log(dates);
+            if (dates.length) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Normalize time for accurate comparison
 
-            const futureDates = getDateschecked(dates).filter(
-                ({ dateObj }) => dateObj >= today,
-            );
+                const futureDates = getDateschecked(dates).filter(
+                    ({ dateObj }) => dateObj >= today,
+                );
 
-            if (futureDates.length > 0) {
-                const closest = futureDates.sort(
-                    (a, b) => a.dateObj - b.dateObj,
-                )[0];
-                const timeDiff =
-                    (closest.dateObj - today) / (1000 * 60 * 60 * 24); // Convert ms to days
+                if (futureDates.length > 0) {
+                    const closest = futureDates.sort(
+                        (a, b) => a.dateObj - b.dateObj,
+                    )[0];
+                    const timeDiff =
+                        (closest.dateObj - today) / (1000 * 60 * 60 * 24); // Convert ms to days
 
-                var status = "upcoming";
+                    var status = "upcoming";
 
-                if (timeDiff < 1) {
-                    status = "today";
-                } else if (timeDiff < 3) {
-                    status = "warning";
+                    if (timeDiff < 1) {
+                        status = "today";
+                    } else if (timeDiff < 3) {
+                        status = "warning";
+                    }
+
+                    return {
+                        date: futureDates.sort(
+                            (a, b) => a.dateObj - b.dateObj,
+                        )[0].dateObj,
+                        status: status,
+                    };
                 }
 
+                // If no future date exists, return the most recent past date
                 return {
-                    date: futureDates.sort((a, b) => a.dateObj - b.dateObj)[0]
-                        .dateObj,
-                    status: status,
+                    date:
+                        getDateschecked(dates).sort(
+                            (a, b) => b.dateObj - a.dateObj,
+                        )[0]?.dateObj || null,
+                    status: "passed",
                 };
             }
-
-            // If no future date exists, return the most recent past date
-            return {
-                date:
-                    getDateschecked(dates).sort(
-                        (a, b) => b.dateObj - a.dateObj,
-                    )[0]?.dateObj || null,
-                status: "passed",
-            };
+        } catch (error) {
+            console.warn(error);
         }
     }
 
@@ -82,7 +87,11 @@
     const dispatch = createEventDispatcher();
     const setInfo = (card) => {
         // checked = card.check === "done";
-        date = dateFormat(new Date(card.created));
+        try {
+            date = dateFormat(new Date(card.created));
+        } catch (error) {
+            console.warn(error);
+        }
     };
     window.scrollTo(0, 0);
 
