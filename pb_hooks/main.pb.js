@@ -1,63 +1,101 @@
 //get meta from link
 
 routerAdd("POST", "/meta", (c) => {
+    try {
+        const apikeymodule = require(`${__hooks}/apikey.js`);
+        const apikey = process.env.LINKPREVIEW || apikeymodule.get();
+        const data = $apis.requestInfo(c).data;
 
-
-
-    const apikeymodule = require(`${__hooks}/apikey.js`)
-    const apikey = process.env.LINKPREVIEW ? process.env.LINKPREVIEW : apikeymodule.get()
-
-    const data = $apis.requestInfo(c).data
-
-
-
-    if (data.url.includes("twitter") || data.url.includes("x.com") || data.url.includes("youtu")) {
-        const apiUrl = `https://api.linkpreview.net/?q=${data.url}`;
-
-
-        const res = $http.send({
-            url: apiUrl,
-            method: "GET",
-            body: "",
-            headers: {
-                'X-Linkpreview-Api-Key': `${apikey}`,
-            },
-            timeout: 120, // in seconds
-        })
-
-
-        return c.json(res.statusCode, `
-                <link rel="icon" href="${(data.url.includes("twitter") || data.url.includes("x.com")) ? "https://chromewebstore.google.com/detail/old-twitter-layout-2024/jgejdcdoeeabklepnkdbglgccjpdgpmf" : "https://www.youtube.com/s/desktop/0c61234c/img/favicon_32x32.png"}" sizes="32x32">
-                <meta name="theme-color" content="${(data.url.includes("twitter") || data.url.includes("x.com")) ? `#5eaade` : "#ff0000"}"/>
-                <title>${res.json.title}</title>
-                <meta property="og:description" content="${res.json.description}"/>
-                <meta property="og:image" content="${res.json.image}"/>
-            
-        `)
-
-    } else {
-
-        const res = $http.send({
-            url: data.url,
-            method: "GET",
-            body: "", // eg. JSON.stringify({"test": 123})
-            headers: { "content-type": "application/json" },
-            timeout: 120, // in seconds
-        })
-
-
-        const headRegex = /<head>([\s\S]*?)<\/head>/i;
-        const matches = res.raw?.match(headRegex);
-        if (matches) {
-
-            return c.json(res.statusCode, matches[0])
+        if (!data || !data.url) {
+            return c.json(400, { error: "Missing URL" });
         }
 
+        const url = data.url.trim();
+
+        if (
+            url.includes("twitter") ||
+            url.includes("x.com") ||
+            url.includes("youtu")
+        ) {
+            const apiUrl = `https://api.linkpreview.net/?q=${encodeURIComponent(url)}`;
+
+            try {
+                const res = $http.send({
+                    url: apiUrl,
+                    method: "GET",
+                    headers: { "X-Linkpreview-Api-Key": apikey },
+                    timeout: 60,
+                });
+
+                if (!res || res.statusCode !== 200 || !res.json) {
+                    return c.json(502, { error: "Failed to fetch preview" });
+                }
+
+                const title = res.json.title || "Untitled";
+                const description = res.json.description || "";
+                const image = res.json.image || "";
+                const icon = url.includes("twitter") || url.includes("x.com")
+                    ? "https://abs.twimg.com/favicons/twitter.ico"
+                    : "https://www.youtube.com/s/desktop/0c61234c/img/favicon_32x32.png";
+                const theme = url.includes("twitter") || url.includes("x.com") ? "#5eaade" : "#ff0000";
+
+                return c.json(200, `
+                    <link rel="icon" href="${icon}" sizes="32x32">
+                    <meta name="theme-color" content="${theme}"/>
+                    <title>${title}</title>
+                    <meta property="og:description" content="${description}"/>
+                    <meta property="og:image" content="${image}"/>
+                `);
+            } catch (err) {
+                return c.json(500, { error: "Failed to reach link preview API", details: err.message });
+            }
+        }
+
+        if (url.includes("listen") ||
+            url.includes("stream") ||
+            url.includes("radio") ||
+            url.match(/\.(mp3|aac|ogg|pls|m3u|m3u8|asx|wax|ram|wma|flac)(\?|$)/)) {
+            return c.json(200, `
+                <link rel="icon" href="" sizes="32x32">
+                <meta name="theme-color" content="#2a7560"/>
+                <title>${url}</title>
+                <meta property="og:description" content="(﹙˓ 📟 ˒﹚)"/>
+                
+            `);
+        }
+
+        try {
+            const res = $http.send({
+                url,
+                method: "GET",
+                headers: { "User-Agent": "MetaFetcher/1.0" },
+                timeout: 15,
+            });
+
+            if (res.statusCode === 408 || !res.raw) {
+                return c.json(408, { error: "Request timed out or returned no content" });
+            }
+
+            const headRegex = /<head[^>]*>([\s\S]*?)<\/head>/i;
+            const matches = res.raw.match(headRegex);
+
+            if (matches && matches[0]) {
+                return c.json(200, matches[0]);
+            } else {
+                return c.json(204, { warning: "No <head> found in document" });
+            }
+        } catch (err) {
+            if (err.message.includes("timeout")) {
+                return c.json(408, { error: "Request timed out" });
+            }
+            return c.json(500, { error: "Error fetching URL", details: err.message });
+        }
+
+    } catch (err) {
+        return c.json(500, { error: "Unexpected server error", details: err.message });
     }
+});
 
-
-
-})
 
 routerAdd("POST", "/createtags", (c) => {
     const data = $apis.requestInfo(c).data

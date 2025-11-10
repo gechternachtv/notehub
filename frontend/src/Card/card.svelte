@@ -142,6 +142,18 @@
 
     setInfo(card);
 
+    const handleShare = (url) => {
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: "",
+                    text: "",
+                    url: url,
+                })
+                .then(() => console.log("Shared successfully"))
+                .catch(console.error);
+        }
+    };
     // //console.log(getFile(card))
 </script>
 
@@ -322,7 +334,7 @@
     <div class="card-container card-container---controls">
         <div class="controls editor-panel">
             {#if card.link != "" || card.imglink != "" || card.file.length}
-                <div class="feed-btn">
+                <div class="feed-btn openlink">
                     <a
                         target="_blank"
                         href={card.link
@@ -335,7 +347,7 @@
                     </a>
                 </div>
             {/if}
-            <div class="feed-btn">
+            <div class="feed-btn openit">
                 <a
                     href="/#/card/{card.id}{workspace?.name && workspace?.id
                         ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
@@ -353,6 +365,11 @@
                     >
                 </a>
             </div>
+            {#if card.link && navigator.share}
+                <button class="feed-btn" on:click={() => handleShare(card.link)}
+                    >🌐</button
+                >
+            {/if}
             <!-- <button on:click={() => (showModal = !showModal)}>view</button> -->
 
             <!-- <a href="/#/card/{card.id}">more</a> -->
@@ -678,7 +695,8 @@
             color: var(--main-font-1);
         }
 
-        .editor-panel {
+        .openit,
+        .openlink {
             display: none;
         }
     }

@@ -171,6 +171,24 @@
 
     .pleaseverify {
         font-weight: 600;
-        font-size: 3rem;
+        font-size: 2.5rem;
+        white-space: nowrap;
+        transform-origin: center;
+        overflow: hidden;
+        max-width: 210px;
+        font-size: clamp(1rem, 5vw, 2.5rem);
+    }
+
+    @media (max-width: 991px) {
+        .pleaseverify {
+            max-width: 100%;
+            font-size: clamp(1rem, 5vw, 2.5rem);
+        }
+    }
+    @media (max-width: 630px) {
+        .pleaseverify {
+            max-width: 38vw;
+            font-size: clamp(1rem, 5vw, 2.5rem);
+        }
     }
 </style>

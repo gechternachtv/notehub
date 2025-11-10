@@ -246,6 +246,19 @@
     setInfo(card);
 
     // console.log(getFile(card))
+
+    const handleShare = (url) => {
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: "",
+                    text: "",
+                    url: url,
+                })
+                .then(() => console.log("Shared successfully"))
+                .catch(console.error);
+        }
+    };
 </script>
 
 <div
@@ -509,6 +522,11 @@
                     📄 view
                 {/if}
             </button>
+            {#if navigator.share && card.link}
+                <button on:click={() => handleShare(card.link)}
+                    >open... 🌐</button
+                >
+            {/if}
         </div>
     </div>
     <Confirmaction
