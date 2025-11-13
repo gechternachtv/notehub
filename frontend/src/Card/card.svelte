@@ -1,24 +1,20 @@
 <script>
     // @ts-nocheck
 
-    // import { pb } from "../pb.js";
-    // import Modal from "../modal/modal.svelte";
     import { createEventDispatcher } from "svelte";
     import dateFormat from "../dateFormat.js";
     import getDateschecked from "../getDateschecked.js";
     import getFiles from "../getFiles.js";
 
-    // import Cardpage from "../Cardpage/cardpage.svelte";
-
     export let card = {
         id: "",
-        check: "",
     };
 
+    export let loaded = true;
     export let workspace;
-    // console.log(card);
-
-    // let showModal = false;
+    let date;
+    let duedate;
+    let filegot;
 
     function closestDate(dates) {
         try {
@@ -68,47 +64,49 @@
         }
     }
 
-    let date;
-
-    let duedate;
-
-    if (card.datementions) {
-        duedate = closestDate(card.datementions.split(","));
-    }
-
-    if (card.done) {
-        if (card.done == 100) {
-            if (duedate) {
-                duedate.status = "done";
-            }
-        }
-    }
-
     const dispatch = createEventDispatcher();
     const setInfo = (card) => {
-        // checked = card.check === "done";
         try {
             date = dateFormat(new Date(card.created));
+
+            if (card.datementions) {
+                duedate = closestDate(card.datementions.split(","));
+            }
+
+            if (card.done) {
+                if (card.done == 100) {
+                    if (duedate) {
+                        duedate.status = "done";
+                    }
+                }
+            }
         } catch (error) {
             console.warn(error);
         }
     };
-    window.scrollTo(0, 0);
 
     const linkPreview = (c) => {
-        const icon = c.link
-            ? "🔗 "
-            : c.imglink
-              ? "🔗 "
-              : c.file?.length
-                ? getFiles(c)[0].type === "image/jpeg"
-                    ? "🖼️"
-                    : getFiles(c)[0].type === "Video"
-                      ? "🎞️"
-                      : getFiles(c)[0].type === "Audio"
-                        ? "🔈"
-                        : "📄"
-                : "";
+        let icon = "";
+
+        if (c.link) {
+            icon = "🔗 ";
+        }
+        if (c.imglink) {
+            icon = "🔗 ";
+        }
+        if (c.file) {
+            if (filegot) {
+                if (filegot.type === "image/jpeg") {
+                    icon = "🖼️ ";
+                } else if (filegot.type === "Video") {
+                    icon = "🎞️ ";
+                } else if (filegot.type === "Audio") {
+                    icon = "🔈 ";
+                } else {
+                    icon = "📄 ";
+                }
+            }
+        }
 
         const link = c.link
             ? c.link
@@ -120,27 +118,6 @@
         const limitlink = link.slice(0, 80);
         return `${icon} ${limitlink} ${link.length > 80 ? ". . ." : ""}`;
     };
-
-    // let checked = card.check === "done";
-    // const handleCheckbox = async () => {
-    //     //console.log("checkboxed");
-    //     // const record = await pb
-    //     //     .collection("cards")
-    //     //     .update(card.id, {
-    //     //         ...card,
-    //     //         check: checked ? "done" : "islist",
-    //     //         logs: [
-    //     //             ...card.logs,
-    //     //             `card marked as ${checked ? "completed" : "incomplete"} at ${dateFormat(new Date())}`,
-    //     //         ],
-    //     //     });
-    //     // card = record;
-    //     // setInfo(card);
-    //     // dispatch("updatefront", card);
-    // };
-    // const handlemovetoBoard = async ()=>{ //console.log("hey")}
-
-    setInfo(card);
 
     const handleShare = (url) => {
         if (navigator.share) {
@@ -154,13 +131,23 @@
                 .catch(console.error);
         }
     };
-    // //console.log(getFile(card))
+
+    if (loaded) {
+        if (card.file) {
+            if (getFiles(card)) {
+                filegot = getFiles(card)[0];
+            }
+        }
+
+        setInfo(card);
+    }
 </script>
 
 <div
     id={card.id}
     class="card"
-    class:noimage={!card.file.length && !card.imglink}
+    class:unloaded={!loaded}
+    class:noimage={!card.file?.length && !card.imglink}
 >
     <div
         style="border-left: 5px solid {card.color
@@ -168,17 +155,6 @@
             : 'var(--card-bg)'}"
         class="border-left"
     ></div>
-    <!-- {card.board}<br/>
-        {card.expand?.board.name} -->
-
-    <!-- {card.board} -->
-    <!-- <object title="stealth_operation_8VgOQaQdlq.mp3" data="{card.img}">Cannot preview the file.</object> -->
-
-    <!-- {#if showModal}
-        <Modal bind:showModal>
-            <Cardpage params={{ id: card.id }}></Cardpage>
-        </Modal>
-    {/if} -->
 
     <div class="card-container card-container---image">
         <div class="grabber">
@@ -195,189 +171,188 @@
             >
             <span class="debug debug-id">{card.id}</span>
         </div>
-        <a
-            class="img-c thumblink"
-            href="/#/card/{card.id}{workspace?.name && workspace?.id
-                ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
-                : ''}"
-        >
-            <div class="thumb">
-                <!-- {#if channel.thumb} -->
-                <!-- <img loading=lazy src="{channel.thumb}" alt=""> -->
 
-                {#if card.file?.length}
-                    {#if getFiles(card)[0].type === "image/jpeg"}
-                        <img
-                            loading="lazy"
-                            src={getFiles(card)[0].link}
-                            alt=""
-                        />
-                    {/if}
-                {:else if card.imglink}
-                    <img loading="lazy" src={card.imglink} alt="" />
-                {/if}
-
-                <!-- {/if} -->
-            </div>
-        </a>
-    </div>
-    <div class="card-container card-container---info">
-        <!-- <div class="title">{channel.name}</div> -->
-        <!-- <div class="hostName">{channel.host}</div> -->
-        <a
-            class="nodeco"
-            href="/#/card/{card.id}{workspace?.name && workspace?.id
-                ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
-                : ''}"
-        >
-            {#if card.title}
-                <div class="title">
-                    {#if card.favico}
-                        <img
-                            style="max-width:16px"
-                            loading="lazy"
-                            src={card.favico}
-                            alt=""
-                        />
-                    {/if}
-
-                    {card.title}
-                </div>
-            {/if}
-
-            <div class="link">
-                {#if !card.title}
-                    {#if card.favico}
-                        <img
-                            style="max-width:16px"
-                            loading="lazy"
-                            src={card.favico}
-                            alt=""
-                        />
-                    {/if}
-                {/if}
-
-                {linkPreview(card)}
-            </div>
-        </a>
-        <!-- {#if card.check}
-            {#if card.check === "done" || card.check === "islist"}
-                <div class:checked class="inputholder">
-                    <label
-                        ><input
-                            type="checkbox"
-                            name=""
-                            bind:checked
-                            on:change={handleCheckbox}
-                        /> done</label
-                    >
-                </div>
-            {/if}
-        {/if} -->
-
-        <a
-            class="nodeco"
-            href="/#/card/{card.id}{workspace?.name && workspace?.id
-                ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
-                : ''}"
-        >
-            <div class="updates">{card.text}</div>
-        </a>
-
-        {#if card.expand?.tags}
-            {#if card.expand?.tags.length > 0}
-                <div class="tags">
-                    {#each card.expand?.tags as tag}
-                        {#if tag.name != undefined}
-                            <a
-                                href="/#/search?tag={tag.id}&usergroup={tag.usergroup}"
-                                class="tag"
-                                style="background:{tag.color};">{tag.name}</a
-                            >
+        {#if loaded}
+            <a
+                class="img-c thumblink"
+                href="/#/card/{card.id}{workspace?.name && workspace?.id
+                    ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                    : ''}"
+            >
+                <div class="thumb">
+                    {#if card.file?.length && filegot}
+                        {#if filegot.type === "image/jpeg"}
+                            <img
+                                loading="lazy"
+                                src={filegot.link + "?thumb=200x200"}
+                                alt=""
+                            />
                         {/if}
-                    {/each}
-                </div>
-            {/if}
-        {:else if card.tags}
-            {#if card.tags.length > 0}
-                <div class="tags">
-                    {#each card.tags as tag}
-                        {#if tag.name != undefined}
-                            <a
-                                href="/#/search?tag={tag.id}&usergroup={tag.usergroup}"
-                                class="tag"
-                                style="background:{tag.color};">{tag.name}</a
-                            >
-                        {/if}
-                    {/each}
-                </div>
-            {/if}
-        {/if}
+                    {:else if card.imglink}
+                        <img loading="lazy" src={card.imglink} alt="" />
+                    {/if}
 
-        <div class="date">🗓️ {date}</div>
-        {#if card.datementions}
-            {#if card.datementions.split(",").length > 0}
-                <div class="duedate {duedate.status}">
-                    📆 {dateFormat(duedate.date, false)}
+                    <!-- {/if} -->
                 </div>
-            {/if}
+            </a>
         {/if}
     </div>
-    {#if card.done}
-        <div class="progress-bar">
-            <div
-                style="width:{card.done}%"
-                class="progress {card.done == 100 ? `complete` : ``}"
-            ></div>
+
+    {#if loaded}
+        <div class="card-container card-container---info">
+            <a
+                class="nodeco"
+                href="/#/card/{card.id}{workspace?.name && workspace?.id
+                    ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                    : ''}"
+            >
+                {#if card.title}
+                    <div class="title">
+                        {#if card.favico}
+                            <img
+                                style="max-width:16px"
+                                loading="lazy"
+                                src={card.favico}
+                                alt=""
+                            />
+                        {/if}
+
+                        {card.title}
+                    </div>
+                {/if}
+
+                <div class="link">
+                    {#if !card.title}
+                        {#if card.favico}
+                            <img
+                                style="max-width:16px"
+                                loading="lazy"
+                                src={card.favico}
+                                alt=""
+                            />
+                        {/if}
+                    {/if}
+
+                    {linkPreview(card)}
+                </div>
+            </a>
+
+            <a
+                class="nodeco"
+                href="/#/card/{card.id}{workspace?.name && workspace?.id
+                    ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                    : ''}"
+            >
+                <div class="updates">
+                    {#if card.text}
+                        {card.text}
+                    {/if}
+                </div>
+            </a>
+
+            {#if card.expand?.tags}
+                {#if card.expand?.tags.length > 0}
+                    <div class="tags">
+                        {#each card.expand?.tags as tag}
+                            {#if tag.name != undefined}
+                                <a
+                                    href="/#/search?tag={tag.id}&usergroup={tag.usergroup}"
+                                    class="tag"
+                                    style="background:{tag.color};"
+                                    >{tag.name}</a
+                                >
+                            {/if}
+                        {/each}
+                    </div>
+                {/if}
+            {:else if card.tags}
+                {#if card.tags.length > 0}
+                    <div class="tags">
+                        {#each card.tags as tag}
+                            {#if tag.name != undefined}
+                                <a
+                                    href="/#/search?tag={tag.id}&usergroup={tag.usergroup}"
+                                    class="tag"
+                                    style="background:{tag.color};"
+                                    >{tag.name}</a
+                                >
+                            {/if}
+                        {/each}
+                    </div>
+                {/if}
+            {/if}
+            {#if date}
+                <div class="date">🗓️ {date}</div>
+            {/if}
+            {#if card.datementions}
+                {#if card.datementions.split(",").length > 0}
+                    <div class="duedate {duedate.status}">
+                        📆 {dateFormat(duedate.date, false)}
+                    </div>
+                {/if}
+            {/if}
         </div>
-    {/if}
-    <div class="card-container card-container---controls">
-        <div class="controls editor-panel">
-            {#if card.link != "" || card.imglink != "" || card.file.length}
-                <div class="feed-btn openlink">
+        {#if card.done}
+            <div class="progress-bar">
+                <div
+                    style="width:{card.done}%"
+                    class="progress {card.done == 100 ? `complete` : ``}"
+                ></div>
+            </div>
+        {/if}
+        <div class="card-container card-container---controls">
+            <div class="controls editor-panel">
+                {#if card.link != "" || card.imglink != "" || card.file.length}
+                    <div class="feed-btn openlink">
+                        <a
+                            target="_blank"
+                            href={card.link
+                                ? card.link
+                                : card.imglink
+                                  ? card.imglink
+                                  : filegot?.link}
+                        >
+                            📎
+                        </a>
+                    </div>
+                {/if}
+                <div class="feed-btn openit">
                     <a
-                        target="_blank"
-                        href={card.link
-                            ? card.link
-                            : card.imglink
-                              ? card.imglink
-                              : getFiles(card)[0].link}
+                        href="/#/card/{card.id}{workspace?.name && workspace?.id
+                            ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
+                            : ''}"
                     >
-                        📎
+                        <svg
+                            fill="var(--button-color)"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48"
+                            width="15px"
+                            height="15px"
+                            ><path
+                                d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"
+                            /></svg
+                        >
                     </a>
                 </div>
-            {/if}
-            <div class="feed-btn openit">
-                <a
-                    href="/#/card/{card.id}{workspace?.name && workspace?.id
-                        ? `?workspacename=${workspace?.name}&workspaceid=${workspace?.id}`
-                        : ''}"
-                >
-                    <svg
-                        fill="var(--button-color)"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 48 48"
-                        width="15px"
-                        height="15px"
-                        ><path
-                            d="M 41.470703 4.9863281 A 1.50015 1.50015 0 0 0 41.308594 5 L 27.5 5 A 1.50015 1.50015 0 1 0 27.5 8 L 37.878906 8 L 22.439453 23.439453 A 1.50015 1.50015 0 1 0 24.560547 25.560547 L 40 10.121094 L 40 20.5 A 1.50015 1.50015 0 1 0 43 20.5 L 43 6.6894531 A 1.50015 1.50015 0 0 0 41.470703 4.9863281 z M 12.5 8 C 8.3754991 8 5 11.375499 5 15.5 L 5 35.5 C 5 39.624501 8.3754991 43 12.5 43 L 32.5 43 C 36.624501 43 40 39.624501 40 35.5 L 40 25.5 A 1.50015 1.50015 0 1 0 37 25.5 L 37 35.5 C 37 38.003499 35.003499 40 32.5 40 L 12.5 40 C 9.9965009 40 8 38.003499 8 35.5 L 8 15.5 C 8 12.996501 9.9965009 11 12.5 11 L 22.5 11 A 1.50015 1.50015 0 1 0 22.5 8 L 12.5 8 z"
-                        /></svg
+                {#if card.link && navigator.share}
+                    <button
+                        class="feed-btn"
+                        on:click={() => handleShare(card.link)}>🌐</button
                     >
-                </a>
-            </div>
-            {#if card.link && navigator.share}
-                <button class="feed-btn" on:click={() => handleShare(card.link)}
-                    >🌐</button
-                >
-            {/if}
-            <!-- <button on:click={() => (showModal = !showModal)}>view</button> -->
+                {/if}
+                <!-- <button on:click={() => (showModal = !showModal)}>view</button> -->
 
-            <!-- <a href="/#/card/{card.id}">more</a> -->
+                <!-- <a href="/#/card/{card.id}">more</a> -->
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 <style>
+    .unloaded {
+        min-height: 130px;
+        opacity: 0.5;
+    }
     .border-left {
         position: absolute;
         top: 0px;

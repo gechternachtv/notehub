@@ -1,5 +1,11 @@
 export default (created) => {
   try {
+    if (!created) {
+      throw ("no date")
+    }
+    if (isNaN(created.getTime())) {
+      throw ("date is NaN")
+    }
     const months = [
       "Jan",
       "Feb",
@@ -23,9 +29,13 @@ export default (created) => {
       minute: created.getMinutes() < 9 ? `0${created.getMinutes()}` : created.getMinutes()
     }
 
+
+
+
     return `${date.day} ${date.month} ${date.year}${(date.minute !== "00" || date.hour !== "00") ? ` | ${date.hour}:${date.minute}` : ``}`
 
   } catch (error) {
+    return null
     console.warn(error)
   }
 

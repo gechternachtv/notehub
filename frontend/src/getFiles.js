@@ -49,8 +49,10 @@ export default (element) => {
 
 
     } catch (error) {
+
         console.warn(`error getting filename:`)
         console.warn(element)
         console.warn(error)
+        return null
     }
 }

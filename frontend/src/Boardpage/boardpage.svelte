@@ -158,6 +158,12 @@
     }
 
     async function getRecords() {
+        // const res = await pb.send("/getboardchunk/njepmhoj11tj0v7/0", {
+        //     method: "GET",
+        // });
+        // console.log("%c HELLO:", "font-size:30px");
+        // console.log(res); // → "Hello world!"
+        // console.log("%c ----:", "font-size:30px");
         if (params.id && !params.id.includes("dnd-shadow-placeholder")) {
             try {
                 if (board.id === "") {
@@ -187,6 +193,9 @@
                     );
                     board = record;
                     currentCardsList = board.cards;
+
+                    console.log("AQUI");
+                    console.log(currentCardsList);
                     // dispatch("boardupdate", board);
                     //  // console.log(board);
                     if (record?.expand) {
@@ -195,7 +204,7 @@
                             counter = cardsFull.length;
                         }
                     }
-
+                    console.log(cardsFull);
                     canmove = true;
 
                     //title
@@ -403,13 +412,16 @@
                 class:canmove={!canmove}
                 class="container"
             >
-                <span
-                    class="debug debug-id"
-                    style="background:{canmove ? 'teal' : 'tomato'}"
-                    >{board.id}</span
-                >
-                <div class="debug" style="background:orange">
-                    {JSON.stringify(currentCardsList)}
+                <div class="debug">
+                    <span
+                        class="debug-id"
+                        style="background:{canmove ? 'teal' : 'tomato'}"
+                    >
+                        {board.id}
+                    </span>
+                    <div style="background:orange">
+                        {JSON.stringify(currentCardsList)}
+                    </div>
                 </div>
 
                 <Boardcard {workspace} {board} {counter} />

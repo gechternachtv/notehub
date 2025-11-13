@@ -773,6 +773,7 @@ milkdown-list-item-block .label-wrapper {
 
 .debug {
   display: none !important;
+  position: absolute;
   color: white;
 }
 
@@ -1037,4 +1038,8 @@ li[data-checked="false"]::before {
     max-height: 2ch !important;
     overflow: hidden;
   }
+}
+
+.minicard-container .card .card-container---info {
+  padding-left: 7px;
 }

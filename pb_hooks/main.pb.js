@@ -1,5 +1,3 @@
-//get meta from link
-
 routerAdd("POST", "/meta", (c) => {
     try {
         const apikeymodule = require(`${__hooks}/apikey.js`);
@@ -95,7 +93,6 @@ routerAdd("POST", "/meta", (c) => {
         return c.json(500, { error: "Unexpected server error", details: err.message });
     }
 });
-
 
 routerAdd("POST", "/createtags", (c) => {
     const data = $apis.requestInfo(c).data
