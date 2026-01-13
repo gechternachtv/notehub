@@ -882,10 +882,13 @@ milkdown-list-item-block .label-wrapper {
 }
 
 .minibutton {
+
+  display: flex;
+  align-content: center;
+
   background: var(--button-bg);
   color: var(--button-color) !important;
   padding: 3px 10px;
-  display: block;
   border-radius: 10px;
   font-weight: 500;
   position: relative;

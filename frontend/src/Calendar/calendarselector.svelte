@@ -5,7 +5,8 @@
     import { localToken } from "../stores.js";
 
     const dispatch = createEventDispatcher();
-
+    let showmentions = true;
+    let showcreated = true;
     const months = [
         "January",
         "February",
@@ -35,7 +36,7 @@
     $: {
         calrows = cal.getCalendar(year, month);
     }
-    console.log(calrows);
+    // console.log(calrows);
 
     let cards = [];
     (async () => {
@@ -44,7 +45,7 @@
             fields: "created,datementions",
             filter: `(board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`,
         });
-        console.log(cards);
+        // console.log(cards);
 
         dispatch("dayclick", {
             day: today.getDate(),
@@ -97,7 +98,7 @@
         {#each calrows as day}
             <div class="day">
                 {#if day}
-                    {#if !!cards.filter((e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`) || e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`)).length}
+                    {#if cards.filter((e) => (showcreated && e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`)) || (showmentions && e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`))).length}
                         <button
                             class="cardday"
                             class:today={day.day === new Date().getDate() &&
@@ -107,7 +108,7 @@
                                 currentmonth == fn(day.month) &&
                                 currentyear == fn(day.year)}
                             on:click={(e) => {
-                                console.log(fn(day.day));
+                                // console.log(fn(day.day));
                                 currentday = day.day;
                                 currentmonth = day.month;
                                 currentyear = day.year;
@@ -119,17 +120,17 @@
                             }}
                         >
                             <div class="daytag-container">
-                                {#if cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), ).length > 1}
+                                {#if showcreated && cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), ).length > 1}
                                     <div class="day-createdon"></div>
                                     <div class="day-createdon"></div>
-                                {:else if cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), ).length > 0}
+                                {:else if showcreated && cards.filter( (e) => e.created.includes(`${year}-${fn(month + 1)}-${fn(day.day)}`), ).length > 0}
                                     <div class="day-createdon"></div>
                                 {/if}
 
-                                {#if cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), ).length > 1}
+                                {#if showmentions && cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), ).length > 1}
                                     <div class="day-mentions"></div>
                                     <div class="day-mentions"></div>
-                                {:else if cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), ).length > 0}
+                                {:else if showmentions && cards.filter( (e) => e.datementions.includes(`${fn(day.day)}-${fn(month + 1)}-${year}`), ).length > 0}
                                     <div class="day-mentions"></div>
                                 {/if}
                             </div>
@@ -148,7 +149,7 @@
                                 year === new Date().getUTCFullYear()}
                             class="nocardday"
                             on:click={(e) => {
-                                console.log(fn(day.day));
+                                // console.log(fn(day.day));
                                 currentday = day.day;
                                 currentmonth = day.month;
                                 currentyear = day.year;
@@ -167,6 +168,72 @@
                 {/if}
             </div>
         {/each}
+    </div>
+    <div class="controls">
+        <button
+            on:click={() => {
+                showcreated = !showcreated;
+                dispatch("filterchange", {
+                    showcreated: showcreated,
+                    showmentions: showmentions,
+                });
+            }}
+            class="minibutton"
+        >
+            {#if showcreated}
+                <svg
+                    width="12px"
+                    height="12px"
+                    viewBox="0 0 36 36"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    aria-hidden="true"
+                    role="img"
+                    class="iconify iconify--twemoji"
+                    preserveAspectRatio="xMidYMid meet"
+                    ><path
+                        fill="var(--mentions)"
+                        d="M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z"
+                    /><path
+                        fill="#FFF"
+                        d="M29.28 6.362a2.502 2.502 0 0 0-3.458.736L14.936 23.877l-5.029-4.65a2.5 2.5 0 1 0-3.394 3.671l7.209 6.666c.48.445 1.09.665 1.696.665c.673 0 1.534-.282 2.099-1.139c.332-.506 12.5-19.27 12.5-19.27a2.5 2.5 0 0 0-.737-3.458z"
+                    /></svg
+                >
+            {/if}
+            created on</button
+        >
+        <button
+            on:click={() => {
+                showmentions = !showmentions;
+                dispatch("filterchange", {
+                    showcreated: showcreated,
+                    showmentions: showmentions,
+                });
+            }}
+            class="minibutton"
+        >
+            {#if showmentions}
+                <svg
+                    width="12px"
+                    height="12px"
+                    viewBox="0 0 36 36"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    aria-hidden="true"
+                    role="img"
+                    class="iconify iconify--twemoji"
+                    preserveAspectRatio="xMidYMid meet"
+                    ><path
+                        fill="var(--mentions)"
+                        d="M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z"
+                    /><path
+                        fill="#FFF"
+                        d="M29.28 6.362a2.502 2.502 0 0 0-3.458.736L14.936 23.877l-5.029-4.65a2.5 2.5 0 1 0-3.394 3.671l7.209 6.666c.48.445 1.09.665 1.696.665c.673 0 1.534-.282 2.099-1.139c.332-.506 12.5-19.27 12.5-19.27a2.5 2.5 0 0 0-.737-3.458z"
+                    /></svg
+                >
+            {/if}
+            mentions</button
+        >
     </div>
 </div>
 
@@ -252,22 +319,22 @@
         background: var(--createdon);
     }
 
-    button {
+    .calendar button {
         background: transparent;
         color: var(--main-font-1);
         transition: all 0.2s;
     }
 
-    button:hover,
-    button.active {
+    .calendar button:hover,
+    .calendar button.active {
         background: var(--button-bg);
         color: var(--button-color);
     }
 
-    button:hover .day-mentions,
-    button:hover .day-createdon,
-    button.active .day-mentions,
-    button.active .day-createdon {
+    .calendar button:hover .day-mentions,
+    .calendar button:hover .day-createdon,
+    .calendar button.active .day-mentions,
+    .calendar button.active .day-createdon {
         background: var(--button-color);
     }
 

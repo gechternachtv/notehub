@@ -28,12 +28,12 @@
     let searchtags = [];
     let includeraw = false;
     let sortby = "newest";
+    let currentDay;
+    let currentBoards = [];
+    let showcreated = true;
+    let showmentions = true;
     // let searchtag = "";
     let filter = `(board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
-
-    $: {
-        console.log(filter);
-    }
 
     //
 
@@ -49,8 +49,8 @@
                 expand: "tags,board",
             });
 
-            console.log("aqui:");
-            console.log(resultList);
+            // console.log("aqui:");
+            // console.log(resultList);
 
             return resultList;
         } catch (error) {
@@ -104,19 +104,47 @@
         }
     };
     const handledayclick = (e) => {
+        currentDay = e.detail;
         console.log(e.detail);
-        filter =
-            `((created >= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 00:00:00" && created <= "${e.detail.year}-${formatNumber(e.detail.month)}-${formatNumber(e.detail.day)} 23:59:59")` +
-            ` || datementions ~ "${formatNumber(e.detail.day)}-${formatNumber(e.detail.month)}-${e.detail.year}")` +
-            ` && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
+        remakePromise();
+    };
+
+    const remakePromise = () => {
+        filter = `(
+    (
+      ${
+          showcreated
+              ? `created >= "${currentDay.year}-${formatNumber(currentDay.month)}-${formatNumber(currentDay.day)} 00:00:00"
+           && created <= "${currentDay.year}-${formatNumber(currentDay.month)}-${formatNumber(currentDay.day)} 23:59:59"`
+              : `1=0`
+      }
+    )
+    ||
+    (
+      ${
+          showmentions
+              ? `datementions ~ "${formatNumber(currentDay.day)}-${formatNumber(currentDay.month)}-${currentDay.year}"`
+              : `1=0`
+      }
+    )
+  )
+  && (board.usergroup.users ~ "${$localToken.model.id}" || board.usergroup.public = "global-view")`;
 
         promise = getRecords().then((e) => {
-            console.log(e);
             if (e?.items?.length) {
                 hascontent = true;
 
                 const boards = new Map();
                 e.items.forEach((x) => {
+                    if (
+                        x.created.includes(
+                            `${formatNumber(currentDay.year)}-${formatNumber(currentDay.month)}-${currentDay.day}`,
+                        )
+                    ) {
+                        x.iscreated = true;
+                    } else {
+                        x.ismentions = true;
+                    }
                     x.expand?.board;
                     if (boards.get(x.expand?.board.id)) {
                         boards.set(x.expand.board.id, {
@@ -133,19 +161,67 @@
 
                 console.log("map:");
                 console.log(boards);
-
-                return Array.from(boards);
+                currentBoards = Array.from(boards);
+                return currentBoards;
             } else {
                 hascontent = false;
                 return false;
             }
         });
     };
+
+    const handlefilterchange = (e) => {
+        console.log(e.detail);
+        let previousshowcreated = showcreated;
+        let previousshowmentions = showmentions;
+        showcreated = e.detail.showcreated;
+        showmentions = e.detail.showmentions;
+
+        if (
+            (previousshowcreated === false && showcreated === true) ||
+            (previousshowmentions === false && showmentions === true)
+        ) {
+            remakePromise();
+        } else {
+            promise = new Promise((resolve) => {
+                let filteredBoards = currentBoards;
+                console.log("filteredBoards");
+
+                if (!showcreated) {
+                    filteredBoards.forEach((board) => {
+                        board[1].cards = board[1].cards.filter(
+                            (a) => !a.iscreated,
+                        );
+                    });
+                    filteredBoards = filteredBoards.filter((board) => {
+                        return board[1].cards.length > 0;
+                    });
+                }
+                if (!showmentions) {
+                    filteredBoards.forEach((board) => {
+                        board[1].cards = board[1].cards.filter(
+                            (a) => !a.ismentions,
+                        );
+                    });
+                    filteredBoards = filteredBoards.filter((board) => {
+                        return board[1].cards.length > 0;
+                    });
+                }
+                if (filteredBoards.length === 0) {
+                    hascontent = false;
+                }
+                return resolve(filteredBoards);
+            });
+        }
+    };
 </script>
 
 <main class:hascontent>
     <div class="calendar-wrapper">
-        <Calendarselector on:dayclick={handledayclick} on:newday={handlenewday}
+        <Calendarselector
+            on:filterchange={handlefilterchange}
+            on:dayclick={handledayclick}
+            on:newday={handlenewday}
         ></Calendarselector>
         <div class="button-container">
             <!-- <button class="minibutton">edit</button> -->

@@ -11,8 +11,8 @@
   export let counter = 0;
   export let workspace = {};
 
-  console.log("boardcard orkspace:");
-  console.log(workspace);
+  // console.log("boardcard orkspace:");
+  // console.log(workspace);
 </script>
 
 <a

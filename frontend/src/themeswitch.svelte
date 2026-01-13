@@ -373,6 +373,10 @@
 		--createdon: var(--main-font-2);
 	}
 
+	:global(.pxtone .board-name) {
+		color: var(--main-font-1);
+	}
+
 	:global(.dark) {
 		--card-border: #ffffff30;
 		--alert: #01f080;
@@ -396,7 +400,7 @@
 		--link-col: var(--button-bg);
 		--menu-bg: var(--button-bg);
 		--menu-col: var(--button-color);
-		--mentions: var(--main-font-2);
+		--mentions: #959494;
 		--createdon: #4f4f4f;
 	}
 
@@ -633,7 +637,7 @@
 		--link-col: #1c1c1c;
 		--menu-bg: #1c2217;
 		--menu-col: var(--button-color);
-		--mentions: #f7f7f7;
+		--mentions: #aeaeae;
 		--createdon: var(--main-font-2);
 	}
 	:global(.goldSrc .instancebox) {
