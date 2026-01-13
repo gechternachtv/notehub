@@ -223,11 +223,6 @@
             on:dayclick={handledayclick}
             on:newday={handlenewday}
         ></Calendarselector>
-        <div class="button-container">
-            <!-- <button class="minibutton">edit</button> -->
-            <!-- <button class="minibutton">week</button>
-            <button class="minibutton">year</button> -->
-        </div>
     </div>
 
     {#await promise then searchresult}
@@ -290,6 +285,8 @@
     }
     .calendar-wrapper {
         min-width: 300px;
+        display: flex;
+        flex-direction: column;
     }
     main {
         position: relative;
@@ -332,6 +329,7 @@
 
     main.hascontent {
         width: 100%;
+        max-width: 856px;
     }
 
     .grid-container {
@@ -343,6 +341,8 @@
         padding: 0px;
         container-type: inline-size;
         container-name: card-container;
+        height: 100%;
+        width: 100%;
     }
 
     .con {

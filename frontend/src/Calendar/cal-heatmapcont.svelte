@@ -27,8 +27,8 @@
                     const [d, m, y] = raw.trim().split("-");
                     if (y && m && d) {
                         const parsed = new Date(`${y}-${m}-${d}T00:00:00Z`);
-                        if (!isNaN(parsed))
-                            allDates.push(parsed.toISOString().split("T")[0]);
+                        // if (!isNaN(parsed))
+                        allDates.push(parsed.toISOString().split("T")[0]);
                     }
                 }
             }

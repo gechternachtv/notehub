@@ -1046,3 +1046,18 @@ li[data-checked="false"]::before {
 .minicard-container .card .card-container---info {
   padding-left: 7px;
 }
+
+
+
+
+
+
+.calendar-user-grid .card {
+  height: fit-content;
+}
+
+.calendar-user-grid .card-grid.list {
+  grid-template-columns: 110px 1fr auto;
+  height: fit-content;
+  min-height: 0;
+}
