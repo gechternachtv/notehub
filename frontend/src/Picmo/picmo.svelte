@@ -380,13 +380,13 @@
                     category: "Smiley",
                 },
                 {
-                    name: "",
+                    name: "veryyy happy",
                     shortcodes: ["smiley"],
                     url: "https://2img.net/u/2615/11/13/86/smiles/354459.gif",
                     category: "Smiley",
                 },
                 {
-                    name: "",
+                    name: "love",
                     shortcodes: ["smiley"],
                     url: "https://2img.net/u/2615/11/13/86/smiles/2389593522.gif",
                     category: "Smiley",
@@ -737,6 +737,7 @@
         }
 
         emojipicker.addEventListener("emoji-click", (event) => {
+            console.log(event);
             dispatch("emojiselect", event.detail);
         });
     });

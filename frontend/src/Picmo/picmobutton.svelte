@@ -8,6 +8,7 @@
     const dispatch = createEventDispatcher();
 
     const handleEmojiselect = (e) => {
+        console.log(e);
         showPicmo = false;
         dispatch("emojiselect", e.detail);
     };
