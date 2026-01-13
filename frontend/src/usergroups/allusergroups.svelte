@@ -170,6 +170,9 @@
         }
         .menu {
             width: 100%;
+
+            height: fit-content;
+            border-radius: 10px;
         }
 
         .usergroup-menu-grid.usergroupactive {
@@ -182,6 +185,14 @@
             z-index: 2;
             right: 13px;
             margin-top: 4px;
+        }
+
+        .usergroupbox {
+            display: none;
+        }
+
+        .usergroupactive .usergroupbox {
+            display: block;
         }
     }
 </style>

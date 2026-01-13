@@ -373,7 +373,37 @@
 		--createdon: var(--main-font-2);
 	}
 
-	:global(.pxtone .board-name) {
+	:global(.piyo) {
+		--card-border: #ffffff30;
+		--alert: #f09c01;
+		--news: var(--alert);
+		--complete: #468333;
+		--complete-col: #ffeedb;
+		--main-font-1: #d2ca9c;
+		--main-font-2: var(--main-font-1);
+		--button-color: #0e0e2d;
+
+		--container-bg: #1c1b22;
+		--maincontainer-bg: transparent;
+		--gradient-col-1: #272535;
+		--gradient-col-2: #27363c;
+
+		--button-bg: #9d9784;
+		--header-color: var(--main-font-1);
+		--board-title-color: var(--main-font-1);
+		--browser-color: #343255;
+		--link-col: var(--button-bg);
+
+		--menu-col: var(--button-bg);
+		--mentions: var(--alert);
+		--createdon: var(--main-font-2);
+		--card-bg: #161c22;
+		--body-background: url("https://cheapycore.com/writings/piyopiyo/images/fish.png");
+		--header-bg: #142d46;
+		--menu-bg: #153f68;
+	}
+
+	:global(.pxtone .board-name, .piyo .board-name) {
 		color: var(--main-font-1);
 	}
 

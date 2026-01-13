@@ -39,6 +39,11 @@
         overflow: hidden;
         min-height: 80px;
     }
+    @media (max-width: 991px) {
+        main {
+            min-height: 102px;
+        }
+    }
     .bannercontainer {
         background: var(--menu-bg);
         background-image: var(--bgbannerimg);

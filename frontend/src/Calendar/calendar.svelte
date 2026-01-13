@@ -283,6 +283,13 @@
         height: 306px;
         overflow: scroll;
     }
+    @media (max-width: 991px) {
+        .calendar-result {
+            height: fit-content;
+            max-height: 400px;
+            overflow: scroll;
+        }
+    }
     .calendar-wrapper {
         min-width: 300px;
         display: flex;
@@ -409,5 +416,11 @@
         background: var(--card-bg);
         padding: min(20px, 2vw);
         border-radius: 10px;
+    }
+
+    @media (max-width: 991px) {
+        main {
+            width: 100%;
+        }
     }
 </style>
